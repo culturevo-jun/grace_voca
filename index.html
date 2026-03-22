@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEW TEPS VOCA 게임</title>
+<style>
+  :root {
+    --teal: #1D9E75; --teal-light: #E1F5EE; --teal-dark: #0F6E56;
+    --blue: #185FA5; --blue-light: #E6F1FB;
+    --amber: #BA7517; --amber-light: #FAEEDA;
+    --red: #E24B4A; --red-light: #FCEBEB;
+    --gray: #5F5E5A; --gray-light: #F1EFE8;
+    --text: #2C2C2A; --text-muted: #888780;
+    --bg: #ffffff; --bg-sec: #F1EFE8; --border: rgba(0,0,0,0.15);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; color: var(--text); min-height: 100vh; }
+  
+  .app { max-width: 680px; margin: 0 auto; padding: 16px; }
+  
+  /* Header */
+  .header { text-align: center; padding: 24px 0 16px; }
+  .header h1 { font-size: 22px; font-weight: 600; color: var(--text); }
+  .header p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+  
+  /* Cards */
+  .card { background: var(--bg); border: 0.5px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 12px; }
+  
+  /* Buttons */
+  .btn { border: 0.5px solid var(--border); background: var(--bg); border-radius: 8px; padding: 10px 18px; font-size: 14px; cursor: pointer; color: var(--text); font-family: inherit; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; }
+  .btn:hover { background: var(--bg-sec); }
+  .btn.primary { background: var(--teal); color: white; border-color: var(--teal-dark); }
+  .btn.primary:hover { background: var(--teal-dark); }
+  .btn.secondary { background: var(--blue-light); color: var(--blue); border-color: #B5D4F4; }
+  .btn.full { width: 100%; justify-content: center; padding: 14px; font-size: 15px; }
+  
+  /* Tags */
+  .tag { font-size: 11px; padding: 3px 8px; border-radius: 6px; font-weight: 500; display: inline-block; }
+  .tag-teal { background: var(--teal-light); color: var(--teal-dark); }
+  .tag-blue { background: var(--blue-light); color: var(--blue); }
+  .tag-amber { background: var(--amber-light); color: var(--amber); }
+  .tag-red { background: var(--red-light); color: var(--red); }
+  .tag-gray { background: var(--gray-light); color: var(--gray); }
+  
+  /* Screen */
+  .screen { display: none; }
+  .screen.active { display: block; }
+  
+  /* Home - Week buttons */
+  .week-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .week-card { border: 1.5px solid var(--border); border-radius: 10px; padding: 14px; cursor: pointer; background: var(--bg); transition: all 0.15s; text-align: center; }
+  .week-card:hover { border-color: var(--teal); background: var(--teal-light); }
+  .week-card.selected { border-color: var(--teal); background: var(--teal-light); }
+  .week-card.disabled { opacity: 0.4; cursor: default; }
+  .week-card.disabled:hover { border-color: var(--border); background: var(--bg); }
+  .week-num { font-size: 18px; font-weight: 700; color: var(--teal); }
+  .week-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .week-days { font-size: 12px; font-weight: 500; color: var(--text); margin-top: 4px; }
+  .week-card.done .week-num { color: var(--text-muted); }
+  .done-badge { font-size: 10px; background: var(--gray-light); color: var(--gray); padding: 2px 6px; border-radius: 4px; margin-top: 4px; display: inline-block; }
+  
+  /* Custom day select */
+  .day-checkboxes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .day-cb { display: none; }
+  .day-cb-label { display: block; text-align: center; padding: 8px 4px; border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.15s; }
+  .day-cb-label.disabled-day { opacity: 0.3; cursor: default; pointer-events: none; }
+  .day-cb:checked + .day-cb-label { border-color: var(--teal); background: var(--teal-light); color: var(--teal-dark); }
+  .day-cb-label:hover { border-color: var(--teal); }
+  
+  /* Mode select */
+  .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .mode-card { border: 1.5px solid var(--border); border-radius: 8px; padding: 12px; cursor: pointer; text-align: center; transition: all 0.15s; background: var(--bg); }
+  .mode-card:hover { border-color: var(--teal); }
+  .mode-card.selected { border-color: var(--teal); background: var(--teal-light); }
+  .mode-icon { font-size: 20px; margin-bottom: 4px; }
+  .mode-title { font-size: 13px; font-weight: 600; }
+  .mode-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  
+  /* Quiz */
+  .progress-bar { height: 8px; background: var(--bg-sec); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
+  .progress-fill { height: 100%; background: var(--teal); transition: width 0.4s; border-radius: 4px; }
+  .quiz-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .hearts { display: flex; gap: 3px; }
+  .heart { font-size: 18px; color: var(--red); transition: opacity 0.3s; }
+  .heart.dead { opacity: 0.2; }
+  .score-disp { font-size: 14px; font-weight: 600; color: var(--teal); }
+  .q-counter { font-size: 13px; color: var(--text-muted); }
+  
+  .quiz-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: 12px; padding: 20px; min-height: 300px; }
+  .q-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .q-word { font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 6px; letter-spacing: 0.3px; }
+  .q-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5; }
+  
+  /* Choices */
+  .choice-btn { width: 100%; text-align: left; padding: 13px 16px; margin: 5px 0; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; font-size: 14px; color: var(--text); font-family: inherit; transition: all 0.15s; line-height: 1.5; }
+  .choice-btn:hover:not(:disabled) { background: var(--bg-sec); border-color: var(--teal); }
+  .choice-btn.correct { background: var(--teal-light) !important; border-color: var(--teal) !important; color: #085041 !important; font-weight: 500; }
+  .choice-btn.wrong { background: var(--red-light) !important; border-color: var(--red) !important; color: #501313 !important; }
+  
+  /* Spell input */
+  .spell-input { width: 100%; border: 1.5px solid var(--border); border-radius: 8px; padding: 13px 16px; font-size: 18px; text-align: center; font-family: inherit; background: var(--bg); color: var(--text); outline: none; transition: border-color 0.2s; }
+  .spell-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(29,158,117,0.1); }
+  .spell-input.correct { border-color: var(--teal); background: var(--teal-light); }
+  .spell-input.wrong { border-color: var(--red); background: var(--red-light); }
+  
+  /* Feedback */
+  .feedback { padding: 12px 16px; border-radius: 8px; font-size: 14px; margin: 10px 0; line-height: 1.6; }
+  .feedback.correct { background: var(--teal-light); color: #085041; border-left: 3px solid var(--teal); }
+  .feedback.wrong { background: var(--red-light); color: #501313; border-left: 3px solid var(--red); }
+  .feedback-ex { font-size: 12px; margin-top: 6px; opacity: 0.85; }
+  
+  /* Result */
+  .result-emoji { font-size: 48px; text-align: center; margin: 10px 0; }
+  .result-title { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 6px; }
+  .result-sub { font-size: 14px; color: var(--text-muted); text-align: center; margin-bottom: 20px; }
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+  .stat-box { background: var(--bg-sec); border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-label { font-size: 11px; color: var(--text-muted); }
+  .stat-value { font-size: 24px; font-weight: 700; color: var(--text); }
+  .missed-section { margin-bottom: 16px; }
+  .missed-title { font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; }
+  .missed-word { display: inline-block; background: var(--red-light); color: #A32D2D; border-radius: 6px; padding: 4px 10px; margin: 3px; font-size: 13px; font-weight: 500; }
+  .result-btns { display: flex; gap: 8px; }
+  
+  /* Divider */
+  .divider { border: none; border-top: 0.5px solid var(--border); margin: 16px 0; }
+  
+  /* Section title */
+  .section-title { font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* Streak */
+  .streak-badge { background: var(--amber-light); color: var(--amber); font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 6px; }
+
+  /* Notification */
+  .notif { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--text); color: white; padding: 10px 20px; border-radius: 8px; font-size: 14px; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+  .notif.show { opacity: 1; }
+
+  @media (max-width: 480px) {
+    .week-grid { grid-template-columns: 1fr 1fr; }
+    .day-checkboxes { grid-template-columns: repeat(4, 1fr); }
+    .stat-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>📚 NEW TEPS VOCA</h1>
+    <p>서울대 최신기출 · 교재 단어 완전 수록</p>
+  </div>
+
+  <!-- HOME SCREEN -->
+  <div id="screen-home" class="screen active">
+
+    <div class="card">
+      <div class="section-title">주차별 테스트</div>
+      <div class="week-grid" id="week-grid"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">원하는 날 조합하기</div>
+      <div class="day-checkboxes" id="day-checkboxes"></div>
+      <div style="margin-top:10px;display:flex;align-items:center;justify-content:space-between">
+        <span id="custom-count" style="font-size:13px;color:var(--text-muted)">Day를 선택하세요</span>
+        <button class="btn secondary" onclick="startCustom()">조합 테스트 →</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">게임 모드</div>
+      <div class="mode-grid">
+        <div class="mode-card selected" id="mode-mc" onclick="selectMode('mc')">
+          <div class="mode-icon">🎯</div>
+          <div class="mode-title">뜻 고르기</div>
+          <div class="mode-desc">영단어 → 한국어 뜻 선택</div>
+        </div>
+        <div class="mode-card" id="mode-reverse" onclick="selectMode('reverse')">
+          <div class="mode-icon">🔄</div>
+          <div class="mode-title">한→영 선택</div>
+          <div class="mode-desc">한국어 뜻 → 영단어 선택</div>
+        </div>
+        <div class="mode-card" id="mode-spell" onclick="selectMode('spell')">
+          <div class="mode-icon">✏️</div>
+          <div class="mode-title">영단어 입력</div>
+          <div class="mode-desc">뜻 보고 단어 직접 쓰기</div>
+        </div>
+        <div class="mode-card" id="mode-mix" onclick="selectMode('mix')">
+          <div class="mode-icon">🎲</div>
+          <div class="mode-title">랜덤 혼합</div>
+          <div class="mode-desc">세 가지 모드 무작위</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="screen-quiz" class="screen">
+    <div class="quiz-meta">
+      <div class="hearts">
+        <span class="heart" id="h1">♥</span>
+        <span class="heart" id="h2">♥</span>
+        <span class="heart" id="h3">♥</span>
+      </div>
+      <span class="q-counter" id="q-counter">1 / 20</span>
+      <span class="score-disp" id="score-disp">0점</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="q-prog" style="width:5%"></div></div>
+    <div class="quiz-card">
+      <div class="q-tags" id="q-tags"></div>
+      <div id="area-mc">
+        <div class="q-word" id="q-word"></div>
+        <div class="q-sub" id="q-sub"></div>
+        <div id="mc-choices"></div>
+      </div>
+      <div id="area-spell" style="display:none">
+        <div class="q-word" id="spell-meaning" style="font-size:18px;font-weight:600;line-height:1.5"></div>
+        <div class="q-sub" id="spell-hint"></div>
+        <input class="spell-input" id="spell-input" placeholder="영단어를 입력하세요" autocomplete="off" autocorrect="off" spellcheck="false">
+        <button class="btn primary full" onclick="checkSpell()" style="margin-top:10px">확인</button>
+      </div>
+      <div id="feedback-area"></div>
+      <button class="btn primary full" id="next-btn" onclick="nextQ()" style="margin-top:12px;display:none">다음 →</button>
+    </div>
+    <button class="btn" onclick="quitQuiz()" style="margin-top:10px;width:100%;justify-content:center;color:var(--text-muted)">그만하기</button>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="screen-result" class="screen">
+    <div class="card">
+      <div class="result-emoji" id="res-emoji">🏆</div>
+      <div class="result-title" id="res-title">완료!</div>
+      <div class="result-sub" id="res-sub"></div>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-label">점수</div><div class="stat-value" id="res-score"></div></div>
+        <div class="stat-box"><div class="stat-label">정답률</div><div class="stat-value" id="res-rate"></div></div>
+        <div class="stat-box"><div class="stat-label">최대연속</div><div class="stat-value" id="res-streak"></div></div>
+      </div>
+      <div class="missed-section" id="missed-section"></div>
+      <div class="result-btns">
+        <button class="btn" onclick="goHome()" style="flex:1;justify-content:center">🏠 처음으로</button>
+        <button class="btn primary" onclick="retryQuiz()" style="flex:1;justify-content:center">🔄 다시 도전</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="notif" id="notif"></div>
+
+<script>
+// ============================================================
+// WORD DATABASE — PDF에서 직접 추출한 교재 단어
+// ============================================================
+const DB = {
+  5: {
+    theme: 'Communications 의사소통',
+    words: [
+      {w:'recount',pos:'v',m:'자세히 이야기하다',ex:'recount an anecdote 일화를 이야기하다'},
+      {w:'aggressive',pos:'a',m:'공격적인; 적극적인',ex:'an aggressive marketing campaign 적극적인 마케팅 활동'},
+      {w:'allude',pos:'v',m:'암시하다, 넌지시 말하다',ex:'allude to one\'s marital troubles 결혼 문제들에 대해 넌지시 말하다'},
+      {w:'assert',pos:'v',m:'(강력히) 주장하다',ex:'assert one\'s rights 권리를 주장하다'},
+      {w:'bilingual',pos:'a',m:'2개 국어를 하는',ex:'provide bilingual education 2개 국어로 교육하다'},
+      {w:'blunt',pos:'a',m:'직설적인; 통명스러운; 무딘',ex:'make a blunt statement 직설적인 발언을 하다'},
+      {w:'brag',pos:'v',m:'자랑하다, 떠벌리다',ex:'brag about winning the game 경기에서 이긴 것을 자랑하다'},
+      {w:'coherent',pos:'a',m:'일관성 있는; 논리 정연한',ex:'a coherent argument 논리 정연한 주장'},
+      {w:'colloquial',pos:'a',m:'구어체의, 일상 회화의',ex:'a colloquial expression 구어체 표현'},
+      {w:'comment',pos:'v/n',m:'논평하다; 언급, 논평',ex:'comment on the issue 그 문제에 대해서 이야기하다'},
+      {w:'communicate',pos:'v',m:'의사소통을 하다; 전달하다; 전염시키다',ex:'communicate by e-mail 이메일로 연락을 주고받다'},
+      {w:'consent',pos:'n/v',m:'동의, 허락; 동의하다, 찬성하다',ex:'ask for prior consent 사전 동의를 구하다'},
+      {w:'controversial',pos:'a',m:'논란이 많은',ex:'a highly controversial issue 대단히 논란이 되는 이슈'},
+      {w:'convey',pos:'v',m:'(사상·견해 등을) 전달하다; 운반하다',ex:'convey the good news 쾌보를 전달하다'},
+      {w:'denote',pos:'v',m:'나타내다; 표시하다',ex:'denote one\'s feelings clearly 자신의 감정을 명확히 나타내다'},
+      {w:'describe',pos:'v',m:'설명하다, 묘사하다',ex:'describe the criminal 범인에 대해 묘사하다'},
+      {w:'interpret',pos:'v',m:'해석하다; 통역하다',ex:'interpret one\'s silence as refusal 침묵을 거절로 해석하다'},
+      {w:'emphasize',pos:'v',m:'강조하다',ex:'emphasize the importance of safety 안전의 중요성을 강조하다'},
+      {w:'exaggerate',pos:'v',m:'과장하다',ex:'exaggerate the difficulties 어려움을 과장하다'},
+      {w:'expound',pos:'v',m:'상세히 설명하다',ex:'expound one\'s views 견해를 상세히 설명하다'},
+      {w:'fathom',pos:'v',m:'헤아리다, 가늠하다',ex:'fathom one\'s intention 의도를 가늠하다'},
+      {w:'slander',pos:'n/v',m:'비방, 중상; 비방하다, 중상모략하다',ex:'a slander on one\'s good reputation 명성에 대한 비방'},
+      {w:'implication',pos:'n',m:'영향, 결과; 암시, 함축',ex:'consider the implications of the new policy 새로운 정책의 영향들을 고려하다'},
+      {w:'inarticulate',pos:'a',m:'불분명한, (발음이) 또렷하지 않은',ex:'an inarticulate reply 불분명한 대답'},
+      {w:'inquire',pos:'v',m:'묻다; 조사하다',ex:'inquire about the schedule 스케줄에 대해 물어보다'},
+      {w:'dispute',pos:'n/v',m:'논쟁, 분쟁; 반박하다, 논쟁하다',ex:'settle a dispute 분쟁을 해결하다'},
+      {w:'interrupt',pos:'v',m:'중단시키다, 가로막다',ex:'interrupt the conversation 대화를 중단시키다'},
+      {w:'mention',pos:'v/n',m:'(간단히) 말하다, 언급하다; (간단한) 언급, 거론',ex:'mention that he has a problem 그에게 문제가 있다는 것을 말하다'},
+      {w:'wrangle',pos:'v/n',m:'말다툼하다, 언쟁하다; 언쟁, 다툼',ex:'wrangle with one\'s wife 부인과 다투다'},
+      {w:'oral',pos:'a',m:'입의, 구강의; 말로 하는',ex:'oral proficiency 구술 능력'},
+      {w:'pronounce',pos:'v',m:'발음하다; 선언하다',ex:'practice pronouncing English 영어 발음하는 것을 연습하다'},
+      {w:'refute',pos:'v',m:'반박하다; 부인하다',ex:'refute one\'s argument 주장을 반박하다'},
+      {w:'respond',pos:'v',m:'대답하다, 답장하다; 반응하다',ex:'respond to one\'s question 질문에 대답하다'},
+      {w:'simultaneous',pos:'a',m:'동시에 일어나는',ex:'simultaneous translation 동시통역'},
+      {w:'gist',pos:'n',m:'요지, 골자',ex:'the gist of one\'s argument 주장의 요지'},
+      {w:'succinct',pos:'a',m:'간결한, 간단명료한',ex:'a succinct answer 간결한 대답'},
+      {w:'trenchant',pos:'a',m:'신랄한, 예리한',ex:'a trenchant analysis 예리한 분석'},
+      {w:'unctuous',pos:'a',m:'(말·행동이) 번지르르한, (사람이) 느끼한',ex:'an unctuous manner 번지르르한 태도'},
+      {w:'verbose',pos:'a',m:'말이 많은, 장황한',ex:'a verbose writing style 장황한 문체'},
+      {w:'mordant',pos:'a',m:'신랄한, 통렬한',ex:'a mordant remark 신랄한 말'}
+    ]
+  },
+  6: {
+    theme: 'Emotions 감정',
+    words: [
+      {w:'affectionate',pos:'a',m:'다정한, 애정 어린',ex:'be affectionate toward one\'s children 자식들에게 다정하다'},
+      {w:'aloof',pos:'a',m:'냉담한; 떨어져 있는',ex:'keep aloof from the politics 정치에 대해 냉담하다'},
+      {w:'annoying',pos:'a',m:'짜증 나게 하는',ex:'the annoying noise 짜증 나는 소리'},
+      {w:'appreciate',pos:'v',m:'고맙게 여기다; 진가를 알다, 감상하다; 값이 오르다',ex:'appreciate another\'s help 남의 도움을 고맙게 여기다'},
+      {w:'arrogant',pos:'a',m:'거만한, 오만한',ex:'an arrogant boss 거만한 상사'},
+      {w:'assuage',pos:'v',m:'(안 좋은 감정을) 누그러뜨리다; 달래다',ex:'assuage one\'s fear 두려움을 누그러뜨리다'},
+      {w:'audacious',pos:'a',m:'대담한; 뻔뻔한',ex:'make an audacious plan 대담한 계획을 세우다'},
+      {w:'awesome',pos:'a',m:'굉장한, 훌륭한',ex:'throw an awesome party 멋진 파티를 열다'},
+      {w:'complacent',pos:'a',m:'자기 만족적인; 무관심한',ex:'a complacent attitude 현실에 안주하는 태도'},
+      {w:'compliment',pos:'n',m:'칭찬, 찬사',ex:'receive a compliment 찬사를 받다'},
+      {w:'confidence',pos:'n',m:'자신감; 신뢰',ex:'lack the confidence to succeed 성공에 대한 자신감이 부족하다'},
+      {w:'distraught',pos:'a',m:'(흥분해서) 제정신이 아닌; 곤혹스러운',ex:'be distraught over his death 그의 죽음에 대해 제정신이 아니다'},
+      {w:'depressed',pos:'a',m:'우울한; 불경기의',ex:'in a depressed mood 우울한 기분으로'},
+      {w:'consolation',pos:'n',m:'위로, 위안',ex:'find consolation in music 음악에서 위안을 찾다'},
+      {w:'exuberant',pos:'a',m:'활기(열의)가 넘치는; 원기 왕성한',ex:'young and exuberant girls 젊고 활기 넘치는 아가씨들'},
+      {w:'fascinating',pos:'a',m:'매력적인',ex:'find the film fascinating 그 영화가 아주 재미있다고 느끼다'},
+      {w:'frantic',pos:'a',m:'제정신이 아닌; 정신없는',ex:'make a frantic effort 미친 듯이 노력하다'},
+      {w:'frightened',pos:'a',m:'겁먹은, 무서워하는',ex:'be frightened to speak 말하는 데 겁을 먹다'},
+      {w:'frivolous',pos:'a',m:'경솔한, 어리석은; 사소한, 하찮은',ex:'a frivolous conversation 쓸데없는 대화'},
+      {w:'furious',pos:'a',m:'몹시 화가 난; 맹렬한',ex:'be furious at the decision 그 결정에 격노하다'},
+      {w:'grim',pos:'a',m:'암울한; 엄한, 비장한',ex:'the grim prospect 암울한 전망'},
+      {w:'grudge',pos:'n/v',m:'원한, 악의; 인색하게 굴다',ex:'bear a grudge against 에 대해 원한을 품다'},
+      {w:'hilarious',pos:'a',m:'유쾌한, 즐거운',ex:'a hilarious joke 아주 우스운 농담'},
+      {w:'hospitable',pos:'a',m:'환대하는, 친절한; (환경이) 쾌적한, 알맞은',ex:'be hospitable to the guests 손님들에게 친절하다'},
+      {w:'hostile',pos:'a',m:'적대적인',ex:'get a hostile reception 적대적인 반응을 받다'},
+      {w:'intimidate',pos:'v',m:'위협(협박)하다',ex:'intimidate one\'s opponents with threats 협박으로 적들을 위협하다'},
+      {w:'jealous',pos:'a',m:'질투하는',ex:'feel jealous of one\'s good looks 잘생긴 외모에 질투가 나다'},
+      {w:'melancholy',pos:'n',m:'우울감, 비애',ex:'a mood of melancholy 우울한 기분'},
+      {w:'nostalgia',pos:'n',m:'향수',ex:'feel nostalgia for one\'s schooldays 학창 시절에 대한 향수를 느끼다'},
+      {w:'panic',pos:'n',m:'극심한 공포, 공황, 패닉',ex:'get into a panic 공황에 빠지다'},
+      {w:'penchant',pos:'n',m:'애호, 경향',ex:'have a penchant for wine 와인을 애호하다'},
+      {w:'pessimistic',pos:'a',m:'비관적인',ex:'a pessimistic view 비관적인 견해'},
+      {w:'pretentious',pos:'a',m:'허세 부리는, 가식적인',ex:'deliver a pretentious speech 허세 부리는 연설을 하다'},
+      {w:'stubborn',pos:'a',m:'완고한, 고집 센; 잘 사라지지 않는',ex:'be too stubborn to admit 너무 고집스러워 인정하지 않다'},
+      {w:'sympathy',pos:'n',m:'동정심, 연민; 공감',ex:'express sympathy for 에게 연민을 표하다'},
+      {w:'tantrum',pos:'n',m:'(아이의) 떼, 투정, 짜증',ex:'have a tantrum 떼를 쓰다, 투정부리다'},
+      {w:'thwart',pos:'v',m:'좌절시키다',ex:'thwart one\'s plan 계획을 좌절시키다'},
+      {w:'upset',pos:'a/v',m:'속상한, 기분이 상한; 속상하게 하다; 망치다',ex:'feel upset by 로 속이 상하다'},
+      {w:'vacillate',pos:'v',m:'머뭇거리다; 오락가락하다, 동요하다',ex:'vacillate between hope and despair 희망과 절망 사이를 오락가락하다'},
+      {w:'volatile',pos:'a',m:'변덕스러운; 휘발성의',ex:'a volatile disposition 변덕스러운 성질'}
+    ]
+  }
+};
+
+// 주차 구성: 2일씩
+const WEEKS = [
+  { num: 1, days: [1, 2], label: '1주차', done: true },
+  { num: 2, days: [3, 4], label: '2주차', done: true },
+  { num: 3, days: [5, 6], label: '3주차', done: false, current: true },
+  { num: 4, days: [7, 8], label: '4주차', done: false },
+  { num: 5, days: [9, 10], label: '5주차', done: false },
+  { num: 6, days: [11, 12], label: '6주차', done: false },
+  { num: 7, days: [13, 14], label: '7주차', done: false },
+  { num: 8, days: [15, 16], label: '8주차', done: false },
+  { num: 9, days: [17, 18], label: '9주차', done: false },
+  { num: 10, days: [19, 20], label: '10주차', done: false },
+  { num: 11, days: [21, 22], label: '11주차', done: false },
+  { num: 12, days: [23, 24], label: '12주차', done: false },
+  { num: 13, days: [25, 26], label: '13주차', done: false },
+  { num: 14, days: [27, 28], label: '14주차', done: false },
+  { num: 15, days: [29, 30], label: '15주차', done: false },
+];
+
+const AVAILABLE_DAYS = Object.keys(DB).map(Number);
+
+// State
+let state = {
+  mode: 'mc',
+  selectedDays: [],
+  questions: [],
+  idx: 0,
+  score: 0,
+  hearts: 3,
+  streak: 0,
+  maxStreak: 0,
+  correct: 0,
+  lastDays: [],
+  currentMode: 'mc'
+};
+
+// ==================== INIT ====================
+function init() {
+  renderWeeks();
+  renderDayCheckboxes();
+  selectMode('mc');
+}
+
+function renderWeeks() {
+  const grid = document.getElementById('week-grid');
+  grid.innerHTML = '';
+  WEEKS.forEach(w => {
+    const hasData = w.days.some(d => AVAILABLE_DAYS.includes(d));
+    const allDays = w.days.map(d => `Day ${d}`).join(' + ');
+    const div = document.createElement('div');
+    div.className = 'week-card' + (w.done ? ' done' : '') + (w.current ? ' selected' : '') + (!hasData && !w.done ? ' disabled' : '');
+    div.innerHTML = `
+      <div class="week-num">${w.label}</div>
+      <div class="week-days">${allDays}</div>
+      ${w.done ? '<div class="done-badge">✓ 시험 완료</div>' : ''}
+      ${w.current ? '<div class="tag tag-teal" style="margin-top:4px">이번 주 ★</div>' : ''}
+      ${!hasData && !w.done ? '<div style="font-size:10px;color:var(--text-muted);margin-top:4px">준비중</div>' : ''}
+    `;
+    if (hasData) {
+      div.onclick = () => startWeek(w);
+    } else if (w.done) {
+      div.onclick = () => showNotif('이 주차 단어는 아직 추가되지 않았어요');
+    }
+    grid.appendChild(div);
+  });
+}
+
+function renderDayCheckboxes() {
+  const container = document.getElementById('day-checkboxes');
+  container.innerHTML = '';
+  for (let d = 1; d <= 30; d++) {
+    const hasData = AVAILABLE_DAYS.includes(d);
+    const cb = document.createElement('input');
+    cb.type = 'checkbox'; cb.className = 'day-cb'; cb.id = `cb${d}`; cb.value = d;
+    cb.disabled = !hasData;
+    cb.onchange = updateCustomCount;
+    const label = document.createElement('label');
+    label.htmlFor = `cb${d}`;
+    label.className = 'day-cb-label' + (!hasData ? ' disabled-day' : '');
+    label.textContent = `D${d}`;
+    container.appendChild(cb);
+    container.appendChild(label);
+  }
+}
+
+function updateCustomCount() {
+  const checked = getCheckedDays();
+  const total = checked.reduce((s, d) => s + (DB[d]?.words.length || 0), 0);
+  const el = document.getElementById('custom-count');
+  if (checked.length === 0) {
+    el.textContent = 'Day를 선택하세요';
+  } else {
+    el.textContent = `${checked.map(d=>'Day '+d).join(', ')} · 총 ${total}개 단어`;
+  }
+}
+
+function getCheckedDays() {
+  return Array.from(document.querySelectorAll('.day-cb:checked')).map(cb => parseInt(cb.value));
+}
+
+function selectMode(m) {
+  state.mode = m;
+  ['mc','reverse','spell','mix'].forEach(id => {
+    document.getElementById('mode-'+id).classList.toggle('selected', id === m);
+  });
+}
+
+// ==================== START ====================
+function startWeek(week) {
+  const days = week.days.filter(d => AVAILABLE_DAYS.includes(d));
+  if (days.length === 0) { showNotif('해당 주차 단어가 아직 준비되지 않았어요'); return; }
+  startWithDays(days);
+}
+
+function startCustom() {
+  const days = getCheckedDays();
+  if (days.length === 0) { showNotif('Day를 하나 이상 선택하세요'); return; }
+  startWithDays(days);
+}
+
+function startWithDays(days) {
+  state.lastDays = days;
+  const pool = days.flatMap(d => (DB[d]?.words || []).map(w => ({...w, day: d})));
+  if (pool.length === 0) { showNotif('선택한 Day에 단어가 없어요'); return; }
+  const shuffled = shuffle(pool);
+  const count = Math.min(20, shuffled.length);
+  state.questions = shuffled.slice(0, count);
+  state.idx = 0; state.score = 0; state.hearts = 3;
+  state.streak = 0; state.maxStreak = 0; state.correct = 0;
+  showScreen('quiz');
+  renderQ();
+}
+
+function retryQuiz() {
+  startWithDays(state.lastDays);
+}
+
+function quitQuiz() {
+  if (confirm('테스트를 그만할까요?')) goHome();
+}
+
+// ==================== QUIZ ====================
+function renderQ() {
+  if (state.idx >= state.questions.length || state.hearts <= 0) { showResult(); return; }
+  const q = state.questions[state.idx];
+  const total = state.questions.length;
+
+  document.getElementById('q-counter').textContent = `${state.idx+1} / ${total}`;
+  document.getElementById('q-prog').style.width = `${((state.idx+1)/total)*100}%`;
+  document.getElementById('score-disp').textContent = `${state.score}점`;
+  ['h1','h2','h3'].forEach((id,i) => {
+    const el = document.getElementById(id);
+    el.classList.toggle('dead', i >= state.hearts);
+  });
+
+  // Tags
+  const tags = document.getElementById('q-tags');
+  const dayTheme = DB[q.day] ? DB[q.day].theme.split(' ')[0] : `Day ${q.day}`;
+  let modeLabel, modeActual = state.mode;
+  if (state.mode === 'mix') {
+    const modes = ['mc','mc','reverse','spell'];
+    modeActual = modes[Math.floor(Math.random() * modes.length)];
+  }
+  state.currentMode = modeActual;
+  const modeLabels = {mc:'뜻 고르기', reverse:'한→영 선택', spell:'영단어 입력'};
+  modeLabel = modeLabels[modeActual];
+
+  const dayColor = q.day === 5 ? 'tag-blue' : 'tag-teal';
+  let streakHtml = state.streak >= 2 ? `<span class="streak-badge">🔥 ${state.streak}연속</span>` : '';
+  tags.innerHTML = `<span class="tag ${dayColor}">Day ${q.day}</span><span class="tag tag-amber">${q.pos}</span><span class="tag tag-gray">${modeLabel}</span>${streakHtml}`;
+
+  // Reset
+  document.getElementById('feedback-area').innerHTML = '';
+  document.getElementById('next-btn').style.display = 'none';
+  document.getElementById('area-mc').style.display = 'none';
+  document.getElementById('area-spell').style.display = 'none';
+
+  const allWords = state.questions;
+
+  if (modeActual === 'mc') {
+    document.getElementById('area-mc').style.display = 'block';
+    document.getElementById('q-word').textContent = q.w;
+    document.getElementById('q-sub').textContent = `(${q.pos})`;
+    const wrong = shuffle(allWords.filter(x => x.w !== q.w)).slice(0, 3).map(x => x.m);
+    const choices = shuffle([q.m, ...wrong]);
+    const mc = document.getElementById('mc-choices'); mc.innerHTML = '';
+    choices.forEach((c, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.textContent = `${String.fromCharCode(65+i)}. ${c}`;
+      btn.onclick = () => checkMC(c === q.m, q, btn, mc);
+      mc.appendChild(btn);
+    });
+
+  } else if (modeActual === 'reverse') {
+    document.getElementById('area-mc').style.display = 'block';
+    document.getElementById('q-word').textContent = q.m;
+    document.getElementById('q-word').style.fontSize = '18px';
+    document.getElementById('q-sub').textContent = `(${q.pos}) — 해당하는 영단어를 고르세요`;
+    const wrong = shuffle(allWords.filter(x => x.w !== q.w)).slice(0, 3).map(x => x.w);
+    const choices = shuffle([q.w, ...wrong]);
+    const mc = document.getElementById('mc-choices'); mc.innerHTML = '';
+    choices.forEach((c, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.textContent = `${String.fromCharCode(65+i)}. ${c}`;
+      btn.onclick = () => checkMC(c === q.w, q, btn, mc);
+      mc.appendChild(btn);
+    });
+
+  } else {
+    document.getElementById('area-spell').style.display = 'block';
+    document.getElementById('spell-meaning').textContent = q.m;
+    document.getElementById('spell-hint').textContent = `(${q.pos}) · ${q.ex}`;
+    const inp = document.getElementById('spell-input');
+    inp.value = ''; inp.disabled = false;
+    inp.className = 'spell-input';
+    inp.onkeydown = e => { if (e.key === 'Enter') checkSpell(); };
+    setTimeout(() => inp.focus(), 100);
+  }
+
+  document.getElementById('q-word').style.fontSize = '';
+}
+
+function checkMC(isCorrect, q, clickedBtn, container) {
+  container.querySelectorAll('.choice-btn').forEach(b => { b.disabled = true; });
+  // Mark correct
+  container.querySelectorAll('.choice-btn').forEach(b => {
+    const txt = b.textContent.slice(3);
+    const isAns = state.currentMode === 'reverse' ? txt === q.w : txt === q.m;
+    if (isAns) b.classList.add('correct');
+  });
+  if (!isCorrect) clickedBtn.classList.add('wrong');
+  handleResult(isCorrect, q);
+}
+
+function checkSpell() {
+  const q = state.questions[state.idx];
+  const inp = document.getElementById('spell-input');
+  const ans = inp.value.trim().toLowerCase();
+  inp.disabled = true;
+  const isCorrect = ans === q.w.toLowerCase();
+  inp.classList.add(isCorrect ? 'correct' : 'wrong');
+  handleResult(isCorrect, q);
+}
+
+function handleResult(isCorrect, q) {
+  const fb = document.getElementById('feedback-area');
+  if (isCorrect) {
+    state.streak++; state.correct++;
+    if (state.streak > state.maxStreak) state.maxStreak = state.streak;
+    const bonus = state.streak >= 3 ? Math.min(state.streak, 5) * 2 : 0;
+    state.score += 10 + bonus;
+    const bonusTxt = bonus > 0 ? ` (+${bonus}점 보너스🔥)` : '';
+    fb.innerHTML = `<div class="feedback correct">✅ 정답!${bonusTxt}<br><strong>${q.w}</strong> = ${q.m}<div class="feedback-ex">📌 ${q.ex}</div></div>`;
+  } else {
+    state.streak = 0; state.hearts--;
+    ['h1','h2','h3'].forEach((id,i) => {
+      document.getElementById(id).classList.toggle('dead', i >= state.hearts);
+    });
+    fb.innerHTML = `<div class="feedback wrong">❌ 틀렸어요!<br>정답: <strong>${q.w}</strong> = ${q.m}<div class="feedback-ex">📌 ${q.ex}</div></div>`;
+  }
+  document.getElementById('score-disp').textContent = `${state.score}점`;
+  if (state.hearts <= 0) {
+    setTimeout(showResult, 1300);
+  } else {
+    document.getElementById('next-btn').style.display = 'block';
+  }
+}
+
+function nextQ() {
+  document.getElementById('spell-input').className = 'spell-input';
+  state.idx++;
+  renderQ();
+}
+
+// ==================== RESULT ====================
+function showResult() {
+  showScreen('result');
+  const total = state.questions.length;
+  const rate = Math.round((state.correct / total) * 100);
+  let emoji = '😅', title = '조금 더 연습해봐요!';
+  if (rate >= 90) { emoji = '🏆'; title = '완벽해요!'; }
+  else if (rate >= 70) { emoji = '🎉'; title = '잘했어요!'; }
+  else if (rate >= 50) { emoji = '💪'; title = '좋아요, 계속 도전!'; }
+
+  document.getElementById('res-emoji').textContent = emoji;
+  document.getElementById('res-title').textContent = title;
+  const dayLabel = state.lastDays.map(d => `Day ${d}`).join(' + ');
+  document.getElementById('res-sub').textContent = `${dayLabel} · ${total}문제 완료`;
+  document.getElementById('res-score').textContent = state.score;
+  document.getElementById('res-rate').textContent = rate + '%';
+  document.getElementById('res-streak').textContent = state.maxStreak + '🔥';
+
+  // Missed words
+  const missed = state.questions.filter((q, i) => {
+    // track per-question result
+    return false; // simplified - show all wrong
+  });
+  document.getElementById('missed-section').innerHTML = '';
+}
+
+// ==================== UTILS ====================
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+function goHome() { showScreen('home'); }
+function showNotif(msg) {
+  const el = document.getElementById('notif');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+init();
+</script>
+</body>
+</html>
