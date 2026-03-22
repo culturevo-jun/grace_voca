@@ -3,662 +3,1066 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEW TEPS VOCA 게임</title>
+<title>NEW TEPS VOCA — Grace</title>
 <style>
-  :root {
-    --teal: #1D9E75; --teal-light: #E1F5EE; --teal-dark: #0F6E56;
-    --blue: #185FA5; --blue-light: #E6F1FB;
-    --amber: #BA7517; --amber-light: #FAEEDA;
-    --red: #E24B4A; --red-light: #FCEBEB;
-    --gray: #5F5E5A; --gray-light: #F1EFE8;
-    --text: #2C2C2A; --text-muted: #888780;
-    --bg: #ffffff; --bg-sec: #F1EFE8; --border: rgba(0,0,0,0.15);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; color: var(--text); min-height: 100vh; }
-  
-  .app { max-width: 680px; margin: 0 auto; padding: 16px; }
-  
-  /* Header */
-  .header { text-align: center; padding: 24px 0 16px; }
-  .header h1 { font-size: 22px; font-weight: 600; color: var(--text); }
-  .header p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
-  
-  /* Cards */
-  .card { background: var(--bg); border: 0.5px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 12px; }
-  
-  /* Buttons */
-  .btn { border: 0.5px solid var(--border); background: var(--bg); border-radius: 8px; padding: 10px 18px; font-size: 14px; cursor: pointer; color: var(--text); font-family: inherit; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; }
-  .btn:hover { background: var(--bg-sec); }
-  .btn.primary { background: var(--teal); color: white; border-color: var(--teal-dark); }
-  .btn.primary:hover { background: var(--teal-dark); }
-  .btn.secondary { background: var(--blue-light); color: var(--blue); border-color: #B5D4F4; }
-  .btn.full { width: 100%; justify-content: center; padding: 14px; font-size: 15px; }
-  
-  /* Tags */
-  .tag { font-size: 11px; padding: 3px 8px; border-radius: 6px; font-weight: 500; display: inline-block; }
-  .tag-teal { background: var(--teal-light); color: var(--teal-dark); }
-  .tag-blue { background: var(--blue-light); color: var(--blue); }
-  .tag-amber { background: var(--amber-light); color: var(--amber); }
-  .tag-red { background: var(--red-light); color: var(--red); }
-  .tag-gray { background: var(--gray-light); color: var(--gray); }
-  
-  /* Screen */
-  .screen { display: none; }
-  .screen.active { display: block; }
-  
-  /* Home - Week buttons */
-  .week-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-  .week-card { border: 1.5px solid var(--border); border-radius: 10px; padding: 14px; cursor: pointer; background: var(--bg); transition: all 0.15s; text-align: center; }
-  .week-card:hover { border-color: var(--teal); background: var(--teal-light); }
-  .week-card.selected { border-color: var(--teal); background: var(--teal-light); }
-  .week-card.disabled { opacity: 0.4; cursor: default; }
-  .week-card.disabled:hover { border-color: var(--border); background: var(--bg); }
-  .week-num { font-size: 18px; font-weight: 700; color: var(--teal); }
-  .week-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-  .week-days { font-size: 12px; font-weight: 500; color: var(--text); margin-top: 4px; }
-  .week-card.done .week-num { color: var(--text-muted); }
-  .done-badge { font-size: 10px; background: var(--gray-light); color: var(--gray); padding: 2px 6px; border-radius: 4px; margin-top: 4px; display: inline-block; }
-  
-  /* Custom day select */
-  .day-checkboxes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
-  .day-cb { display: none; }
-  .day-cb-label { display: block; text-align: center; padding: 8px 4px; border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.15s; }
-  .day-cb-label.disabled-day { opacity: 0.3; cursor: default; pointer-events: none; }
-  .day-cb:checked + .day-cb-label { border-color: var(--teal); background: var(--teal-light); color: var(--teal-dark); }
-  .day-cb-label:hover { border-color: var(--teal); }
-  
-  /* Mode select */
-  .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .mode-card { border: 1.5px solid var(--border); border-radius: 8px; padding: 12px; cursor: pointer; text-align: center; transition: all 0.15s; background: var(--bg); }
-  .mode-card:hover { border-color: var(--teal); }
-  .mode-card.selected { border-color: var(--teal); background: var(--teal-light); }
-  .mode-icon { font-size: 20px; margin-bottom: 4px; }
-  .mode-title { font-size: 13px; font-weight: 600; }
-  .mode-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-  
-  /* Quiz */
-  .progress-bar { height: 8px; background: var(--bg-sec); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
-  .progress-fill { height: 100%; background: var(--teal); transition: width 0.4s; border-radius: 4px; }
-  .quiz-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .hearts { display: flex; gap: 3px; }
-  .heart { font-size: 18px; color: var(--red); transition: opacity 0.3s; }
-  .heart.dead { opacity: 0.2; }
-  .score-disp { font-size: 14px; font-weight: 600; color: var(--teal); }
-  .q-counter { font-size: 13px; color: var(--text-muted); }
-  
-  .quiz-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: 12px; padding: 20px; min-height: 300px; }
-  .q-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
-  .q-word { font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 6px; letter-spacing: 0.3px; }
-  .q-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5; }
-  
-  /* Choices */
-  .choice-btn { width: 100%; text-align: left; padding: 13px 16px; margin: 5px 0; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; font-size: 14px; color: var(--text); font-family: inherit; transition: all 0.15s; line-height: 1.5; }
-  .choice-btn:hover:not(:disabled) { background: var(--bg-sec); border-color: var(--teal); }
-  .choice-btn.correct { background: var(--teal-light) !important; border-color: var(--teal) !important; color: #085041 !important; font-weight: 500; }
-  .choice-btn.wrong { background: var(--red-light) !important; border-color: var(--red) !important; color: #501313 !important; }
-  
-  /* Spell input */
-  .spell-input { width: 100%; border: 1.5px solid var(--border); border-radius: 8px; padding: 13px 16px; font-size: 18px; text-align: center; font-family: inherit; background: var(--bg); color: var(--text); outline: none; transition: border-color 0.2s; }
-  .spell-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(29,158,117,0.1); }
-  .spell-input.correct { border-color: var(--teal); background: var(--teal-light); }
-  .spell-input.wrong { border-color: var(--red); background: var(--red-light); }
-  
-  /* Feedback */
-  .feedback { padding: 12px 16px; border-radius: 8px; font-size: 14px; margin: 10px 0; line-height: 1.6; }
-  .feedback.correct { background: var(--teal-light); color: #085041; border-left: 3px solid var(--teal); }
-  .feedback.wrong { background: var(--red-light); color: #501313; border-left: 3px solid var(--red); }
-  .feedback-ex { font-size: 12px; margin-top: 6px; opacity: 0.85; }
-  
-  /* Result */
-  .result-emoji { font-size: 48px; text-align: center; margin: 10px 0; }
-  .result-title { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 6px; }
-  .result-sub { font-size: 14px; color: var(--text-muted); text-align: center; margin-bottom: 20px; }
-  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
-  .stat-box { background: var(--bg-sec); border-radius: 8px; padding: 12px; text-align: center; }
-  .stat-label { font-size: 11px; color: var(--text-muted); }
-  .stat-value { font-size: 24px; font-weight: 700; color: var(--text); }
-  .missed-section { margin-bottom: 16px; }
-  .missed-title { font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; }
-  .missed-word { display: inline-block; background: var(--red-light); color: #A32D2D; border-radius: 6px; padding: 4px 10px; margin: 3px; font-size: 13px; font-weight: 500; }
-  .result-btns { display: flex; gap: 8px; }
-  
-  /* Divider */
-  .divider { border: none; border-top: 0.5px solid var(--border); margin: 16px 0; }
-  
-  /* Section title */
-  .section-title { font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+:root {
+  --teal:#1D9E75;--teal-l:#E1F5EE;--teal-d:#0F6E56;--teal-ll:#9FE1CB;
+  --blue:#185FA5;--blue-l:#E6F1FB;--blue-ll:#B5D4F4;
+  --amber:#BA7517;--amber-l:#FAEEDA;
+  --red:#E24B4A;--red-l:#FCEBEB;
+  --gray:#5F5E5A;--gray-l:#F1EFE8;--gray-ll:#D3D1C7;
+  --text:#2C2C2A;--text-m:#888780;--text-h:#444441;
+  --bg:#fff;--bg2:#F1EFE8;--bd:rgba(0,0,0,0.13);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0efea;color:var(--text);min-height:100vh}
+.app{max-width:700px;margin:0 auto;padding:16px}
 
-  /* Streak */
-  .streak-badge { background: var(--amber-light); color: var(--amber); font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 6px; }
+/* Typography */
+h2{font-size:18px;font-weight:600;margin-bottom:4px}
+h3{font-size:15px;font-weight:600}
+p{font-size:14px;line-height:1.6;color:var(--text-h)}
 
-  /* Notification */
-  .notif { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--text); color: white; padding: 10px 20px; border-radius: 8px; font-size: 14px; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
-  .notif.show { opacity: 1; }
+/* Card */
+.card{background:var(--bg);border:0.5px solid var(--bd);border-radius:12px;padding:18px 20px;margin-bottom:12px}
+.card-sm{background:var(--bg);border:0.5px solid var(--bd);border-radius:10px;padding:14px 16px;margin-bottom:8px}
 
-  @media (max-width: 480px) {
-    .week-grid { grid-template-columns: 1fr 1fr; }
-    .day-checkboxes { grid-template-columns: repeat(4, 1fr); }
-    .stat-grid { grid-template-columns: repeat(3, 1fr); }
-  }
+/* Buttons */
+.btn{border:0.5px solid var(--bd);background:var(--bg);border-radius:8px;padding:9px 16px;font-size:14px;cursor:pointer;color:var(--text);font-family:inherit;transition:all .15s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{background:var(--bg2)}
+.btn.teal{background:var(--teal);color:#fff;border-color:var(--teal-d)}
+.btn.teal:hover{background:var(--teal-d)}
+.btn.blue{background:var(--blue-l);color:var(--blue);border-color:var(--blue-ll)}
+.btn.blue:hover{background:#dae9f8}
+.btn.full{width:100%;justify-content:center;padding:13px;font-size:15px}
+.btn.sm{padding:6px 12px;font-size:13px}
+.btn:disabled{opacity:.4;cursor:default}
+
+/* Tag */
+.tag{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500;display:inline-block}
+.tag-teal{background:var(--teal-l);color:var(--teal-d)}
+.tag-blue{background:var(--blue-l);color:var(--blue)}
+.tag-amber{background:var(--amber-l);color:var(--amber)}
+.tag-gray{background:var(--gray-l);color:var(--gray)}
+.tag-red{background:var(--red-l);color:var(--red)}
+
+/* Screen */
+.screen{display:none}
+.screen.active{display:block}
+
+/* ──────── HOME ──────── */
+.home-header{text-align:center;padding:20px 0 14px}
+.home-header h1{font-size:24px;font-weight:700;color:var(--text)}
+.home-header p{font-size:13px;color:var(--text-m);margin-top:3px}
+
+.day-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:4px}
+.day-btn{background:var(--bg);border:1.5px solid var(--bd);border-radius:10px;padding:14px 12px;cursor:pointer;text-align:left;transition:all .15s;font-family:inherit}
+.day-btn:hover{border-color:var(--teal);background:var(--teal-l)}
+.day-btn.active{border-color:var(--teal);background:var(--teal-l)}
+.day-btn .db-num{font-size:16px;font-weight:700;color:var(--teal);margin-bottom:2px}
+.day-btn .db-theme{font-size:11px;color:var(--text-m);margin-bottom:6px;line-height:1.4}
+.day-btn .db-cnt{font-size:11px;font-weight:500;color:var(--text-h)}
+.day-btn.locked{opacity:.4;cursor:not-allowed}
+.day-btn.locked:hover{border-color:var(--bd);background:var(--bg)}
+
+.step-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px}
+.step-tab{border:1.5px solid var(--bd);border-radius:10px;padding:14px;cursor:pointer;text-align:center;transition:all .15s;background:var(--bg);font-family:inherit}
+.step-tab:hover{border-color:var(--teal)}
+.step-tab.active{border-color:var(--teal);background:var(--teal-l)}
+.step-tab .st-icon{font-size:22px;margin-bottom:5px}
+.step-tab .st-title{font-size:14px;font-weight:600;color:var(--text)}
+.step-tab .st-desc{font-size:11px;color:var(--text-m);margin-top:2px}
+
+/* ──────── LEARN (Step 1) ──────── */
+.learn-progress{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.learn-prog-bar{flex:1;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden}
+.learn-prog-fill{height:100%;background:var(--teal);border-radius:3px;transition:width .4s}
+.learn-prog-text{font-size:12px;color:var(--text-m);white-space:nowrap}
+
+.word-card{background:var(--bg);border:0.5px solid var(--bd);border-radius:14px;padding:22px 22px 18px;margin-bottom:10px}
+.wc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px}
+.wc-word{font-size:32px;font-weight:700;color:var(--text);line-height:1.2}
+.wc-pron{font-size:13px;color:var(--text-m);margin-top:3px}
+.wc-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+.wc-meaning{font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px;line-height:1.5}
+.wc-meaning-en{font-size:13px;color:var(--text-m);margin-bottom:12px}
+
+.section-label{font-size:11px;font-weight:600;color:var(--text-m);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+.phrase-row{display:flex;gap:8px;margin-bottom:5px;font-size:13px;line-height:1.5}
+.phrase-en{color:var(--teal-d);font-weight:500;min-width:0}
+.phrase-kr{color:var(--text-h)}
+.ex-box{background:var(--blue-l);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;padding:10px 12px;margin-top:8px}
+.ex-en{font-size:13px;font-weight:500;color:var(--blue);line-height:1.6;margin-bottom:4px}
+.ex-kr{font-size:12px;color:var(--text-m);line-height:1.5}
+.ex-kw{font-weight:700;color:var(--blue)}
+
+.voca-box{background:var(--gray-l);border-radius:8px;padding:8px 12px;margin-top:8px}
+.voca-item{font-size:12px;color:var(--text-h);line-height:1.7}
+.voca-word{font-weight:600;color:var(--text)}
+
+.learn-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:4px}
+.nav-dots{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;flex:1}
+.nav-dot{width:8px;height:8px;border-radius:50%;background:var(--gray-ll);cursor:pointer;transition:all .15s;flex-shrink:0}
+.nav-dot.seen{background:var(--teal-ll)}
+.nav-dot.current{background:var(--teal);transform:scale(1.3)}
+
+/* ──────── TEST (Step 2) ──────── */
+.test-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.hearts{display:flex;gap:3px}
+.heart{font-size:18px;color:var(--red);transition:opacity .3s}
+.heart.dead{opacity:.18}
+.score-disp{font-size:14px;font-weight:600;color:var(--teal)}
+.q-count{font-size:13px;color:var(--text-m)}
+.prog-bar{height:7px;background:var(--bg2);border-radius:4px;overflow:hidden;margin-bottom:14px}
+.prog-fill{height:100%;background:var(--teal);border-radius:4px;transition:width .4s}
+
+.q-card{background:var(--bg);border:0.5px solid var(--bd);border-radius:12px;padding:20px;min-height:280px}
+.q-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.q-word{font-size:26px;font-weight:700;color:var(--text);margin-bottom:5px}
+.q-sub{font-size:13px;color:var(--text-m);margin-bottom:16px;line-height:1.5}
+
+.choice{width:100%;text-align:left;padding:12px 16px;margin:5px 0;border:1px solid var(--bd);border-radius:8px;background:var(--bg);cursor:pointer;font-size:14px;color:var(--text);font-family:inherit;transition:all .15s;line-height:1.5}
+.choice:hover:not(:disabled){background:var(--bg2);border-color:var(--teal)}
+.choice.correct{background:var(--teal-l)!important;border-color:var(--teal)!important;color:#085041!important;font-weight:500}
+.choice.wrong{background:var(--red-l)!important;border-color:var(--red)!important;color:#501313!important}
+
+.spell-inp{width:100%;border:1.5px solid var(--bd);border-radius:8px;padding:12px 16px;font-size:18px;text-align:center;font-family:inherit;background:var(--bg);color:var(--text);outline:none;transition:border-color .2s}
+.spell-inp:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(29,158,117,.1)}
+.spell-inp.ok{border-color:var(--teal);background:var(--teal-l)}
+.spell-inp.ng{border-color:var(--red);background:var(--red-l)}
+
+.feedback{padding:12px 16px;border-radius:8px;font-size:14px;margin:10px 0;line-height:1.6;border-left:3px solid}
+.feedback.ok{background:var(--teal-l);color:#085041;border-color:var(--teal)}
+.feedback.ng{background:var(--red-l);color:#501313;border-color:var(--red)}
+.feedback-ex{font-size:12px;margin-top:5px;opacity:.85}
+
+/* ──────── RESULT ──────── */
+.res-emoji{font-size:46px;text-align:center;margin:8px 0}
+.res-title{font-size:22px;font-weight:700;text-align:center;margin-bottom:5px}
+.res-sub{font-size:13px;color:var(--text-m);text-align:center;margin-bottom:18px}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.stat{background:var(--bg2);border-radius:8px;padding:12px;text-align:center}
+.stat-l{font-size:11px;color:var(--text-m)}
+.stat-v{font-size:22px;font-weight:700}
+
+/* Divider */
+hr{border:none;border-top:0.5px solid var(--bd);margin:14px 0}
+
+/* Notif */
+.notif{position:fixed;top:18px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;padding:9px 18px;border-radius:8px;font-size:13px;z-index:999;opacity:0;transition:opacity .25s;pointer-events:none}
+.notif.show{opacity:1}
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="header">
+
+<!-- ═══════════════ HOME ═══════════════ -->
+<div id="s-home" class="screen active">
+  <div class="home-header">
     <h1>📚 NEW TEPS VOCA</h1>
-    <p>서울대 최신기출 · 교재 단어 완전 수록</p>
+    <p>서울대 최신기출 · Grace</p>
   </div>
 
-  <!-- HOME SCREEN -->
-  <div id="screen-home" class="screen active">
-
-    <div class="card">
-      <div class="section-title">주차별 테스트</div>
-      <div class="week-grid" id="week-grid"></div>
-    </div>
-
-    <div class="card">
-      <div class="section-title">원하는 날 조합하기</div>
-      <div class="day-checkboxes" id="day-checkboxes"></div>
-      <div style="margin-top:10px;display:flex;align-items:center;justify-content:space-between">
-        <span id="custom-count" style="font-size:13px;color:var(--text-muted)">Day를 선택하세요</span>
-        <button class="btn secondary" onclick="startCustom()">조합 테스트 →</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="section-title">게임 모드</div>
-      <div class="mode-grid">
-        <div class="mode-card selected" id="mode-mc" onclick="selectMode('mc')">
-          <div class="mode-icon">🎯</div>
-          <div class="mode-title">뜻 고르기</div>
-          <div class="mode-desc">영단어 → 한국어 뜻 선택</div>
-        </div>
-        <div class="mode-card" id="mode-reverse" onclick="selectMode('reverse')">
-          <div class="mode-icon">🔄</div>
-          <div class="mode-title">한→영 선택</div>
-          <div class="mode-desc">한국어 뜻 → 영단어 선택</div>
-        </div>
-        <div class="mode-card" id="mode-spell" onclick="selectMode('spell')">
-          <div class="mode-icon">✏️</div>
-          <div class="mode-title">영단어 입력</div>
-          <div class="mode-desc">뜻 보고 단어 직접 쓰기</div>
-        </div>
-        <div class="mode-card" id="mode-mix" onclick="selectMode('mix')">
-          <div class="mode-icon">🎲</div>
-          <div class="mode-title">랜덤 혼합</div>
-          <div class="mode-desc">세 가지 모드 무작위</div>
-        </div>
-      </div>
-    </div>
-
+  <div class="card">
+    <div style="font-size:11px;font-weight:600;color:var(--text-m);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px">Day 선택</div>
+    <div class="day-grid" id="day-grid"></div>
   </div>
 
-  <!-- QUIZ SCREEN -->
-  <div id="screen-quiz" class="screen">
-    <div class="quiz-meta">
-      <div class="hearts">
-        <span class="heart" id="h1">♥</span>
-        <span class="heart" id="h2">♥</span>
-        <span class="heart" id="h3">♥</span>
+  <div class="card">
+    <div style="font-size:11px;font-weight:600;color:var(--text-m);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px">학습 단계</div>
+    <div class="step-tabs">
+      <div class="step-tab active" id="tab-learn" onclick="selectStep('learn')">
+        <div class="st-icon">📖</div>
+        <div class="st-title">Step 1 · 학습</div>
+        <div class="st-desc">단어 · 숙어 · 예문 학습</div>
       </div>
-      <span class="q-counter" id="q-counter">1 / 20</span>
-      <span class="score-disp" id="score-disp">0점</span>
+      <div class="step-tab" id="tab-test" onclick="selectStep('test')">
+        <div class="st-icon">✏️</div>
+        <div class="st-title">Step 2 · 테스트</div>
+        <div class="st-desc">전체 단어 테스트</div>
+      </div>
     </div>
-    <div class="progress-bar"><div class="progress-fill" id="q-prog" style="width:5%"></div></div>
-    <div class="quiz-card">
-      <div class="q-tags" id="q-tags"></div>
-      <div id="area-mc">
-        <div class="q-word" id="q-word"></div>
-        <div class="q-sub" id="q-sub"></div>
-        <div id="mc-choices"></div>
+    <div style="margin-top:10px">
+      <div style="font-size:11px;font-weight:600;color:var(--text-m);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">테스트 모드</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap" id="mode-btns">
+        <button class="btn sm teal" id="m-mc" onclick="selectMode('mc')">🎯 뜻 고르기</button>
+        <button class="btn sm" id="m-rev" onclick="selectMode('rev')">🔄 한→영 선택</button>
+        <button class="btn sm" id="m-sp" onclick="selectMode('sp')">✏️ 영단어 입력</button>
+        <button class="btn sm" id="m-mix" onclick="selectMode('mix')">🎲 랜덤 혼합</button>
       </div>
-      <div id="area-spell" style="display:none">
-        <div class="q-word" id="spell-meaning" style="font-size:18px;font-weight:600;line-height:1.5"></div>
-        <div class="q-sub" id="spell-hint"></div>
-        <input class="spell-input" id="spell-input" placeholder="영단어를 입력하세요" autocomplete="off" autocorrect="off" spellcheck="false">
-        <button class="btn primary full" onclick="checkSpell()" style="margin-top:10px">확인</button>
-      </div>
-      <div id="feedback-area"></div>
-      <button class="btn primary full" id="next-btn" onclick="nextQ()" style="margin-top:12px;display:none">다음 →</button>
     </div>
-    <button class="btn" onclick="quitQuiz()" style="margin-top:10px;width:100%;justify-content:center;color:var(--text-muted)">그만하기</button>
   </div>
 
-  <!-- RESULT SCREEN -->
-  <div id="screen-result" class="screen">
-    <div class="card">
-      <div class="result-emoji" id="res-emoji">🏆</div>
-      <div class="result-title" id="res-title">완료!</div>
-      <div class="result-sub" id="res-sub"></div>
-      <div class="stat-grid">
-        <div class="stat-box"><div class="stat-label">점수</div><div class="stat-value" id="res-score"></div></div>
-        <div class="stat-box"><div class="stat-label">정답률</div><div class="stat-value" id="res-rate"></div></div>
-        <div class="stat-box"><div class="stat-label">최대연속</div><div class="stat-value" id="res-streak"></div></div>
-      </div>
-      <div class="missed-section" id="missed-section"></div>
-      <div class="result-btns">
-        <button class="btn" onclick="goHome()" style="flex:1;justify-content:center">🏠 처음으로</button>
-        <button class="btn primary" onclick="retryQuiz()" style="flex:1;justify-content:center">🔄 다시 도전</button>
-      </div>
+  <button class="btn teal full" onclick="go()" id="go-btn">시작하기</button>
+  <div style="font-size:12px;color:var(--text-m);text-align:center;margin-top:8px" id="go-hint">Day와 단계를 선택하세요</div>
+</div>
+
+<!-- ═══════════════ LEARN ═══════════════ -->
+<div id="s-learn" class="screen">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <button class="btn sm" onclick="backHome()">← 홈</button>
+    <div style="font-size:13px;font-weight:600" id="learn-title"></div>
+    <div style="font-size:12px;color:var(--text-m)" id="learn-idx"></div>
+  </div>
+  <div class="learn-progress">
+    <div class="learn-prog-bar"><div class="learn-prog-fill" id="learn-prog"></div></div>
+    <div class="learn-prog-text" id="learn-prog-t"></div>
+  </div>
+
+  <div class="word-card" id="word-card">
+    <!-- filled by JS -->
+  </div>
+
+  <div class="learn-nav">
+    <button class="btn sm" id="prev-btn" onclick="learnNav(-1)">← 이전</button>
+    <div class="nav-dots" id="nav-dots"></div>
+    <button class="btn sm teal" id="next-btn" onclick="learnNav(1)">다음 →</button>
+  </div>
+
+  <div style="margin-top:12px;text-align:center">
+    <button class="btn blue" onclick="goTestFromLearn()">✏️ Step 2 테스트 바로 가기</button>
+  </div>
+</div>
+
+<!-- ═══════════════ TEST ═══════════════ -->
+<div id="s-test" class="screen">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+    <button class="btn sm" onclick="backHome()">← 홈</button>
+    <div style="font-size:13px;font-weight:600" id="test-title"></div>
+    <span></span>
+  </div>
+  <div class="test-meta">
+    <div class="hearts"><span class="heart" id="h1">♥</span><span class="heart" id="h2">♥</span><span class="heart" id="h3">♥</span></div>
+    <span class="q-count" id="q-cnt">1 / 20</span>
+    <span class="score-disp" id="sc">0점</span>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="q-prog"></div></div>
+  <div class="q-card">
+    <div class="q-tags" id="q-tags"></div>
+    <div id="area-mc">
+      <div class="q-word" id="q-word"></div>
+      <div class="q-sub" id="q-sub"></div>
+      <div id="mc-wrap"></div>
+    </div>
+    <div id="area-sp" style="display:none">
+      <div class="q-word" id="sp-mean" style="font-size:17px;font-weight:600;line-height:1.5"></div>
+      <div class="q-sub" id="sp-hint"></div>
+      <input class="spell-inp" id="sp-inp" placeholder="영단어를 입력하세요" autocomplete="off" autocorrect="off" spellcheck="false">
+      <button class="btn teal full" onclick="chkSpell()" style="margin-top:10px">확인</button>
+    </div>
+    <div id="fb"></div>
+    <button class="btn teal full" id="nxt" onclick="nextQ()" style="margin-top:12px;display:none">다음 →</button>
+  </div>
+  <button class="btn" onclick="backHome()" style="width:100%;justify-content:center;margin-top:8px;color:var(--text-m)">그만하기</button>
+</div>
+
+<!-- ═══════════════ RESULT ═══════════════ -->
+<div id="s-result" class="screen">
+  <div class="card">
+    <div class="res-emoji" id="r-emoji">🏆</div>
+    <div class="res-title" id="r-title"></div>
+    <div class="res-sub" id="r-sub"></div>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-l">점수</div><div class="stat-v" id="r-sc"></div></div>
+      <div class="stat"><div class="stat-l">정답률</div><div class="stat-v" id="r-rt"></div></div>
+      <div class="stat"><div class="stat-l">최대연속</div><div class="stat-v" id="r-st"></div></div>
+    </div>
+    <div id="r-miss" style="margin-bottom:12px"></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn" onclick="backHome()" style="flex:1;justify-content:center">🏠 홈</button>
+      <button class="btn teal" onclick="retryTest()" style="flex:1;justify-content:center">🔄 다시 도전</button>
     </div>
   </div>
 </div>
 
+</div>
 <div class="notif" id="notif"></div>
 
 <script>
-// ============================================================
-// WORD DATABASE — PDF에서 직접 추출한 교재 단어
-// ============================================================
+// ══════════════════════════════════════════
+//  DATABASE
+// ══════════════════════════════════════════
 const DB = {
-  5: {
-    theme: 'Communications 의사소통',
-    words: [
-      {w:'recount',pos:'v',m:'자세히 이야기하다',ex:'recount an anecdote 일화를 이야기하다'},
-      {w:'aggressive',pos:'a',m:'공격적인; 적극적인',ex:'an aggressive marketing campaign 적극적인 마케팅 활동'},
-      {w:'allude',pos:'v',m:'암시하다, 넌지시 말하다',ex:'allude to one\'s marital troubles 결혼 문제들에 대해 넌지시 말하다'},
-      {w:'assert',pos:'v',m:'(강력히) 주장하다',ex:'assert one\'s rights 권리를 주장하다'},
-      {w:'bilingual',pos:'a',m:'2개 국어를 하는',ex:'provide bilingual education 2개 국어로 교육하다'},
-      {w:'blunt',pos:'a',m:'직설적인; 통명스러운; 무딘',ex:'make a blunt statement 직설적인 발언을 하다'},
-      {w:'brag',pos:'v',m:'자랑하다, 떠벌리다',ex:'brag about winning the game 경기에서 이긴 것을 자랑하다'},
-      {w:'coherent',pos:'a',m:'일관성 있는; 논리 정연한',ex:'a coherent argument 논리 정연한 주장'},
-      {w:'colloquial',pos:'a',m:'구어체의, 일상 회화의',ex:'a colloquial expression 구어체 표현'},
-      {w:'comment',pos:'v/n',m:'논평하다; 언급, 논평',ex:'comment on the issue 그 문제에 대해서 이야기하다'},
-      {w:'communicate',pos:'v',m:'의사소통을 하다; 전달하다; 전염시키다',ex:'communicate by e-mail 이메일로 연락을 주고받다'},
-      {w:'consent',pos:'n/v',m:'동의, 허락; 동의하다, 찬성하다',ex:'ask for prior consent 사전 동의를 구하다'},
-      {w:'controversial',pos:'a',m:'논란이 많은',ex:'a highly controversial issue 대단히 논란이 되는 이슈'},
-      {w:'convey',pos:'v',m:'(사상·견해 등을) 전달하다; 운반하다',ex:'convey the good news 쾌보를 전달하다'},
-      {w:'denote',pos:'v',m:'나타내다; 표시하다',ex:'denote one\'s feelings clearly 자신의 감정을 명확히 나타내다'},
-      {w:'describe',pos:'v',m:'설명하다, 묘사하다',ex:'describe the criminal 범인에 대해 묘사하다'},
-      {w:'interpret',pos:'v',m:'해석하다; 통역하다',ex:'interpret one\'s silence as refusal 침묵을 거절로 해석하다'},
-      {w:'emphasize',pos:'v',m:'강조하다',ex:'emphasize the importance of safety 안전의 중요성을 강조하다'},
-      {w:'exaggerate',pos:'v',m:'과장하다',ex:'exaggerate the difficulties 어려움을 과장하다'},
-      {w:'expound',pos:'v',m:'상세히 설명하다',ex:'expound one\'s views 견해를 상세히 설명하다'},
-      {w:'fathom',pos:'v',m:'헤아리다, 가늠하다',ex:'fathom one\'s intention 의도를 가늠하다'},
-      {w:'slander',pos:'n/v',m:'비방, 중상; 비방하다, 중상모략하다',ex:'a slander on one\'s good reputation 명성에 대한 비방'},
-      {w:'implication',pos:'n',m:'영향, 결과; 암시, 함축',ex:'consider the implications of the new policy 새로운 정책의 영향들을 고려하다'},
-      {w:'inarticulate',pos:'a',m:'불분명한, (발음이) 또렷하지 않은',ex:'an inarticulate reply 불분명한 대답'},
-      {w:'inquire',pos:'v',m:'묻다; 조사하다',ex:'inquire about the schedule 스케줄에 대해 물어보다'},
-      {w:'dispute',pos:'n/v',m:'논쟁, 분쟁; 반박하다, 논쟁하다',ex:'settle a dispute 분쟁을 해결하다'},
-      {w:'interrupt',pos:'v',m:'중단시키다, 가로막다',ex:'interrupt the conversation 대화를 중단시키다'},
-      {w:'mention',pos:'v/n',m:'(간단히) 말하다, 언급하다; (간단한) 언급, 거론',ex:'mention that he has a problem 그에게 문제가 있다는 것을 말하다'},
-      {w:'wrangle',pos:'v/n',m:'말다툼하다, 언쟁하다; 언쟁, 다툼',ex:'wrangle with one\'s wife 부인과 다투다'},
-      {w:'oral',pos:'a',m:'입의, 구강의; 말로 하는',ex:'oral proficiency 구술 능력'},
-      {w:'pronounce',pos:'v',m:'발음하다; 선언하다',ex:'practice pronouncing English 영어 발음하는 것을 연습하다'},
-      {w:'refute',pos:'v',m:'반박하다; 부인하다',ex:'refute one\'s argument 주장을 반박하다'},
-      {w:'respond',pos:'v',m:'대답하다, 답장하다; 반응하다',ex:'respond to one\'s question 질문에 대답하다'},
-      {w:'simultaneous',pos:'a',m:'동시에 일어나는',ex:'simultaneous translation 동시통역'},
-      {w:'gist',pos:'n',m:'요지, 골자',ex:'the gist of one\'s argument 주장의 요지'},
-      {w:'succinct',pos:'a',m:'간결한, 간단명료한',ex:'a succinct answer 간결한 대답'},
-      {w:'trenchant',pos:'a',m:'신랄한, 예리한',ex:'a trenchant analysis 예리한 분석'},
-      {w:'unctuous',pos:'a',m:'(말·행동이) 번지르르한, (사람이) 느끼한',ex:'an unctuous manner 번지르르한 태도'},
-      {w:'verbose',pos:'a',m:'말이 많은, 장황한',ex:'a verbose writing style 장황한 문체'},
-      {w:'mordant',pos:'a',m:'신랄한, 통렬한',ex:'a mordant remark 신랄한 말'}
+  5:{
+    theme:'Communications',
+    theme_kr:'의사소통',
+    words:[
+      {w:'recount',pos:'v',m:'자세히 이야기하다',
+       syn:'depict 묘사하다 / portray 그리다 / describe 설명하다',
+       phrases:['be vividly recounted|생생하게 묘사된','recount an anecdote|일화를 이야기하다'],
+       ex:'In his new book, Mr. Turner <b>recounts</b> the lessons he learned on running a business.',
+       ex_kr:'터너 씨는 그의 새 책에서 사업 운영에 대해 배운 교훈을 이야기하고 있다.'},
+      {w:'aggressive',pos:'a',m:'공격적인; 적극적인',
+       syn:'regress 퇴보하다 / progress 진전하다 / transgress 위반하다',
+       phrases:['an aggressive marketing campaign|적극적인 마케팅 활동','take aggressive steps to|~하기 위한 적극적인 조치를 취하다'],
+       ex:'Gorillas have often been portrayed as fierce and <b>aggressive</b> — perhaps because they\'re the largest of the primates.',
+       ex_kr:'고릴라는 사납고 공격적인 동물로 자주 묘사된다. 아마도 영장류 중에서 가장 몸집이 크기 때문일 것이다.'},
+      {w:'allude',pos:'v',m:'암시하다, 넌지시 말하다',
+       syn:'allure 매혹하다 / elude 교묘히 피하다',
+       phrases:['allude to one\'s marital troubles|결혼 문제들에 대해 넌지시 말하다','allude to a historical event|고사에 빗대어 말하다'],
+       ex:'The general manager <b>alluded</b> to the product\'s failure during his presentation.',
+       ex_kr:'총지배인은 프레젠테이션 중에 그 제품의 실패를 암시했다.',
+       tip:'~을 암시하다: allude something (×) → allude to something (O)'},
+      {w:'assert',pos:'v',m:'(강력히) 주장하다',
+       syn:'affirm 확언하다 / allege 우겨대다',
+       phrases:['assert one\'s rights|권리를 주장하다','assert that he is the criminal|그가 범인이라고 주장하다'],
+       ex:'Considering these factors, Dr. Lofton <b>asserts</b> that the extinction rate is currently approaching one bird species per year.',
+       ex_kr:'로프튼 박사는 이런 요인들을 감안하면 멸종률은 현재 매년 새의 한 종에 가깝다고 주장한다.'},
+      {w:'bilingual',pos:'a',m:'2개 국어를 하는',
+       syn:'monolingual 1개 국어를 하는 / multilingual 여러 언어를 하는',
+       phrases:['bilingual in English and Japanese|영어와 일어를 할 줄 아는','provide bilingual education|2개 국어로 교육하다'],
+       ex:'One of the approaches to attacking minority languages is the movement to oppose <b>bilingual</b> education.',
+       ex_kr:'소수 언어를 공격하는 것에 대한 하나의 접근법은 이중 언어 교육을 반대하는 운동이다.'},
+      {w:'blunt',pos:'a',m:'직설적인; 통명스러운; 무딘',
+       syn:'blurt 불쑥 말하다',
+       phrases:['make a blunt statement|직설적인 발언을 하다','blunt language|통명스러운 말투','a blunt knife|무딘 칼','a blunt pencil|(심이) 뭉툭한 연필'],
+       ex:'Ms. Peterson\'s <b>blunt</b> style of speech often resulted in her coworkers taking offense.',
+       ex_kr:'피터슨 씨의 직설적인 말투는 종종 동료들의 반감을 샀다.'},
+      {w:'brag',pos:'v',m:'자랑하다, 떠벌리다',
+       syn:'drag 질질 끌다',
+       phrases:['brag about winning the game|경기에서 이긴 것을 자랑하다','brag that one\'s daughter is pretty|딸이 예쁘다고 자랑하다'],
+       ex:'He <b>brags</b> too much about how much money he has.',
+       ex_kr:'자기가 가진 돈이 얼마나 많은지 엄청 떠벌리더군요.'},
+      {w:'coherent',pos:'a',m:'일관성 있는; 논리 정연한',
+       syn:'adherent 접착성의 지지자',
+       phrases:['a coherent argument|논리 정연한 주장','a coherent account of the incident|사건에 대한 조리 있는 설명'],
+       ex:'If your outline is well-arranged, your composition will be <b>coherent</b>.',
+       ex_kr:'개요가 잘 정리되어 있으면 작문이 논리 정연해질 것이다.'},
+      {w:'colloquial',pos:'a',m:'구어체의, 일상 회화의',
+       syn:'eloquent 웅변적인 / loquacious 말이 많은',
+       phrases:['a colloquial expression|구어체 표현','colloquial English|구어체 영어'],
+       ex:'In general, it is best to avoid <b>colloquial</b> speech in academic writing.',
+       ex_kr:'일반적으로 학술적인 글에서는 구어체의 말은 피하는 것이 최선이다.'},
+      {w:'comment',pos:'v/n',m:'논평하다, 언급하다 / 언급, 논평',
+       syn:'commend 칭찬하다 / command 명령하다',
+       phrases:['comment on the issue|그 문제에 대해서 이야기하다','leave a comment on our website|우리 웹 사이트에 댓글을 남기다'],
+       ex:'Would anyone like to <b>comment</b> on his last suggestion?',
+       ex_kr:'그의 마지막 제안에 대해 누구 의견 있습니까?'},
+      {w:'communicate',pos:'v',m:'의사소통을 하다; 전달하다; 전염시키다',
+       syn:'community 지역 사회 / commute 통근하다',
+       phrases:['communicate by e-mail|이메일로 연락을 주고받다','communicate the news to him|그에게 소식을 전하다','communicate the disease to the others|병을 다른 사람들에게 전염시키다'],
+       ex:'They <b>communicate</b> with a special kind of language — a chemical language.',
+       ex_kr:'그들은 화학적인 언어와 같은 특별한 대화로 의사소통을 한다.'},
+      {w:'consent',pos:'n/v',m:'동의, 허락 / 동의하다, 찬성하다',
+       syn:'consensus 일치, 합의, 여론',
+       phrases:['ask for prior consent|사전 동의를 구하다','consent to the plan|계획에 동의하다','the age of consent|법적 연령'],
+       ex:'Advertisers often collect user information, such as searches done, sites visited, and content viewed, without user <b>consent</b>.',
+       ex_kr:'광고 업체들은 종종 사용자의 동의 없이 사용자가 했던 검색과 방문한 사이트, 보았던 콘텐츠와 같은 사용자의 정보를 수집한다.'},
+      {w:'controversial',pos:'a',m:'논란이 많은',
+       syn:'controversy 논란 / controversially 논쟁적으로',
+       phrases:['a highly controversial issue|대단히 논란이 되는 이슈','remain controversial|논란의 여지가 남아 있다'],
+       ex:'The most <b>controversial</b> disputes were over this deceptively simple question: What was Christopher Columbus really like?',
+       ex_kr:'가장 논란이 되었던 논쟁은 \'크리스토퍼 콜럼버스가 정말 어떤 사람이었는가\'에 대한 믿을 수 없을 만큼 단순한 질문을 놓고 벌어졌다.'},
+      {w:'convey',pos:'v',m:'(사상·견해 등을) 전달하다; 운반하다',
+       syn:'convoy 호위하다 / survey 설문 조사',
+       phrases:['convey the good news|쾌보를 전달하다','convey drugs to a prison inmate|재소자에게 마약을 나르다'],
+       ex:'Though the chief producer clearly sees the message you are trying to <b>convey</b>, he feels that there is something missing.',
+       ex_kr:'제작 책임자는 귀하가 전달하고자 하는 메시지가 무엇인지 분명히 알겠지만 뭔가 빠진 것이 있다고 느끼고 있고, 저도 그의 의견에 동의합니다.'},
+      {w:'denote',pos:'v',m:'나타내다; 표시하다',
+       syn:'connote 내포하다 / notify 통지하다 / notice 통지 알아차리다',
+       phrases:['denote one\'s feelings clearly|자신의 감정을 명확히 나타내다','be denoted by an asterisk|별표로 표시되다'],
+       ex:'Grammar involves the ways in which they order words and <b>denote</b> tense and number.',
+       ex_kr:'문법은 단어를 배열하고 시제와 수를 표현하는 방식과 관련이 있다.'},
+      {w:'describe',pos:'v',m:'설명하다, 묘사하다',
+       syn:'subscribe 서명하다 구독 신청하다',
+       phrases:['describe the criminal|범인에 대해 묘사하다','be described as unusual|특이하다고 묘사되다'],
+       ex:'To begin with, let me <b>describe</b> the progress made this year.',
+       ex_kr:'우선, 올해의 경과를 설명하겠습니다.'},
+      {w:'interpret',pos:'v',m:'해석하다; 통역하다',
+       syn:'translate 번역하다 / paraphrase 바꾸어 말하다',
+       phrases:['interpret one\'s silence as refusal|침묵을 거절로 해석하다','ask the guide to interpret for us|가이드에게 통역해 달라고 부탁하다'],
+       ex:'Anyone who believes this poem is satirical is not <b>interpreting</b> it correctly.',
+       ex_kr:'이 시가 풍자적이라고 생각하는 사람은 제대로 해석하고 있는 것이 아니다.'},
+      {w:'emphasize',pos:'v',m:'강조하다',
+       syn:'empathy 감정 이입 공감',
+       phrases:['emphasize the importance of safety|안전의 중요성을 강조하다','place emphasis on ~|~을 강조하다'],
+       ex:'The issue at hand is one that has been <b>emphasized</b> in the past, both in state and in public social forums.',
+       ex_kr:'현안은 과거에 국가와 국민 사회 포럼 양쪽 모두에서 강조된 사안이다.'},
+      {w:'exaggerate',pos:'v',m:'과장하다',
+       syn:'exacerbate 악화시키다 / excavate 발굴하다',
+       phrases:['exaggerate the difficulties|어려움을 과장하다','I\'m not exaggerating.|과장하는 게 아냐.'],
+       ex:'According to a 10-year study by leading scholars, earlier claims regarding infants\' quantitative skills were greatly <b>exaggerated</b>.',
+       ex_kr:'최고 학자들이 수행한 10년간의 연구를 보면 유아의 수리 능력에 대한 이전의 주장은 굉장히 과장되어 있다.'},
+      {w:'expound',pos:'v',m:'상세히 설명하다',
+       syn:'compound 혼합물',
+       phrases:['expound one\'s views|견해를 상세히 설명하다'],
+       ex:'When questioned, the economist <b>expounded</b> on his theory in great detail.',
+       ex_kr:'경제학자는 질문을 받으면 매우 상세하게 그의 이론에 대해 설명했다.'},
+      {w:'fathom',pos:'v',m:'헤아리다, 가늠하다',
+       syn:'pathos 비애감 / pathology 병리학',
+       phrases:['fathom one\'s pain|고통을 헤아리다','fathom (out) one\'s intention|의도를 가늠하다'],
+       ex:'A fan of murder mysteries, Brian could not <b>fathom</b> why his wife enjoyed reading romance novels so much.',
+       ex_kr:'살인 미스터리물의 팬인 브라이언은 아내가 왜 로맨스 소설을 그렇게 즐겨 읽는지 이해할 수 없었다.'},
+      {w:'slander',pos:'n/v',m:'비방, 중상 / 비방하다, 중상모략하다',
+       syn:'slender 날씬한 / libel (문서에 의한) 비방',
+       phrases:['a slander on one\'s good reputation|명성에 대한 비방','slander the politician|그 정치인을 비방하다','groundless slander|근거 없는 비방'],
+       ex:'The journalist who reported on the mayor\'s affair was accused of <b>slander</b>.',
+       ex_kr:'시장의 추문에 관해 보도한 기자는 명예 훼손죄로 체포되었다.'},
+      {w:'implication',pos:'n',m:'영향, 결과; 암시, 함축',
+       syn:'explicate 해명하다 / complicate 복잡하게 하다 / supplicate 간청하다',
+       phrases:['consider the implications of the new policy|새로운 정책의 영향들을 고려하다','the obvious implication|명백한 암시','by implication|함축적으로'],
+       ex:'Please note that any political speculations should be linked to their economic <b>implications</b>.',
+       ex_kr:'정치적인 의견은 경제적 영향과 관련된 것이어야 함을 주의하시기 바랍니다.'},
+      {w:'inarticulate',pos:'a',m:'불분명한, (발음이) 또렷하지 않은',
+       syn:'articulate 또렷하게 발음하다 / articulation 명확한 발음[표현]',
+       phrases:['an inarticulate reply|불분명한 대답','an inarticulate drunk|술 취해 발음이 불분명한 사람','inarticulate murmurs|알아들을 수 없는 중얼거림'],
+       ex:'Granted they were shy and <b>inarticulate</b>, but so was my son.',
+       ex_kr:'그들이 수줍음이 많고 말을 또렷하게 못한다 하더라도, 그것은 내 아들도 마찬가지였다.'},
+      {w:'inquire',pos:'v',m:'묻다; 조사하다',
+       syn:'inquest 심문 조사 / acquire 습득하다 / require 요구하다',
+       phrases:['inquire about the schedule|스케줄에 대해 물어보다','inquire into the allegation|혐의에 대해 조사하다','inquire after my wife\'s health|아내의 안부를 묻다'],
+       ex:'I\'m calling to <b>inquire</b> about the job opening.',
+       ex_kr:'구인에 관해 문의할 게 있어 전화했습니다.'},
+      {w:'dispute',pos:'n/v',m:'논쟁, 분쟁 / 반박하다, 논쟁하다',
+       syn:'impute ~의 탓으로 돌리다 / repute 평판',
+       phrases:['settle a dispute|분쟁을 해결하다','a labor dispute between workers and management|근로자와 경영진 간의 노동 분쟁','dispute the claim|그 주장을 반박하다','be beyond[open to] dispute|논란의 여지가 없다[있다]'],
+       ex:'The River Amur forms the natural border between China and Russia, where territorial <b>disputes</b> and armed conflicts have frequently occurred.',
+       ex_kr:'아무르 강은 중국과 러시아 사이의 자연 국경을 이루며, 이곳에서는 영토 분쟁과 무력 충돌이 빈발했다.'},
+      {w:'interrupt',pos:'v',m:'중단시키다, 가로막다',
+       syn:'irrupt 난입[침입]하다 / erupt 폭발하다 분출하다',
+       phrases:['interrupt the conversation|대화를 중단시키다','be interrupted by the war|전쟁으로 인해 중단되다','Don\'t interrupt me.|내 말 가로막지 마.'],
+       ex:'I understand, sir, but he can\'t be <b>interrupted</b> right now.',
+       ex_kr:'선생님, 이해는 합니다만 지금 당장은 그를 방해할 수는 없습니다.'},
+      {w:'mention',pos:'v/n',m:'(간단히) 말하다, 언급하다 / (간단한) 언급, 거론',
+       syn:'mansion 대저택 / mentor 스승 조언자',
+       phrases:['mention that he has a problem|그에게 문제가 있다는 것을 말하다','avoid any mention|언급을 피하다','Don\'t mention it.|별 말씀을요.','not to mention|~은 말할 것도 없고'],
+       ex:'Morgan\'s loathing became so strong that his grandchildren were not even allowed to <b>mention</b> Roosevelt\'s name.',
+       ex_kr:'모건의 혐오감은 너무나 심해져서 그의 손주들은 루스벨트라는 이름조차 입에 올리지 못할 정도였다.'},
+      {w:'wrangle',pos:'v/n',m:'말다툼하다, 언쟁하다 / 언쟁, 다툼',
+       syn:'strangle 목 졸라 죽이다 / wriggle 꿈틀거리다',
+       phrases:['wrangle with one\'s wife|부인과 다투다','wrangle over money|돈 문제로 다투다','a bitter wrangle over copyright|저작권에 관한 격렬한 다툼'],
+       ex:'The two friends <b>wrangled</b> over who would get the last slice of pizza.',
+       ex_kr:'두 친구는 마지막 남은 피자 조각을 누가 먹느냐로 말다툼을 했다.'},
+      {w:'oral',pos:'a',m:'입의, 구강의; 말로 하는',
+       syn:'coral 산호의 / moral 도덕의 / orator 연설가 / oration 연설 웅변',
+       phrases:['oral proficiency|구술 능력','an oral agreement|구두 합의','oral hygiene|구강 위생','an oral contraceptive|경구용 피임약'],
+       ex:'At about age five, your child is ready to use an <b>oral</b> thermometer.',
+       ex_kr:'자녀가 5세 정도 되면 구강 온도계를 사용할 수 있습니다.'},
+      {w:'pronounce',pos:'v',m:'발음하다; 선언하다',
+       syn:'announce 발표하다 / renounce 포기하다 / denounce 비난하다',
+       phrases:['practice pronouncing English|영어 발음하는 것을 연습하다','pronounce her the winner|그녀를 우승자로 선언하다','be pronounced dead|사망한 것으로 발표되다'],
+       ex:'Linguist Noam Chomsky <b>pronounced</b> the concept of postmodernism meaningless, saying it added nothing to analytical or empirical knowledge.',
+       ex_kr:'언어학자인 노암 촘스키는 포스트모더니즘의 개념이란 것은 분석적 또는 실증적인 지식에 어떠한 도움도 되지 않기 때문에 무의미하다고 표명했다.'},
+      {w:'refute',pos:'v',m:'반박하다; 부인하다',
+       syn:'repute 평판 ~이라고 간주하다 / refuse 거절하다',
+       phrases:['refute one\'s argument|주장을 반박하다','refute the allegations against oneself|자신에 대한 혐의를 부인하다'],
+       ex:'The findings of our report <b>refute</b> the idea that there has to be a trade-off between immigration and economic progress.',
+       ex_kr:'우리 보고서의 연구 결과는 이민과 경제 발전 사이의 균형이 있어야 한다는 생각에 반박한다.'},
+      {w:'respond',pos:'v',m:'대답하다, 답장하다; 반응하다',
+       syn:'correspond 교신하다 일치하다 ~에 상당하다',
+       phrases:['respond to one\'s question|질문에 대답하다','respond favorably to the new product|신제품에 대한 반응이 좋다'],
+       ex:'Please take a few minutes to <b>respond</b> to this confidential survey.',
+       ex_kr:'몇 분 할애해서 이 비밀 설문 조사에 응해 주시기 바랍니다.'},
+      {w:'simultaneous',pos:'a',m:'동시에 일어나는',
+       syn:'spontaneous 자발적인 자연스러운',
+       phrases:['simultaneous translation|동시통역','simultaneous bomb explosions|폭탄의 동시 폭발'],
+       ex:'The meeting will run more smoothly if <b>simultaneous</b> interpretation of Russian and English is provided.',
+       ex_kr:'러시아어와 영어의 동시통역이 제공된다면 회의는 더 부드럽게 진행될 것이다.'},
+      {w:'gist',pos:'n',m:'요지, 골자',
+       syn:'fist 주먹 / mist (옅은) 안개',
+       phrases:['the gist of one\'s argument|주장의 요지','get the gist of|~의 요점을 파악하다'],
+       ex:'The <b>gist</b> of the report is that poverty in the region is decreasing.',
+       ex_kr:'보고서의 요지는 그 지역의 빈곤이 줄어들고 있다는 것이다.'},
+      {w:'succinct',pos:'a',m:'간결한, 간단명료한',
+       syn:'prolix 장황한 / wordy 장황한',
+       phrases:['a succinct answer|간결한 대답','succinct and to the point|간결하고 요점에 맞는'],
+       ex:'<b>Succinct</b> writing tends to be better received than overly wordy prose.',
+       ex_kr:'간결한 글쓰기는 지나치게 장황한 산문보다 더 잘 받아들여지는 경향이 있다.'},
+      {w:'trenchant',pos:'a',m:'신랄한, 예리한',
+       syn:'enchant 매혹하다 / penchant 경향 강한 기호',
+       phrases:['a trenchant analysis|예리한 분석','a writer with a trenchant wit|신랄한 기지를 갖고 있는 작가'],
+       ex:'The spokesperson could not come up with a reply to the customer\'s <b>trenchant</b> criticism.',
+       ex_kr:'대변인은 고객의 예리한 비판에 대해 답변을 낼 수 없었다.'},
+      {w:'unctuous',pos:'a',m:'(말·행동이) 번지르르한, (사람이) 느끼한',
+       syn:'impetuous 충동적인 맹렬한 / sumptuous 사치스러운',
+       phrases:['an unctuous manner|번지르르한 태도','an unctuous way of speaking|느끼한 말투'],
+       ex:'The speaker\'s <b>unctuous</b> tone caused many in the audience to walk out of the theater.',
+       ex_kr:'말하는 사람의 번지르르한 말투 때문에 객석의 많은 사람들이 극장을 나갔다.'},
+      {w:'verbose',pos:'a',m:'말이 많은, 장황한',
+       syn:'verbal 언어의 말의',
+       phrases:['a verbose politician|말이 많은 정치인','a verbose writing style|장황한 문체'],
+       ex:'The more <b>verbose</b> an e-mail, the less likely the recipient is to read it.',
+       ex_kr:'이메일이 장황할수록 받는 사람은 덜 읽고 싶어진다.'},
+      {w:'mordant',pos:'a',m:'신랄한, 통렬한',
+       syn:'remorse 참회 가책',
+       phrases:['a mordant remark|신랄한 말','mordant satire|신랄한 풍자[유머]'],
+       ex:'No politician wanted to be the punchline of the comedian\'s <b>mordant</b> jokes.',
+       ex_kr:'어떤 정치인도 그 코미디언이 하는 신랄한 농담의 주안공이 되고 싶지 않았다.'}
     ]
   },
-  6: {
-    theme: 'Emotions 감정',
-    words: [
-      {w:'affectionate',pos:'a',m:'다정한, 애정 어린',ex:'be affectionate toward one\'s children 자식들에게 다정하다'},
-      {w:'aloof',pos:'a',m:'냉담한; 떨어져 있는',ex:'keep aloof from the politics 정치에 대해 냉담하다'},
-      {w:'annoying',pos:'a',m:'짜증 나게 하는',ex:'the annoying noise 짜증 나는 소리'},
-      {w:'appreciate',pos:'v',m:'고맙게 여기다; 진가를 알다, 감상하다; 값이 오르다',ex:'appreciate another\'s help 남의 도움을 고맙게 여기다'},
-      {w:'arrogant',pos:'a',m:'거만한, 오만한',ex:'an arrogant boss 거만한 상사'},
-      {w:'assuage',pos:'v',m:'(안 좋은 감정을) 누그러뜨리다; 달래다',ex:'assuage one\'s fear 두려움을 누그러뜨리다'},
-      {w:'audacious',pos:'a',m:'대담한; 뻔뻔한',ex:'make an audacious plan 대담한 계획을 세우다'},
-      {w:'awesome',pos:'a',m:'굉장한, 훌륭한',ex:'throw an awesome party 멋진 파티를 열다'},
-      {w:'complacent',pos:'a',m:'자기 만족적인; 무관심한',ex:'a complacent attitude 현실에 안주하는 태도'},
-      {w:'compliment',pos:'n',m:'칭찬, 찬사',ex:'receive a compliment 찬사를 받다'},
-      {w:'confidence',pos:'n',m:'자신감; 신뢰',ex:'lack the confidence to succeed 성공에 대한 자신감이 부족하다'},
-      {w:'distraught',pos:'a',m:'(흥분해서) 제정신이 아닌; 곤혹스러운',ex:'be distraught over his death 그의 죽음에 대해 제정신이 아니다'},
-      {w:'depressed',pos:'a',m:'우울한; 불경기의',ex:'in a depressed mood 우울한 기분으로'},
-      {w:'consolation',pos:'n',m:'위로, 위안',ex:'find consolation in music 음악에서 위안을 찾다'},
-      {w:'exuberant',pos:'a',m:'활기(열의)가 넘치는; 원기 왕성한',ex:'young and exuberant girls 젊고 활기 넘치는 아가씨들'},
-      {w:'fascinating',pos:'a',m:'매력적인',ex:'find the film fascinating 그 영화가 아주 재미있다고 느끼다'},
-      {w:'frantic',pos:'a',m:'제정신이 아닌; 정신없는',ex:'make a frantic effort 미친 듯이 노력하다'},
-      {w:'frightened',pos:'a',m:'겁먹은, 무서워하는',ex:'be frightened to speak 말하는 데 겁을 먹다'},
-      {w:'frivolous',pos:'a',m:'경솔한, 어리석은; 사소한, 하찮은',ex:'a frivolous conversation 쓸데없는 대화'},
-      {w:'furious',pos:'a',m:'몹시 화가 난; 맹렬한',ex:'be furious at the decision 그 결정에 격노하다'},
-      {w:'grim',pos:'a',m:'암울한; 엄한, 비장한',ex:'the grim prospect 암울한 전망'},
-      {w:'grudge',pos:'n/v',m:'원한, 악의; 인색하게 굴다',ex:'bear a grudge against 에 대해 원한을 품다'},
-      {w:'hilarious',pos:'a',m:'유쾌한, 즐거운',ex:'a hilarious joke 아주 우스운 농담'},
-      {w:'hospitable',pos:'a',m:'환대하는, 친절한; (환경이) 쾌적한, 알맞은',ex:'be hospitable to the guests 손님들에게 친절하다'},
-      {w:'hostile',pos:'a',m:'적대적인',ex:'get a hostile reception 적대적인 반응을 받다'},
-      {w:'intimidate',pos:'v',m:'위협(협박)하다',ex:'intimidate one\'s opponents with threats 협박으로 적들을 위협하다'},
-      {w:'jealous',pos:'a',m:'질투하는',ex:'feel jealous of one\'s good looks 잘생긴 외모에 질투가 나다'},
-      {w:'melancholy',pos:'n',m:'우울감, 비애',ex:'a mood of melancholy 우울한 기분'},
-      {w:'nostalgia',pos:'n',m:'향수',ex:'feel nostalgia for one\'s schooldays 학창 시절에 대한 향수를 느끼다'},
-      {w:'panic',pos:'n',m:'극심한 공포, 공황, 패닉',ex:'get into a panic 공황에 빠지다'},
-      {w:'penchant',pos:'n',m:'애호, 경향',ex:'have a penchant for wine 와인을 애호하다'},
-      {w:'pessimistic',pos:'a',m:'비관적인',ex:'a pessimistic view 비관적인 견해'},
-      {w:'pretentious',pos:'a',m:'허세 부리는, 가식적인',ex:'deliver a pretentious speech 허세 부리는 연설을 하다'},
-      {w:'stubborn',pos:'a',m:'완고한, 고집 센; 잘 사라지지 않는',ex:'be too stubborn to admit 너무 고집스러워 인정하지 않다'},
-      {w:'sympathy',pos:'n',m:'동정심, 연민; 공감',ex:'express sympathy for 에게 연민을 표하다'},
-      {w:'tantrum',pos:'n',m:'(아이의) 떼, 투정, 짜증',ex:'have a tantrum 떼를 쓰다, 투정부리다'},
-      {w:'thwart',pos:'v',m:'좌절시키다',ex:'thwart one\'s plan 계획을 좌절시키다'},
-      {w:'upset',pos:'a/v',m:'속상한, 기분이 상한; 속상하게 하다; 망치다',ex:'feel upset by 로 속이 상하다'},
-      {w:'vacillate',pos:'v',m:'머뭇거리다; 오락가락하다, 동요하다',ex:'vacillate between hope and despair 희망과 절망 사이를 오락가락하다'},
-      {w:'volatile',pos:'a',m:'변덕스러운; 휘발성의',ex:'a volatile disposition 변덕스러운 성질'}
+  6:{
+    theme:'Emotions',
+    theme_kr:'감정',
+    words:[
+      {w:'affectionate',pos:'a',m:'다정한, 애정 어린',
+       syn:'affectation 가장 허세 / infection 감염 전염 / effect 영향 효과 초래하다',
+       phrases:['an affectionate kiss|애정 어린 입맞춤','be affectionate toward one\'s children|자식들에게 다정하다'],
+       ex:'In an <b>affectionate</b> and stable family unit, a child develops a sense of personal integrity and security.',
+       ex_kr:'사랑이 넘치고 안정적인 가정에서 자라는 어린이는 개인의 성실성과 안전성이 발달한다.'},
+      {w:'aloof',pos:'a',m:'냉담한; 떨어져 있는',
+       syn:'loom 불쑥 나타나다 / loot 약탈하다',
+       phrases:['keep aloof from the politics|정치에 대해 냉담하다','hold oneself aloof from one\'s coworkers|동료들과 가까이 지내지 않다'],
+       ex:'Jenny\'s quiet nature made her seem <b>aloof</b> to people who did not know her.',
+       ex_kr:'조용한 성품 때문에 제니는 그녀를 잘 모르는 사람들에게 쌀쌀맞은 것처럼 보였다.'},
+      {w:'annoying',pos:'a',m:'짜증 나게 하는',
+       syn:'allay 가라앉히다 / alloy 합금',
+       phrases:['the annoying noise|짜증 나는 소리','annoyed|짜증이 나 있는 심리 상태'],
+       ex:'A plague of gnats in the summer months can be very <b>annoying</b>.',
+       ex_kr:'여름철 각다귀들이 들려오면 매우 성가실 수 있다.'},
+      {w:'appreciate',pos:'v',m:'~을 고맙게 여기다; 진가를 알다, 감상하다; 값이 오르다',
+       syn:'depreciate 경시하다 값이 하락하다 / deprecate 반대하다 비난하다',
+       phrases:['appreciate another\'s help|남의 도움을 고맙게 여기다','like to appreciate movies|영화 감상을 좋아하다','land appreciating yearly|해마다 값이 오르는 땅'],
+       ex:'I really <b>appreciate</b> your coming over tonight.',
+       ex_kr:'오늘 저녁 방문해 주셔서 진심으로 감사드립니다.'},
+      {w:'arrogant',pos:'a',m:'거만한, 오만한',
+       syn:'derogate 깎아내리다 헐뜯다 / surrogate 대리인 대용의',
+       phrases:['be unbearably arrogant|참을 수 없을 정도로 거만하다','an arrogant boss|거만한 상사'],
+       ex:'Nancy was acting a bit <b>arrogant</b> when she started bragging about her test scores.',
+       ex_kr:'낸시는 자신의 시험 점수에 대해 떠벌리기 시작했을 때 조금 오만하게 행동했다.'},
+      {w:'assuage',pos:'v',m:'(안 좋은 감정을) 누그러뜨리다; 달래다',
+       syn:'dosage 복용량 / massage 마사지',
+       phrases:['assuage one\'s fear|두려움을 누그러뜨리다','assuage one\'s guilt|죄책감을 덜어 주다','assuage one\'s thirst|갈증을 달래다'],
+       ex:'The day after her emotional tantrum, Martha tried hard to <b>assuage</b> the anger of her husband and make amends.',
+       ex_kr:'짜증을 부린 다음 날, 마사는 남편의 화를 달래고 보상해 주기 위해 열심히 애썼다.'},
+      {w:'audacious',pos:'a',m:'대담한; 뻔뻔한',
+       syn:'tenacious 집요한 / veracious 진실한 / perspicacious 명민한',
+       phrases:['make an audacious plan|대담한 계획을 세우다','an audacious suggestion|용감한 제안'],
+       ex:'The <b>audacious</b> explorer set off into the wilderness with only a week\'s worth of food and water.',
+       ex_kr:'그 대담한 탐험가는 일주일치의 식량과 물만 가지고 미개지로 떠났다.'},
+      {w:'awesome',pos:'a',m:'굉장한, 훌륭한',
+       syn:'awful 끔찍한 / lawful 합법적인',
+       phrases:['put on awesome sunglasses|멋진 선글라스를 끼다','throw an awesome party|멋진 파티를 열다'],
+       ex:'We saw an <b>awesome</b> band play at the club last night.',
+       ex_kr:'우린 어젯밤 클럽에서 굉장한 밴드의 연주를 봤어.'},
+      {w:'complacent',pos:'a',m:'자기 만족적인; 무관심한',
+       syn:'complaisant 남의 말을 잘 듣는',
+       phrases:['a complacent attitude|현실에 안주하는 태도','wear a complacent smile|만족해하는 미소를 짓다','be complacent about one\'s achievement|자신의 성취에 대해 안주하다'],
+       ex:'The company\'s employees are too <b>complacent</b> to go on strike for higher wages.',
+       ex_kr:'그 회사의 직원들은 임금 인상을 위해 파업을 하기에는 너무 현실에 안주하는 성향이 있다.'},
+      {w:'compliment',pos:'n',m:'칭찬, 찬사',
+       syn:'complement 보완물 보충하다 / supplement 추가 보충하다',
+       phrases:['receive a compliment|찬사를 받다','return the compliment|받은 칭찬에 대해 답례하다'],
+       ex:'I hope that\'s a <b>compliment</b>.',
+       ex_kr:'칭찬이길 바랍니다.'},
+      {w:'confidence',pos:'n',m:'자신감; 신뢰',
+       syn:'diffident 수줍어하는 자신이 없는 / confidant 절친한 친구',
+       phrases:['lack the confidence to succeed|성공에 대한 자신감이 부족하다','win the confidence of voters|유권자들에게 신뢰를 얻다','have full confidence in|~을 전폭적으로 신뢰하다'],
+       ex:'Grace and self-confidence will make you stand out far more than will dyed hair or a face-lift.',
+       ex_kr:'머리를 염색하고 얼굴 피부를 탱탱하게 하는 것보다는 오히려 품위와 자신감이 당신을 한층 더 돋보이게 만들 것이다.'},
+      {w:'distraught',pos:'a',m:'(흥분해서) 제정신이 아닌; 곤혹스러운',
+       syn:'fraught ~으로 가득한',
+       phrases:['be distraught over his death|그의 죽음에 대해 제정신이 아니다','be too distraught to speak|완전히 제정신이 아니어서 말도 못 하다'],
+       ex:'Fans of the novelist will no doubt be <b>distraught</b> to learn that his latest effort is hugely disappointing.',
+       ex_kr:'그 소설가의 팬들은 그의 최근 작품이 대단히 실망스러운 것을 알면 분명히 곤혹스러워할 것이다.'},
+      {w:'depressed',pos:'a',m:'우울한; 불경기의',
+       syn:'suppress 진압하다 억제하다 / oppress 억압하다 박해하다 / repress 진압하다 억제하다',
+       phrases:['in a depressed mood|우울한 기분으로','the depressed economy|침체된 경제','Great Depression|(1930년대 미국) 대공황'],
+       ex:'I got an F in biology. I\'m so <b>depressed</b>.',
+       ex_kr:'생물학에서 F를 받았어. 기분이 아주 울적해.'},
+      {w:'consolation',pos:'n',m:'위로, 위안',
+       syn:'condolence 조문 애도 / consolidation 통합 합병',
+       phrases:['find consolation in music|음악에서 위안을 찾다','offer a few words of consolation|몇 마디 위로의 말을 해 주다'],
+       ex:'As a <b>consolation</b> prize, runners-up will receive a new stainless steel toaster.',
+       ex_kr:'위로상으로 차점자들은 스테인리스로 만든 빵 굽는 기구를 받을 것이다.'},
+      {w:'exuberant',pos:'a',m:'활기(열의)가 넘치는; 원기 왕성한',
+       syn:'exude 스며 나오다 / exultant 기뻐 날뛰는',
+       phrases:['young and exuberant girls|젊고 활기 넘치는 아가씨들','give an exuberant performance|활기 넘치는 공연을 하다'],
+       ex:'Ms. Dandridge is the only <b>exuberant</b> server among the otherwise dull waitstaff.',
+       ex_kr:'댄드릿지 양은 다른 무던 종업원들 사이에서 유일하게 활력이 넘치는 웨이트리스이다.'},
+      {w:'fascinating',pos:'a',m:'매력적인',
+       syn:'fascism 파시즘 / fascist 파시스트',
+       phrases:['find the film fascinating|그 영화가 아주 재미있다고 느끼다'],
+       ex:'You read this book, too, right? Isn\'t the plot <b>fascinating</b>?',
+       ex_kr:'너도 이 책 읽었지? 줄거리가 정말 재미있지 않아?'},
+      {w:'frantic',pos:'a',m:'제정신이 아닌; 정신없는',
+       syn:'antic 익살 장난',
+       phrases:['be frantic with fear|두려움으로 제 정신이 아니다','make a frantic effort|미친 듯이 노력하다','make frantic preparations for the party|파티를 준비하느라 정신이 없다'],
+       ex:'The parents were <b>frantic</b> when they found out their son was missing.',
+       ex_kr:'아들이 실종되었다는 사실을 알게 되자 그 부모들은 제정신이 아니었다.'},
+      {w:'frightened',pos:'a',m:'겁먹은, 무서워하는',
+       syn:'plight 곤경 궁지 / freight 화물 / flight 비행 도주',
+       phrases:['get frightened|겁먹다','be frightened to speak|말하는 데 겁을 먹다','frightening dream|악몽'],
+       ex:'She wasn\'t seriously hurt but very shocked and <b>frightened</b>.',
+       ex_kr:'그녀는 중상을 입지는 않았지만 큰 충격을 받고 놀랐다.'},
+      {w:'frivolous',pos:'a',m:'경솔한, 어리석은; 사소한, 하찮은',
+       syn:'scrupulous 꼼꼼한 양심적인',
+       phrases:['one\'s frivolous behavior|경솔한 행동','a frivolous conversation|쓸데없는 대화','a frivolous lawsuit|사소한 소송'],
+       ex:'Work time is too valuable to waste on <b>frivolous</b> games.',
+       ex_kr:'근무 시간은 시시한 게임으로 써 버리기에는 너무나 귀중한 시간이다.'},
+      {w:'furious',pos:'a',m:'몹시 화가 난; 맹렬한',
+       syn:'curious 호기심 많은 / spurious 가짜의 위조의',
+       phrases:['be furious at the decision|그 결정에 격노하다','have a furious argument|격렬한 논쟁을 벌이다','a furious storm|맹렬한 폭풍'],
+       ex:'Stephen was <b>furious</b> with me when I arrived at the restaurant an hour late.',
+       ex_kr:'한 시간 늦게 식당에 도착했더니 스티븐이 나에게 몹시 화를 냈어.'},
+      {w:'grim',pos:'a',m:'암울한; 엄한, 비장한',
+       syn:'grimy 더러운 때 묻은 / grimace 얼굴을 찡그리다',
+       phrases:['the grim prospect|암울한 전망','a grim face|진지한 얼굴','with grim determination|비장한 각오로'],
+       ex:'The atmosphere in the office was <b>grim</b> following news of the layoffs.',
+       ex_kr:'해고 소식에 사무실의 분위기가 침울해졌다.'},
+      {w:'grudge',pos:'n/v',m:'원한, 악의 / 인색하게 굴다',
+       syn:'begrudge 시기하다 주기를 꺼리다 / drudge (일을) 꾸준히 하는 사람',
+       phrases:['bear a grudge against|~에 대해 원한을 품다','grudge me money|나에게 돈 주기를 아까워하다'],
+       ex:'We\'re truly sorry. I hope you won\'t hold a <b>grudge</b> against us.',
+       ex_kr:'대단히 죄송합니다. 저희에게 악의는 갖지 않으셨으면 좋겠네요.'},
+      {w:'hilarious',pos:'a',m:'유쾌한, 즐거운',
+       syn:'exhilarate 흥겹게 하다',
+       phrases:['a hilarious joke|아주 우스운 농담','Do you know Danny? He\'s hilarious.|너 대니 아니? 개 정말 재미있어'],
+       ex:'The new comedy starring Danny Whitman is supposed to be <b>hilarious</b>.',
+       ex_kr:'대니 휘트먼이 나오는 새 코미디는 아주 재미있을 것이다.'},
+      {w:'hospitable',pos:'a',m:'환대하는, 친절한; (환경이) 쾌적한, 알맞은',
+       syn:'welcoming 환대하는 친절한',
+       phrases:['be hospitable to the guests|손님들에게 친절하다','the climate hospitable to many plants|여러 식물에 알맞은 기후'],
+       ex:'The people here are so friendly and welcoming; they\'re very <b>hospitable</b>.',
+       ex_kr:'여기 사람들은 아주 친절하고 반갑게 맞아줘요. 굉장히 호의적이에요.'},
+      {w:'hostile',pos:'a',m:'적대적인',
+       syn:'unsympathetic 인정이 없는 호감이 안 가는',
+       phrases:['get a hostile reception|적대적인 반응을 받다','a hostile country|적대국','the hostile economic environment|어려운 경제적 여건'],
+       ex:'Most people are born with the capacity for cooperation and love as well as the capacity for aggressive and <b>hostile</b> behavior.',
+       ex_kr:'대부분의 사람들은 공격적이고 악의적인 행동 능력뿐만 아니라 협동과 사랑의 능력 또한 가지고 태어난다.'},
+      {w:'intimidate',pos:'v',m:'위협(협박)하다',
+       syn:'intimate 친밀한 암시하다',
+       phrases:['intimidate one another by growling|으르렁거리며 상대를 위협하다','intimidate one\'s opponents with threats|협박으로 적들을 위협하다','an intimidating manner|겁을 주는 태도'],
+       ex:'The dog\'s bark is meant to <b>intimidate</b> strangers entering its territory.',
+       ex_kr:'개가 짖는 것은 자신의 영역에 침범한 낯선 사람을 위협하기 위한 것이다.'},
+      {w:'jealous',pos:'a',m:'질투하는',
+       syn:'zealous 열정적인',
+       phrases:['feel jealous of one\'s good looks|잘생긴 외모에 질투가 나다','be jealous of one\'s success|성공을 시기하다'],
+       ex:'Emily keeps trying to make me <b>jealous</b>.',
+       ex_kr:'에밀리는 계속 내가 질투하게 만들려고 해요.'},
+      {w:'melancholy',pos:'n',m:'우울감, 비애',
+       syn:'E. coli 대장균',
+       phrases:['a mood of melancholy|우울한 기분','suffer from melancholy|우울한 감정에 시달리다'],
+       ex:'Some poets are best at dealing with upbeat themes, while others seem to prefer more <b>melancholy</b> subjects.',
+       ex_kr:'어떤 시인들은 낙관적인 주제를 가장 잘 다루는 반면, 어떤 시인들은 좀 더 구슬픈 주제를 선호하는 것 같다.'},
+      {w:'nostalgia',pos:'n',m:'향수',
+       syn:'nostril 콧구멍 / nostrum 특효약 묘책',
+       phrases:['a wave of nostalgia for one\'s hometown|확 밀려드는 고향에 대한 향수','feel nostalgia for one\'s schooldays|학창 시절에 대한 향수를 느끼다'],
+       ex:'Songs from the 1990s fill me with <b>nostalgia</b> because they remind me of my childhood.',
+       ex_kr:'1990년대 음악은 내 어린 시절이 생각나서 향수에 젖게 해 준다.'},
+      {w:'panic',pos:'n',m:'극심한 공포, 공황, 패닉',
+       syn:'organic 유기농의 / volcanic 화산의',
+       phrases:['get into a panic|공황에 빠지다','be in a state of panic|공황 상태에 있다','a panic disorder|공황 장애','panic selling|(주식의) 투매 장세'],
+       ex:'Astronomers nearly created a global <b>panic</b> for nothing.',
+       ex_kr:'천문학자들은 아무것도 아닌 일로 국제적 공황을 일으킬 뻔했다.'},
+      {w:'penchant',pos:'n',m:'애호, 경향',
+       syn:'pendant 장식물 / pendent 매달린 (문제가) 미결의',
+       phrases:['have a penchant for wine|와인을 애호하다'],
+       ex:'Cathy\'s <b>penchant</b> for high fashion got her into serious debt.',
+       ex_kr:'최신 패션을 매우 좋아하는 성향 때문에 캐시는 많은 빚을 지게 되었다.'},
+      {w:'pessimistic',pos:'a',m:'비관적인',
+       syn:'gloomy 희망이 없는',
+       phrases:['a pessimistic view|비관적인 견해','be deeply pessimistic about the future|미래에 대해 매우 비관적이다'],
+       ex:'Others are <b>pessimistic</b>, as they witness speakers of these endangered languages abandoning their native tongues in favor of English.',
+       ex_kr:'다른 사람들은 사멸 위기에 처한 언어를 구사하는 사람들이 영어를 선호하여 자신들의 모국어를 저버리는 것을 보며 비관적인 입장을 취한다.'},
+      {w:'pretentious',pos:'a',m:'허세 부리는, 가식적인',
+       syn:'contentious 논쟁의 소지가 있는 / tentative 잠정적인',
+       phrases:['deliver a pretentious speech|허세 부리는 연설을 하다','a pretentious and boring film|젠체하고 지루한 영화'],
+       ex:'Joseph has been saying some <b>pretentious</b> things ever since he was awarded the promotion.',
+       ex_kr:'조셉은 승진을 한 후로 약간 건방진 말들을 하고 다닌다.'},
+      {w:'stubborn',pos:'a',m:'완고한, 고집 센; 잘 사라지지 않는',
+       syn:'pliant 얌전한 / tractable 유순한',
+       phrases:['be too stubborn to admit|너무 고집스러워 인정하지 않다','a stubborn resistance|완강한 저항','stubborn stains and dirt|잘 지워지지 않는 얼룩 먼지','as stubborn as a mule|황소고집인','a stubborn cough|잘 낫지 않는 기침'],
+       ex:'Maze tried her best to change Stan\'s mind, but he proved much too <b>stubborn</b>.',
+       ex_kr:'메이즈는 스탠의 마음을 돌리기 위해 최선을 다했지만 그는 너무 완고했다.'},
+      {w:'sympathy',pos:'n',m:'동정심, 연민; 공감',
+       syn:'apathy 무관심 냉담 / antipathy 반감 혐오',
+       phrases:['a sympathy vote|동정표','express sympathy for|~에게 연민을 표하다','my sympathy with his views|그의 견해에 대한 나의 지지'],
+       ex:'Friends and family gathered here today, I would like to express my sympathies to you on behalf of the Solomon Foundation.',
+       ex_kr:'솔로몬 재단을 대신해 오늘 이 자리에 모인 친구와 가족들 여러분께 애도의 말씀을 전합니다.'},
+      {w:'tantrum',pos:'n',m:'(아이의) 떼, 투정, 짜증',
+       syn:'tandem 앞뒤로 연결되어',
+       phrases:['have a tantrum|떼를 쓰다 투정부리다','temper tantrums|짜증 성질'],
+       ex:'Parents should not give in to children who throw fits or <b>tantrums</b> because it sets a poor precedent.',
+       ex_kr:'떼를 쓰거나 짜증을 부리는 아이에게 부모가 져 주면 나쁜 선례를 남기게 되므로 그러지 말아야 한다.'},
+      {w:'thwart',pos:'v',m:'좌절시키다',
+       syn:'twist 비틀다 왜곡하다 / twitter 새가 지저귀다',
+       phrases:['thwart one\'s plan|계획을 좌절시키다','be thwarted in one\'s ambitions|야망이 꺾이다'],
+       ex:'British authorities are readying new laws that will give police greater powers toward <b>thwarting</b> terror attacks.',
+       ex_kr:'영국 당국은 테러 공격을 저지하는 데 있어 경찰에 더 많은 권한을 부여할 새로운 법안들을 마련 중에 있다.'},
+      {w:'upset',pos:'a/v',m:'속상한, 기분이 상한 / 속상하게 하다; 망치다',
+       syn:'onset 시작 시초 / offset 벌충하다 상쇄하다',
+       phrases:['feel upset by|~로 속이 상하다','have an upset stomach|배탈이 나다','upset a plan|계획을 망치다'],
+       ex:'I guess John got pretty <b>upset</b> when Cook criticized his work.',
+       ex_kr:'쿡이 존의 작업에 대해 비판해서 존이 무척 화가 난 것 같아요.'},
+      {w:'vacillate',pos:'v',m:'머뭇거리다; 오락가락하다, 동요하다',
+       syn:'vaccinate 백신을 접종하다',
+       phrases:['vacillate on this issue|이 문제에 대해 머뭇거리다','vacillate between hope and despair|희망과 절망 사이를 오락가락하다'],
+       ex:'He\'s been <b>vacillating</b> between two options.',
+       ex_kr:'그는 두 가지 선택 사이에서 망설이고 있다.'},
+      {w:'volatile',pos:'a',m:'변덕스러운; 휘발성의',
+       syn:'ductile 연성이 있는 유연한 / fertile 비옥한 풍부한 / futile 소용없는 쓸데없는',
+       phrases:['a volatile disposition|변덕스러운 성질','a volatile exchange rate|불안정한 환율'],
+       ex:'Beethoven had a very <b>volatile</b> personality.',
+       ex_kr:'베토벤은 매우 변덕스러운 성격이었다.'}
     ]
   }
 };
 
-// 주차 구성: 2일씩
-const WEEKS = [
-  { num: 1, days: [1, 2], label: '1주차', done: true },
-  { num: 2, days: [3, 4], label: '2주차', done: true },
-  { num: 3, days: [5, 6], label: '3주차', done: false, current: true },
-  { num: 4, days: [7, 8], label: '4주차', done: false },
-  { num: 5, days: [9, 10], label: '5주차', done: false },
-  { num: 6, days: [11, 12], label: '6주차', done: false },
-  { num: 7, days: [13, 14], label: '7주차', done: false },
-  { num: 8, days: [15, 16], label: '8주차', done: false },
-  { num: 9, days: [17, 18], label: '9주차', done: false },
-  { num: 10, days: [19, 20], label: '10주차', done: false },
-  { num: 11, days: [21, 22], label: '11주차', done: false },
-  { num: 12, days: [23, 24], label: '12주차', done: false },
-  { num: 13, days: [25, 26], label: '13주차', done: false },
-  { num: 14, days: [27, 28], label: '14주차', done: false },
-  { num: 15, days: [29, 30], label: '15주차', done: false },
-];
-
-const AVAILABLE_DAYS = Object.keys(DB).map(Number);
-
-// State
-let state = {
-  mode: 'mc',
-  selectedDays: [],
-  questions: [],
-  idx: 0,
-  score: 0,
-  hearts: 3,
-  streak: 0,
-  maxStreak: 0,
-  correct: 0,
-  lastDays: [],
-  currentMode: 'mc'
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+let S = {
+  selDay: null, selStep: 'learn', selMode: 'mc',
+  learnIdx: 0, learnDay: null,
+  testDay: null, testMode: 'mc',
+  testQs: [], testIdx: 0, score: 0, hearts: 3,
+  streak: 0, maxStreak: 0, correct: 0,
+  missedWords: []
 };
 
-// ==================== INIT ====================
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
 function init() {
-  renderWeeks();
-  renderDayCheckboxes();
+  const grid = document.getElementById('day-grid');
+  grid.innerHTML = '';
+  Object.keys(DB).forEach(d => {
+    const day = DB[d];
+    const btn = document.createElement('button');
+    btn.className = 'day-btn' + (String(d) === '5' ? ' active' : '');
+    btn.dataset.day = d;
+    btn.innerHTML = `<div class="db-num">Day ${d}</div>
+      <div class="db-theme">${day.theme}<br>${day.theme_kr}</div>
+      <div class="db-cnt">단어 ${day.words.length}개</div>`;
+    btn.onclick = () => { selectDay(d); };
+    grid.appendChild(btn);
+  });
+  selectDay('5');
+  selectStep('learn');
   selectMode('mc');
 }
 
-function renderWeeks() {
-  const grid = document.getElementById('week-grid');
-  grid.innerHTML = '';
-  WEEKS.forEach(w => {
-    const hasData = w.days.some(d => AVAILABLE_DAYS.includes(d));
-    const allDays = w.days.map(d => `Day ${d}`).join(' + ');
-    const div = document.createElement('div');
-    div.className = 'week-card' + (w.done ? ' done' : '') + (w.current ? ' selected' : '') + (!hasData && !w.done ? ' disabled' : '');
-    div.innerHTML = `
-      <div class="week-num">${w.label}</div>
-      <div class="week-days">${allDays}</div>
-      ${w.done ? '<div class="done-badge">✓ 시험 완료</div>' : ''}
-      ${w.current ? '<div class="tag tag-teal" style="margin-top:4px">이번 주 ★</div>' : ''}
-      ${!hasData && !w.done ? '<div style="font-size:10px;color:var(--text-muted);margin-top:4px">준비중</div>' : ''}
-    `;
-    if (hasData) {
-      div.onclick = () => startWeek(w);
-    } else if (w.done) {
-      div.onclick = () => showNotif('이 주차 단어는 아직 추가되지 않았어요');
-    }
-    grid.appendChild(div);
-  });
+function selectDay(d) {
+  S.selDay = String(d);
+  document.querySelectorAll('.day-btn').forEach(b => b.classList.toggle('active', b.dataset.day === String(d)));
+  updateGoHint();
 }
 
-function renderDayCheckboxes() {
-  const container = document.getElementById('day-checkboxes');
-  container.innerHTML = '';
-  for (let d = 1; d <= 30; d++) {
-    const hasData = AVAILABLE_DAYS.includes(d);
-    const cb = document.createElement('input');
-    cb.type = 'checkbox'; cb.className = 'day-cb'; cb.id = `cb${d}`; cb.value = d;
-    cb.disabled = !hasData;
-    cb.onchange = updateCustomCount;
-    const label = document.createElement('label');
-    label.htmlFor = `cb${d}`;
-    label.className = 'day-cb-label' + (!hasData ? ' disabled-day' : '');
-    label.textContent = `D${d}`;
-    container.appendChild(cb);
-    container.appendChild(label);
-  }
-}
-
-function updateCustomCount() {
-  const checked = getCheckedDays();
-  const total = checked.reduce((s, d) => s + (DB[d]?.words.length || 0), 0);
-  const el = document.getElementById('custom-count');
-  if (checked.length === 0) {
-    el.textContent = 'Day를 선택하세요';
-  } else {
-    el.textContent = `${checked.map(d=>'Day '+d).join(', ')} · 총 ${total}개 단어`;
-  }
-}
-
-function getCheckedDays() {
-  return Array.from(document.querySelectorAll('.day-cb:checked')).map(cb => parseInt(cb.value));
+function selectStep(s) {
+  S.selStep = s;
+  document.getElementById('tab-learn').classList.toggle('active', s === 'learn');
+  document.getElementById('tab-test').classList.toggle('active', s === 'test');
+  document.getElementById('mode-btns').style.opacity = s === 'test' ? '1' : '0.4';
+  document.getElementById('mode-btns').style.pointerEvents = s === 'test' ? 'auto' : 'none';
+  updateGoHint();
 }
 
 function selectMode(m) {
-  state.mode = m;
-  ['mc','reverse','spell','mix'].forEach(id => {
-    document.getElementById('mode-'+id).classList.toggle('selected', id === m);
+  S.selMode = m;
+  ['mc','rev','sp','mix'].forEach(id => {
+    const btn = document.getElementById('m-' + id);
+    const active = id === m;
+    btn.className = 'btn sm' + (active ? ' teal' : '');
   });
 }
 
-// ==================== START ====================
-function startWeek(week) {
-  const days = week.days.filter(d => AVAILABLE_DAYS.includes(d));
-  if (days.length === 0) { showNotif('해당 주차 단어가 아직 준비되지 않았어요'); return; }
-  startWithDays(days);
+function updateGoHint() {
+  const hint = document.getElementById('go-hint');
+  if (!S.selDay) { hint.textContent = 'Day를 선택하세요'; return; }
+  const cnt = DB[S.selDay]?.words.length || 0;
+  if (S.selStep === 'learn') hint.textContent = `Day ${S.selDay} · ${cnt}개 단어 학습`;
+  else hint.textContent = `Day ${S.selDay} · ${cnt}개 단어 테스트`;
 }
 
-function startCustom() {
-  const days = getCheckedDays();
-  if (days.length === 0) { showNotif('Day를 하나 이상 선택하세요'); return; }
-  startWithDays(days);
+function go() {
+  if (!S.selDay) { showNotif('Day를 선택하세요'); return; }
+  if (S.selStep === 'learn') startLearn(S.selDay);
+  else startTest(S.selDay, S.selMode);
 }
 
-function startWithDays(days) {
-  state.lastDays = days;
-  const pool = days.flatMap(d => (DB[d]?.words || []).map(w => ({...w, day: d})));
-  if (pool.length === 0) { showNotif('선택한 Day에 단어가 없어요'); return; }
-  const shuffled = shuffle(pool);
-  const count = Math.min(20, shuffled.length);
-  state.questions = shuffled.slice(0, count);
-  state.idx = 0; state.score = 0; state.hearts = 3;
-  state.streak = 0; state.maxStreak = 0; state.correct = 0;
-  showScreen('quiz');
+// ══════════════════════════════════════════
+//  LEARN
+// ══════════════════════════════════════════
+function startLearn(day) {
+  S.learnDay = String(day);
+  S.learnIdx = 0;
+  const d = DB[day];
+  document.getElementById('learn-title').textContent = `Day ${day} · ${d.theme_kr}`;
+  showScreen('learn');
+  renderLearnCard();
+}
+
+function renderLearnCard() {
+  const d = DB[S.learnDay];
+  const words = d.words;
+  const idx = S.learnIdx;
+  const w = words[idx];
+  const total = words.length;
+
+  document.getElementById('learn-idx').textContent = `${idx+1} / ${total}`;
+  document.getElementById('learn-prog').style.width = `${((idx+1)/total)*100}%`;
+  document.getElementById('learn-prog-t').textContent = `${idx+1}/${total}`;
+  document.getElementById('prev-btn').disabled = idx === 0;
+  document.getElementById('next-btn').textContent = idx === total-1 ? '완료 ✓' : '다음 →';
+
+  // Dots
+  const dotsEl = document.getElementById('nav-dots');
+  dotsEl.innerHTML = '';
+  words.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot' + (i < idx ? ' seen' : '') + (i === idx ? ' current' : '');
+    dot.onclick = () => { S.learnIdx = i; renderLearnCard(); };
+    dotsEl.appendChild(dot);
+  });
+
+  // Highlight keyword in ex
+  let exHtml = w.ex || '';
+  // build card
+  let phrasesHtml = '';
+  if (w.phrases && w.phrases.length) {
+    phrasesHtml = `<div class="section-label" style="margin-top:14px">숙어 · 활용</div>`;
+    w.phrases.forEach(p => {
+      const [en, kr] = p.split('|');
+      phrasesHtml += `<div class="phrase-row"><span class="phrase-en">${en}</span><span class="phrase-kr"> — ${kr}</span></div>`;
+    });
+  }
+
+  let vocaHtml = '';
+  if (w.syn) {
+    vocaHtml = `<div class="voca-box" style="margin-top:12px">
+      <div style="font-size:10px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">VOCA+</div>
+      ${w.syn.split(' / ').map(s => `<div class="voca-item">${s.replace(/^(\S+)/,'<span class="voca-word">$1</span>')}</div>`).join('')}
+    </div>`;
+  }
+
+  let tipHtml = w.tip ? `<div style="font-size:12px;color:var(--amber);background:var(--amber-l);border-radius:6px;padding:7px 10px;margin-top:8px">📌 ${w.tip}</div>` : '';
+
+  document.getElementById('word-card').innerHTML = `
+    <div class="wc-top">
+      <div>
+        <div class="wc-word">${w.w}</div>
+        ${w.pron ? `<div class="wc-pron">${w.pron}</div>` : ''}
+      </div>
+      <span class="tag tag-gray">${w.pos}</span>
+    </div>
+    <div class="wc-tags">
+      <span class="tag ${S.learnDay=='5'?'tag-blue':'tag-teal'}">Day ${S.learnDay}</span>
+    </div>
+    <div class="wc-meaning">${w.m}</div>
+    ${phrasesHtml}
+    ${w.ex ? `
+    <div class="section-label" style="margin-top:14px">기출 예문</div>
+    <div class="ex-box">
+      <div class="ex-en">${exHtml}</div>
+      <div class="ex-kr">${w.ex_kr}</div>
+    </div>` : ''}
+    ${tipHtml}
+    ${vocaHtml}
+  `;
+}
+
+function learnNav(dir) {
+  const total = DB[S.learnDay].words.length;
+  const next = S.learnIdx + dir;
+  if (next < 0) return;
+  if (next >= total) {
+    showNotif('🎉 Day ' + S.learnDay + ' 학습 완료!');
+    backHome();
+    return;
+  }
+  S.learnIdx = next;
+  renderLearnCard();
+}
+
+function goTestFromLearn() {
+  startTest(S.learnDay, S.selMode);
+}
+
+// ══════════════════════════════════════════
+//  TEST
+// ══════════════════════════════════════════
+function startTest(day, mode) {
+  S.testDay = String(day);
+  S.testMode = mode || S.selMode;
+  const pool = DB[day].words.map(w => ({...w, day: String(day)}));
+  S.testQs = shuffle(pool);
+  S.testIdx = 0; S.score = 0; S.hearts = 3;
+  S.streak = 0; S.maxStreak = 0; S.correct = 0;
+  S.missedWords = [];
+  document.getElementById('test-title').textContent = `Day ${day} · 테스트`;
+  showScreen('test');
   renderQ();
 }
 
-function retryQuiz() {
-  startWithDays(state.lastDays);
-}
-
-function quitQuiz() {
-  if (confirm('테스트를 그만할까요?')) goHome();
-}
-
-// ==================== QUIZ ====================
 function renderQ() {
-  if (state.idx >= state.questions.length || state.hearts <= 0) { showResult(); return; }
-  const q = state.questions[state.idx];
-  const total = state.questions.length;
+  if (S.testIdx >= S.testQs.length || S.hearts <= 0) { showResult(); return; }
+  const q = S.testQs[S.testIdx];
+  const total = S.testQs.length;
 
-  document.getElementById('q-counter').textContent = `${state.idx+1} / ${total}`;
-  document.getElementById('q-prog').style.width = `${((state.idx+1)/total)*100}%`;
-  document.getElementById('score-disp').textContent = `${state.score}점`;
-  ['h1','h2','h3'].forEach((id,i) => {
-    const el = document.getElementById(id);
-    el.classList.toggle('dead', i >= state.hearts);
-  });
+  document.getElementById('q-cnt').textContent = `${S.testIdx+1} / ${total}`;
+  document.getElementById('q-prog').style.width = `${((S.testIdx+1)/total)*100}%`;
+  document.getElementById('sc').textContent = `${S.score}점`;
+  ['h1','h2','h3'].forEach((id,i) => document.getElementById(id).classList.toggle('dead', i >= S.hearts));
 
-  // Tags
-  const tags = document.getElementById('q-tags');
-  const dayTheme = DB[q.day] ? DB[q.day].theme.split(' ')[0] : `Day ${q.day}`;
-  let modeLabel, modeActual = state.mode;
-  if (state.mode === 'mix') {
-    const modes = ['mc','mc','reverse','spell'];
-    modeActual = modes[Math.floor(Math.random() * modes.length)];
+  let actualMode = S.testMode;
+  if (S.testMode === 'mix') {
+    const modes = ['mc','mc','rev','sp'];
+    actualMode = modes[Math.floor(Math.random() * modes.length)];
   }
-  state.currentMode = modeActual;
-  const modeLabels = {mc:'뜻 고르기', reverse:'한→영 선택', spell:'영단어 입력'};
-  modeLabel = modeLabels[modeActual];
+  S._curMode = actualMode;
 
-  const dayColor = q.day === 5 ? 'tag-blue' : 'tag-teal';
-  let streakHtml = state.streak >= 2 ? `<span class="streak-badge">🔥 ${state.streak}연속</span>` : '';
-  tags.innerHTML = `<span class="tag ${dayColor}">Day ${q.day}</span><span class="tag tag-amber">${q.pos}</span><span class="tag tag-gray">${modeLabel}</span>${streakHtml}`;
+  const mLabels = {mc:'뜻 고르기', rev:'한→영', sp:'영단어 입력'};
+  const dayColor = q.day === '5' ? 'tag-blue' : 'tag-teal';
+  const streakBadge = S.streak >= 2 ? `<span class="tag tag-amber">🔥 ${S.streak}연속</span>` : '';
+  document.getElementById('q-tags').innerHTML =
+    `<span class="tag ${dayColor}">Day ${q.day}</span><span class="tag tag-gray">${q.pos}</span><span class="tag" style="background:var(--gray-l);color:var(--gray)">${mLabels[actualMode]}</span>${streakBadge}`;
 
-  // Reset
-  document.getElementById('feedback-area').innerHTML = '';
-  document.getElementById('next-btn').style.display = 'none';
+  document.getElementById('fb').innerHTML = '';
+  document.getElementById('nxt').style.display = 'none';
   document.getElementById('area-mc').style.display = 'none';
-  document.getElementById('area-spell').style.display = 'none';
+  document.getElementById('area-sp').style.display = 'none';
 
-  const allWords = state.questions;
-
-  if (modeActual === 'mc') {
+  if (actualMode === 'mc') {
     document.getElementById('area-mc').style.display = 'block';
     document.getElementById('q-word').textContent = q.w;
+    document.getElementById('q-word').style.fontSize = '';
     document.getElementById('q-sub').textContent = `(${q.pos})`;
-    const wrong = shuffle(allWords.filter(x => x.w !== q.w)).slice(0, 3).map(x => x.m);
-    const choices = shuffle([q.m, ...wrong]);
-    const mc = document.getElementById('mc-choices'); mc.innerHTML = '';
-    choices.forEach((c, i) => {
-      const btn = document.createElement('button');
-      btn.className = 'choice-btn';
-      btn.textContent = `${String.fromCharCode(65+i)}. ${c}`;
-      btn.onclick = () => checkMC(c === q.m, q, btn, mc);
-      mc.appendChild(btn);
-    });
-
-  } else if (modeActual === 'reverse') {
+    const wrong = shuffle(S.testQs.filter(x => x.w !== q.w)).slice(0,3).map(x => x.m);
+    renderChoices(shuffle([q.m, ...wrong]), c => checkMC(c === q.m, q));
+  } else if (actualMode === 'rev') {
     document.getElementById('area-mc').style.display = 'block';
+    document.getElementById('q-word').style.fontSize = '17px';
     document.getElementById('q-word').textContent = q.m;
-    document.getElementById('q-word').style.fontSize = '18px';
-    document.getElementById('q-sub').textContent = `(${q.pos}) — 해당하는 영단어를 고르세요`;
-    const wrong = shuffle(allWords.filter(x => x.w !== q.w)).slice(0, 3).map(x => x.w);
-    const choices = shuffle([q.w, ...wrong]);
-    const mc = document.getElementById('mc-choices'); mc.innerHTML = '';
-    choices.forEach((c, i) => {
-      const btn = document.createElement('button');
-      btn.className = 'choice-btn';
-      btn.textContent = `${String.fromCharCode(65+i)}. ${c}`;
-      btn.onclick = () => checkMC(c === q.w, q, btn, mc);
-      mc.appendChild(btn);
-    });
-
+    document.getElementById('q-sub').textContent = `(${q.pos}) — 영단어를 고르세요`;
+    const wrong = shuffle(S.testQs.filter(x => x.w !== q.w)).slice(0,3).map(x => x.w);
+    renderChoices(shuffle([q.w, ...wrong]), c => checkMC(c === q.w, q));
   } else {
-    document.getElementById('area-spell').style.display = 'block';
-    document.getElementById('spell-meaning').textContent = q.m;
-    document.getElementById('spell-hint').textContent = `(${q.pos}) · ${q.ex}`;
-    const inp = document.getElementById('spell-input');
-    inp.value = ''; inp.disabled = false;
-    inp.className = 'spell-input';
-    inp.onkeydown = e => { if (e.key === 'Enter') checkSpell(); };
-    setTimeout(() => inp.focus(), 100);
+    document.getElementById('area-sp').style.display = 'block';
+    document.getElementById('sp-mean').innerHTML = q.m;
+    document.getElementById('sp-hint').textContent = `(${q.pos})`;
+    const inp = document.getElementById('sp-inp');
+    inp.value = ''; inp.disabled = false; inp.className = 'spell-inp';
+    inp.onkeydown = e => { if (e.key === 'Enter') chkSpell(); };
+    setTimeout(() => inp.focus(), 80);
   }
-
-  document.getElementById('q-word').style.fontSize = '';
 }
 
-function checkMC(isCorrect, q, clickedBtn, container) {
-  container.querySelectorAll('.choice-btn').forEach(b => { b.disabled = true; });
-  // Mark correct
-  container.querySelectorAll('.choice-btn').forEach(b => {
+function renderChoices(choices, handler) {
+  const wrap = document.getElementById('mc-wrap');
+  wrap.innerHTML = '';
+  choices.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = `${String.fromCharCode(65+i)}. ${c}`;
+    btn.onclick = () => handler(c, btn);
+    wrap.appendChild(btn);
+  });
+}
+
+function checkMC(isCorrect, q, clickedBtn) {
+  // find and click was via handler — need to disable all
+  const wrap = document.getElementById('mc-wrap');
+  wrap.querySelectorAll('.choice').forEach(b => {
+    b.disabled = true;
     const txt = b.textContent.slice(3);
-    const isAns = state.currentMode === 'reverse' ? txt === q.w : txt === q.m;
+    const isAns = S._curMode === 'rev' ? txt === q.w : txt === q.m;
     if (isAns) b.classList.add('correct');
   });
-  if (!isCorrect) clickedBtn.classList.add('wrong');
+  // mark wrong if clicked wrong
+  if (!isCorrect && clickedBtn) clickedBtn.classList.add('wrong');
   handleResult(isCorrect, q);
 }
 
-function checkSpell() {
-  const q = state.questions[state.idx];
-  const inp = document.getElementById('spell-input');
+// override renderChoices to pass btn
+function renderChoices(choices, handler) {
+  const wrap = document.getElementById('mc-wrap');
+  wrap.innerHTML = '';
+  choices.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = `${String.fromCharCode(65+i)}. ${c}`;
+    btn.onclick = function() {
+      wrap.querySelectorAll('.choice').forEach(b => b.disabled = true);
+      const q = S.testQs[S.testIdx];
+      const isCorrect = S._curMode === 'rev' ? c === q.w : c === q.m;
+      wrap.querySelectorAll('.choice').forEach(b => {
+        const txt = b.textContent.slice(3);
+        const isAns = S._curMode === 'rev' ? txt === q.w : txt === q.m;
+        if (isAns) b.classList.add('correct');
+      });
+      if (!isCorrect) btn.classList.add('wrong');
+      handleResult(isCorrect, q);
+    };
+    wrap.appendChild(btn);
+  });
+}
+
+function chkSpell() {
+  const q = S.testQs[S.testIdx];
+  const inp = document.getElementById('sp-inp');
   const ans = inp.value.trim().toLowerCase();
   inp.disabled = true;
-  const isCorrect = ans === q.w.toLowerCase();
-  inp.classList.add(isCorrect ? 'correct' : 'wrong');
-  handleResult(isCorrect, q);
+  const ok = ans === q.w.toLowerCase();
+  inp.classList.add(ok ? 'ok' : 'ng');
+  handleResult(ok, q);
 }
 
-function handleResult(isCorrect, q) {
-  const fb = document.getElementById('feedback-area');
-  if (isCorrect) {
-    state.streak++; state.correct++;
-    if (state.streak > state.maxStreak) state.maxStreak = state.streak;
-    const bonus = state.streak >= 3 ? Math.min(state.streak, 5) * 2 : 0;
-    state.score += 10 + bonus;
-    const bonusTxt = bonus > 0 ? ` (+${bonus}점 보너스🔥)` : '';
-    fb.innerHTML = `<div class="feedback correct">✅ 정답!${bonusTxt}<br><strong>${q.w}</strong> = ${q.m}<div class="feedback-ex">📌 ${q.ex}</div></div>`;
+function handleResult(ok, q) {
+  const fb = document.getElementById('fb');
+  if (ok) {
+    S.streak++; S.correct++;
+    if (S.streak > S.maxStreak) S.maxStreak = S.streak;
+    const bonus = S.streak >= 3 ? Math.min(S.streak, 5) * 2 : 0;
+    S.score += 10 + bonus;
+    const bonusTxt = bonus ? ` (+${bonus}점 보너스 🔥)` : '';
+    fb.innerHTML = `<div class="feedback ok">✅ 정답!${bonusTxt}<br><strong>${q.w}</strong> = ${q.m}<div class="feedback-ex">📌 ${q.ex ? q.ex.replace(/<\/?b>/g,'') : ''}</div></div>`;
   } else {
-    state.streak = 0; state.hearts--;
-    ['h1','h2','h3'].forEach((id,i) => {
-      document.getElementById(id).classList.toggle('dead', i >= state.hearts);
-    });
-    fb.innerHTML = `<div class="feedback wrong">❌ 틀렸어요!<br>정답: <strong>${q.w}</strong> = ${q.m}<div class="feedback-ex">📌 ${q.ex}</div></div>`;
+    S.streak = 0; S.hearts--;
+    S.missedWords.push(q.w);
+    ['h1','h2','h3'].forEach((id,i) => document.getElementById(id).classList.toggle('dead', i >= S.hearts));
+    fb.innerHTML = `<div class="feedback ng">❌ 틀렸어요!<br>정답: <strong>${q.w}</strong> = ${q.m}<div class="feedback-ex">📌 ${q.ex ? q.ex.replace(/<\/?b>/g,'') : ''}</div></div>`;
   }
-  document.getElementById('score-disp').textContent = `${state.score}점`;
-  if (state.hearts <= 0) {
-    setTimeout(showResult, 1300);
-  } else {
-    document.getElementById('next-btn').style.display = 'block';
-  }
+  document.getElementById('sc').textContent = `${S.score}점`;
+  if (S.hearts <= 0) { setTimeout(showResult, 1200); return; }
+  document.getElementById('nxt').style.display = 'block';
 }
 
 function nextQ() {
-  document.getElementById('spell-input').className = 'spell-input';
-  state.idx++;
+  document.getElementById('sp-inp').className = 'spell-inp';
+  S.testIdx++;
   renderQ();
 }
 
-// ==================== RESULT ====================
+// ══════════════════════════════════════════
+//  RESULT
+// ══════════════════════════════════════════
 function showResult() {
   showScreen('result');
-  const total = state.questions.length;
-  const rate = Math.round((state.correct / total) * 100);
+  const total = S.testQs.length;
+  const rate = Math.round((S.correct / total) * 100);
   let emoji = '😅', title = '조금 더 연습해봐요!';
   if (rate >= 90) { emoji = '🏆'; title = '완벽해요!'; }
   else if (rate >= 70) { emoji = '🎉'; title = '잘했어요!'; }
   else if (rate >= 50) { emoji = '💪'; title = '좋아요, 계속 도전!'; }
-
-  document.getElementById('res-emoji').textContent = emoji;
-  document.getElementById('res-title').textContent = title;
-  const dayLabel = state.lastDays.map(d => `Day ${d}`).join(' + ');
-  document.getElementById('res-sub').textContent = `${dayLabel} · ${total}문제 완료`;
-  document.getElementById('res-score').textContent = state.score;
-  document.getElementById('res-rate').textContent = rate + '%';
-  document.getElementById('res-streak').textContent = state.maxStreak + '🔥';
-
-  // Missed words
-  const missed = state.questions.filter((q, i) => {
-    // track per-question result
-    return false; // simplified - show all wrong
-  });
-  document.getElementById('missed-section').innerHTML = '';
+  document.getElementById('r-emoji').textContent = emoji;
+  document.getElementById('r-title').textContent = title;
+  document.getElementById('r-sub').textContent = `Day ${S.testDay} · ${total}문제`;
+  document.getElementById('r-sc').textContent = S.score;
+  document.getElementById('r-rt').textContent = rate + '%';
+  document.getElementById('r-st').textContent = S.maxStreak + '🔥';
+  const miss = S.missedWords;
+  document.getElementById('r-miss').innerHTML = miss.length
+    ? `<div style="font-size:12px;font-weight:600;color:var(--text-m);margin-bottom:6px">다시 볼 단어 (${miss.length}개)</div>` +
+      miss.map(w => `<span style="display:inline-block;background:var(--red-l);color:#A32D2D;border-radius:6px;padding:3px 10px;margin:3px;font-size:13px;font-weight:500">${w}</span>`).join('')
+    : '';
 }
 
-// ==================== UTILS ====================
-function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+function retryTest() { startTest(S.testDay, S.testMode); }
+
+// ══════════════════════════════════════════
+//  UTIL
+// ══════════════════════════════════════════
+function shuffle(arr) { return [...arr].sort(() => Math.random()-.5); }
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + id).classList.add('active');
+  document.getElementById('s-' + id).classList.add('active');
   window.scrollTo(0, 0);
 }
-function goHome() { showScreen('home'); }
+function backHome() { showScreen('home'); }
 function showNotif(msg) {
   const el = document.getElementById('notif');
   el.textContent = msg; el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2500);
+  setTimeout(() => el.classList.remove('show'), 2200);
 }
 
 init();
