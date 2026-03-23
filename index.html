@@ -5,47 +5,86 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEW TEPS VOCA — Grace</title>
 <style>
-:root{--teal:#1D9E75;--tl:#E1F5EE;--td:#0F6E56;--tll:#9FE1CB;--bl:#185FA5;--bll:#E6F1FB;--blll:#B5D4F4;--am:#BA7517;--aml:#FAEEDA;--rd:#E24B4A;--rdl:#FCEBEB;--gy:#5F5E5A;--gyl:#F1EFE8;--gyll:#D3D1C7;--tx:#2C2C2A;--txm:#888780;--txh:#444441;--bg:#fff;--bg2:#F1EFE8;--bd:rgba(0,0,0,0.13)}
+:root{
+  --teal:#1D9E75;--tl:#E1F5EE;--td:#0F6E56;--tll:#9FE1CB;
+  --bl:#185FA5;--bll:#E6F1FB;--blll:#B5D4F4;
+  --am:#BA7517;--aml:#FAEEDA;
+  --rd:#E24B4A;--rdl:#FCEBEB;
+  --gy:#5F5E5A;--gyl:#F1EFE8;--gyll:#D3D1C7;
+  --tx:#2C2C2A;--txm:#888780;--txh:#444441;
+  --bg:#fff;--bg2:#F1EFE8;--bd:rgba(0,0,0,0.13)
+}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0efea;color:var(--tx);min-height:100vh}
 .app{max-width:700px;margin:0 auto;padding:16px}
 .card{background:var(--bg);border:.5px solid var(--bd);border-radius:12px;padding:18px 20px;margin-bottom:12px}
 .btn{border:.5px solid var(--bd);background:var(--bg);border-radius:8px;padding:9px 16px;font-size:14px;cursor:pointer;color:var(--tx);font-family:inherit;transition:all .15s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
-.btn:hover{background:var(--bg2)}.btn.tl{background:var(--teal);color:#fff;border-color:var(--td)}.btn.tl:hover{background:var(--td)}.btn.bl{background:var(--bll);color:var(--bl);border-color:var(--blll)}.btn.bl:hover{background:#dae9f8}.btn.full{width:100%;justify-content:center;padding:13px;font-size:15px}.btn.sm{padding:6px 12px;font-size:13px}.btn:disabled{opacity:.4;cursor:default}
+.btn:hover{background:var(--bg2)}.btn.tl{background:var(--teal);color:#fff;border-color:var(--td)}.btn.tl:hover{background:var(--td)}.btn.bl{background:var(--bll);color:var(--bl);border-color:var(--blll)}.btn.bl:hover{background:#dae9f8}.btn.full{width:100%;justify-content:center;padding:13px;font-size:15px;font-weight:600}.btn.sm{padding:6px 12px;font-size:13px}.btn:disabled{opacity:.4;cursor:default}
 .tag{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500;display:inline-block}
-.tg-tl{background:var(--tl);color:var(--td)}.tg-bl{background:var(--bll);color:var(--bl)}.tg-am{background:var(--aml);color:var(--am)}.tg-gy{background:var(--gyl);color:var(--gy)}.tg-rd{background:var(--rdl);color:var(--rd)}
+.tg-tl{background:var(--tl);color:var(--td)}.tg-bl{background:var(--bll);color:var(--bl)}.tg-am{background:var(--aml);color:var(--am)}.tg-gy{background:var(--gyl);color:var(--gy)}
 .screen{display:none}.screen.active{display:block}
-.hdr{text-align:center;padding:20px 0 14px}.hdr h1{font-size:24px;font-weight:700}.hdr p{font-size:13px;color:var(--txm);margin-top:3px}
-.sec{font-size:11px;font-weight:600;color:var(--txm);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
-.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:4px}
-.dbtn{background:var(--bg);border:1.5px solid var(--bd);border-radius:10px;padding:14px 12px;cursor:pointer;text-align:left;transition:all .15s;font-family:inherit}.dbtn:hover{border-color:var(--teal);background:var(--tl)}.dbtn.act{border-color:var(--teal);background:var(--tl)}.dbtn.lk{opacity:.35;cursor:not-allowed}.dbtn.lk:hover{border-color:var(--bd);background:var(--bg)}
-.dnum{font-size:16px;font-weight:700;color:var(--teal);margin-bottom:2px}.dthm{font-size:11px;color:var(--txm);margin-bottom:6px;line-height:1.4}.dcnt{font-size:11px;font-weight:500;color:var(--txh)}
-.stabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px}
-.stab{border:1.5px solid var(--bd);border-radius:10px;padding:14px;cursor:pointer;text-align:center;transition:all .15s;background:var(--bg);font-family:inherit}.stab:hover{border-color:var(--teal)}.stab.act{border-color:var(--teal);background:var(--tl)}
-.stic{font-size:22px;margin-bottom:5px}.sttl{font-size:14px;font-weight:600}.stds{font-size:11px;color:var(--txm);margin-top:2px}
-.lpb{flex:1;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden}.lpf{height:100%;background:var(--teal);border-radius:3px;transition:width .4s}
-.wcard{background:var(--bg);border:.5px solid var(--bd);border-radius:14px;padding:22px 22px 18px;margin-bottom:10px}
-.ww{font-size:32px;font-weight:700;line-height:1.2}.wm{font-size:16px;font-weight:600;margin-bottom:6px;line-height:1.5}
-.phr{display:flex;gap:8px;margin-bottom:5px;font-size:13px;line-height:1.5}.phen{color:var(--td);font-weight:500}.phkr{color:var(--txh)}
-.exbox{background:var(--bll);border-left:3px solid var(--bl);border-radius:0 8px 8px 0;padding:10px 12px;margin-top:8px}
-.exen{font-size:13px;font-weight:500;color:var(--bl);line-height:1.6;margin-bottom:4px}.exkr{font-size:12px;color:var(--txm);line-height:1.5}
-.vbox{background:var(--gyl);border-radius:8px;padding:8px 12px;margin-top:8px}.vi{font-size:12px;color:var(--txh);line-height:1.7}.vw{font-weight:600;color:var(--tx)}
-.ndots{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;flex:1}
-.ndot{width:8px;height:8px;border-radius:50%;background:var(--gyll);cursor:pointer;transition:all .15s;flex-shrink:0}.ndot.seen{background:var(--tll)}.ndot.cur{background:var(--teal);transform:scale(1.3)}
-.pgb{height:7px;background:var(--bg2);border-radius:4px;overflow:hidden;margin-bottom:14px}.pgf{height:100%;background:var(--teal);border-radius:4px;transition:width .4s}
-.qcard{background:var(--bg);border:.5px solid var(--bd);border-radius:12px;padding:20px;min-height:280px}
-.qw{font-size:26px;font-weight:700;margin-bottom:5px}.qs{font-size:13px;color:var(--txm);margin-bottom:16px;line-height:1.5}
-.cho{width:100%;text-align:left;padding:12px 16px;margin:5px 0;border:1px solid var(--bd);border-radius:8px;background:var(--bg);cursor:pointer;font-size:14px;color:var(--tx);font-family:inherit;transition:all .15s;line-height:1.5}
-.cho:hover:not(:disabled){background:var(--bg2);border-color:var(--teal)}.cho.ok{background:var(--tl)!important;border-color:var(--teal)!important;color:#085041!important;font-weight:500}.cho.ng{background:var(--rdl)!important;border-color:var(--rd)!important;color:#501313!important}
-.sinp{width:100%;border:1.5px solid var(--bd);border-radius:8px;padding:12px 16px;font-size:18px;text-align:center;font-family:inherit;background:var(--bg);color:var(--tx);outline:none;transition:border-color .2s}
-.sinp:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(29,158,117,.1)}.sinp.ok{border-color:var(--teal);background:var(--tl)}.sinp.ng{border-color:var(--rd);background:var(--rdl)}
-.fb{padding:12px 16px;border-radius:8px;font-size:14px;margin:10px 0;line-height:1.6;border-left:3px solid}
-.fb.ok{background:var(--tl);color:#085041;border-color:var(--teal)}.fb.ng{background:var(--rdl);color:#501313;border-color:var(--rd)}
-.fbex{font-size:12px;margin-top:5px;opacity:.85}
-.srow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
-.sbox{background:var(--bg2);border-radius:8px;padding:12px;text-align:center}.sl{font-size:11px;color:var(--txm)}.sv{font-size:22px;font-weight:700}
-.ht{font-size:18px;color:var(--rd);transition:opacity .3s}.ht.dead{opacity:.18}
-.notif{position:fixed;top:18px;left:50%;transform:translateX(-50%);background:var(--tx);color:#fff;padding:9px 18px;border-radius:8px;font-size:13px;z-index:999;opacity:0;transition:opacity .25s;pointer-events:none}.notif.show{opacity:1}
+/* HOME */
+.hdr{text-align:center;padding:22px 0 14px}
+.hdr h1{font-size:24px;font-weight:700}.hdr p{font-size:13px;color:var(--txm);margin-top:3px}
+.sec{font-size:12px;font-weight:600;color:var(--txm);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
+.dgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.dbtn{border:.5px solid var(--bd);background:var(--bg2);border-radius:10px;padding:10px 4px;font-size:12px;font-weight:600;cursor:pointer;text-align:center;color:var(--txh);transition:all .15s;font-family:inherit;line-height:1.4}
+.dbtn:hover{background:var(--tl);border-color:var(--tll)}.dbtn.sel{background:var(--teal);color:#fff;border-color:var(--td)}.dbtn.lk{opacity:.35;cursor:default}
+.stabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.stab{border:.5px solid var(--bd);border-radius:10px;padding:12px;cursor:pointer;transition:all .15s;background:var(--bg)}
+.stab:hover{background:var(--bg2)}.stab.act{border-color:var(--tll);background:var(--tl)}
+.stic{font-size:20px;margin-bottom:4px}.sttl{font-size:13px;font-weight:600}.stds{font-size:11px;color:var(--txm);margin-top:2px}
+/* LEARN */
+.wcard{background:var(--bg);border:.5px solid var(--bd);border-radius:14px;padding:20px;margin-bottom:12px}
+.whead{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px}
+.wtop{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.wword{font-size:28px;font-weight:700;letter-spacing:-.5px}
+.wpos{font-size:11px;padding:2px 8px;border-radius:20px;background:var(--bll);color:var(--bl);font-weight:600}
+.wpron{font-size:13px;color:var(--txm);margin-top:2px}
+.wmean{font-size:17px;font-weight:600;color:var(--tx);margin:10px 0 4px}
+
+/* 🔊 TTS 버튼 */
+.tts-btn{border:none;background:var(--tl);border-radius:50%;width:42px;height:42px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;color:var(--td)}
+.tts-btn:hover{background:var(--tll);transform:scale(1.08)}
+.tts-btn.speaking{background:var(--teal);color:#fff;animation:pulse .8s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+/* TTS 진행 표시 */
+.tts-seq{display:flex;gap:6px;align-items:center;margin:8px 0 0;font-size:11px;color:var(--txm)}
+.tts-dot{width:7px;height:7px;border-radius:50%;background:var(--gyll);transition:all .3s}
+.tts-dot.active{background:var(--teal);transform:scale(1.3)}
+.tts-dot.done{background:var(--tll)}
+
+.wdiv{border-top:.5px solid var(--bd);margin:12px 0}
+.wsec{font-size:11px;font-weight:600;color:var(--txm);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.phrases{display:flex;flex-direction:column;gap:4px}
+.phrase{font-size:13px;color:var(--txh)}
+.phrase strong{color:var(--bl)}
+.exbox{background:var(--bll);border-radius:8px;padding:10px 12px}
+.exen{font-size:13px;line-height:1.6;color:var(--tx)}
+.exen b{color:var(--bl);font-weight:700}
+.exko{font-size:12px;color:var(--txm);margin-top:3px;line-height:1.5}
+.synbox{font-size:12px;color:var(--gy);background:var(--gyl);border-radius:6px;padding:7px 10px;line-height:1.6}
+.prog{height:4px;background:var(--bg2);border-radius:2px;overflow:hidden}
+.progb{height:100%;background:var(--teal);border-radius:2px;transition:width .3s}
+.navrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+/* TEST */
+.srow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.sbox{background:var(--bg2);border-radius:8px;padding:8px;text-align:center}
+.sl{font-size:11px;color:var(--txm);margin-bottom:2px}.sv{font-size:18px;font-weight:700}
+.qcard{background:var(--bg);border:.5px solid var(--bd);border-radius:14px;padding:20px;margin-bottom:12px}
+.qw{font-size:22px;font-weight:700;margin-bottom:8px;line-height:1.3}.qw.sp-word{cursor:pointer;display:inline-flex;align-items:center;gap:8px;border-radius:8px;padding:2px 6px;transition:background .15s}.qw.sp-word:hover{background:var(--tl)}.tts-q-btn{font-size:15px;background:none;border:none;cursor:pointer;opacity:.55;transition:opacity .2s;padding:0}.qw.sp-word:hover .tts-q-btn{opacity:1}
+.qs{font-size:13px;color:var(--txm);margin-bottom:14px}
+.mc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mc-opt{border:.5px solid var(--bd);background:var(--bg);border-radius:10px;padding:12px;font-size:14px;cursor:pointer;text-align:left;font-family:inherit;transition:all .15s;color:var(--tx);width:100%}
+.mc-opt:hover{background:var(--bg2)}.mc-opt.ok{background:var(--tl);border-color:var(--tll);color:var(--td)}.mc-opt.ng{background:var(--rdl);border-color:#f5c6c6;color:var(--rd)}.mc-opt:disabled{cursor:default}
+.sinp{width:100%;border:.5px solid var(--bd);border-radius:8px;padding:12px;font-size:16px;font-family:inherit;color:var(--tx);background:var(--bg);margin-top:10px}
+.sinp:focus{outline:none;border-color:var(--tll)}
+.fb-ok{background:var(--tl);border:.5px solid var(--tll);border-radius:8px;padding:10px 14px;margin-top:10px;font-size:13px;color:var(--td)}
+.fb-ng{background:var(--rdl);border:.5px solid #f5c6c6;border-radius:8px;padding:10px 14px;margin-top:10px;font-size:13px;color:var(--rd)}
+.witem{padding:6px 0;border-bottom:.5px solid var(--bd);font-size:13px}
+.witem:last-child{border-bottom:none}
+.notif{position:fixed;top:18px;left:50%;transform:translateX(-50%);background:var(--tx);color:#fff;padding:9px 18px;border-radius:8px;font-size:13px;z-index:999;opacity:0;transition:opacity .25s;pointer-events:none}
+.notif.show{opacity:1}
 </style>
 </head>
 <body>
@@ -57,103 +96,193 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="card">
     <div class="sec">Day 선택</div>
     <div class="dgrid" id="day-grid"></div>
+    <div style="font-size:11px;color:var(--txm);margin-top:8px" id="day-info"></div>
   </div>
   <div class="card">
     <div class="sec">학습 단계</div>
     <div class="stabs">
-      <div class="stab act" id="tab-learn" onclick="selStep('learn')"><div class="stic">📖</div><div class="sttl">Step 1 · 학습</div><div class="stds">단어 · 숙어 · 예문 학습</div></div>
-      <div class="stab" id="tab-test" onclick="selStep('test')"><div class="stic">✏️</div><div class="sttl">Step 2 · 테스트</div><div class="stds">전체 단어 테스트</div></div>
+      <div class="stab act" id="tab-learn" onclick="selStep('learn')">
+        <div class="stic">📖</div><div class="sttl">Step 1 · 학습</div><div class="stds">단어 · 숙어 · 예문 학습</div>
+      </div>
+      <div class="stab" id="tab-test" onclick="selStep('test')">
+        <div class="stic">✏️</div><div class="sttl">Step 2 · 테스트</div><div class="stds">전체 단어 테스트</div>
+      </div>
     </div>
-    <div style="margin-top:10px">
+    <div id="mode-area" style="display:none;margin-top:4px">
       <div class="sec">테스트 모드</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap" id="mbts">
-        <button class="btn sm tl" id="m-mc" onclick="selMode('mc')">🎯 뜻 고르기</button>
-        <button class="btn sm" id="m-rev" onclick="selMode('rev')">🔄 한→영</button>
-        <button class="btn sm" id="m-sp" onclick="selMode('sp')">✏️ 영단어 입력</button>
-        <button class="btn sm" id="m-mix" onclick="selMode('mix')">🎲 랜덤 혼합</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn sm tl" id="m-mc"  onclick="selMode('mc')">🎯 뜻 고르기</button>
+        <button class="btn sm"    id="m-rev" onclick="selMode('rev')">🔄 한→영</button>
+        <button class="btn sm"    id="m-sp"  onclick="selMode('sp')">✏️ 철자 입력</button>
+        <button class="btn sm"    id="m-mix" onclick="selMode('mix')">🎲 랜덤 혼합</button>
       </div>
     </div>
   </div>
-  <button class="btn tl full" onclick="go()">시작하기</button>
+  <button class="btn tl full" onclick="go()">시작하기 →</button>
   <div style="font-size:12px;color:var(--txm);text-align:center;margin-top:8px" id="go-hint">Day와 단계를 선택하세요</div>
 </div>
 
 <!-- LEARN -->
 <div id="s-learn" class="screen">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-    <button class="btn sm" onclick="bkHome()">← 홈</button>
-    <div style="font-size:13px;font-weight:600" id="ltitle"></div>
-    <div style="font-size:12px;color:var(--txm)" id="lidx"></div>
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+    <button class="btn sm" onclick="toHome()">← 홈</button>
+    <div id="l-title" style="font-weight:600;font-size:15px;flex:1"></div>
   </div>
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-    <div class="lpb"><div class="lpf" id="lprog"></div></div>
-    <div style="font-size:12px;color:var(--txm);white-space:nowrap" id="lprogt"></div>
-  </div>
-  <div class="wcard" id="wcard"></div>
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:4px">
-    <button class="btn sm" id="pbtn" onclick="lnav(-1)">← 이전</button>
-    <div class="ndots" id="ndots"></div>
-    <button class="btn sm tl" id="nbtn" onclick="lnav(1)">다음 →</button>
-  </div>
-  <div style="margin-top:12px;text-align:center">
-    <button class="btn bl" onclick="goTst()">✏️ Step 2 테스트 바로 가기</button>
+  <div id="l-word"></div>
+  <div class="navrow">
+    <button class="btn sm" id="prev-btn" onclick="prevW()">← 이전</button>
+    <div style="text-align:center">
+      <div style="font-size:12px;color:var(--txm)" id="l-counter"></div>
+      <div class="prog" style="width:140px;margin-top:4px"><div class="progb" id="l-prog"></div></div>
+    </div>
+    <button class="btn sm tl" id="next-btn" onclick="nextW()">다음 →</button>
   </div>
 </div>
 
 <!-- TEST -->
 <div id="s-test" class="screen">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-    <button class="btn sm" onclick="bkHome()">← 홈</button>
-    <div style="font-size:13px;font-weight:600" id="ttitle"></div>
-    <span></span>
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+    <button class="btn sm" onclick="toHome()">← 홈</button>
+    <div id="t-title" style="font-weight:600;font-size:15px;flex:1"></div>
   </div>
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-    <div style="display:flex;gap:3px"><span class="ht" id="h1">♥</span><span class="ht" id="h2">♥</span><span class="ht" id="h3">♥</span></div>
-    <span style="font-size:13px;color:var(--txm)" id="qcnt">1/20</span>
-    <span style="font-size:14px;font-weight:600;color:var(--teal)" id="sc">0점</span>
+  <div class="srow">
+    <div class="sbox"><div class="sl">진행</div><div class="sv" id="t-prog">0/0</div></div>
+    <div class="sbox"><div class="sl">정답</div><div class="sv" style="color:var(--teal)" id="t-ok">0</div></div>
+    <div class="sbox"><div class="sl">오답</div><div class="sv" style="color:var(--rd)" id="t-ng">0</div></div>
   </div>
-  <div class="pgb"><div class="pgf" id="qpg"></div></div>
-  <div class="qcard">
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px" id="qtags"></div>
-    <div id="area-mc">
-      <div class="qw" id="qword"></div>
-      <div class="qs" id="qsub"></div>
-      <div id="mcwrap"></div>
-    </div>
-    <div id="area-sp" style="display:none">
-      <div class="qw" id="spmean" style="font-size:17px;font-weight:600;line-height:1.5"></div>
-      <div class="qs" id="sphint"></div>
-      <input class="sinp" id="spinp" placeholder="영단어를 입력하세요" autocomplete="off" autocorrect="off" spellcheck="false">
-      <button class="btn tl full" onclick="chkSp()" style="margin-top:10px">확인</button>
-    </div>
-    <div id="fb"></div>
-    <button class="btn tl full" id="nxt" onclick="nextQ()" style="margin-top:12px;display:none">다음 →</button>
-  </div>
-  <button class="btn" onclick="bkHome()" style="width:100%;justify-content:center;margin-top:8px;color:var(--txm)">그만하기</button>
+  <div style="text-align:right;margin-bottom:8px" id="hearts"></div>
+  <div class="qcard" id="qcard"></div>
+  <div id="t-fb" style="display:none"></div>
+  <button class="btn tl full" id="t-next" onclick="nextQ()" style="display:none">다음 →</button>
 </div>
 
 <!-- RESULT -->
 <div id="s-result" class="screen">
-  <div class="card">
-    <div style="font-size:46px;text-align:center;margin:8px 0" id="remo">🏆</div>
-    <div style="font-size:22px;font-weight:700;text-align:center;margin-bottom:5px" id="rtit"></div>
-    <div style="font-size:13px;color:var(--txm);text-align:center;margin-bottom:18px" id="rsub"></div>
-    <div class="srow">
-      <div class="sbox"><div class="sl">점수</div><div class="sv" id="rsc"></div></div>
-      <div class="sbox"><div class="sl">정답률</div><div class="sv" id="rrt"></div></div>
-      <div class="sbox"><div class="sl">최대연속</div><div class="sv" id="rst"></div></div>
-    </div>
-    <div id="rmiss" style="margin-bottom:12px"></div>
-    <div style="display:flex;gap:8px">
-      <button class="btn" onclick="bkHome()" style="flex:1;justify-content:center">🏠 홈</button>
-      <button class="btn tl" onclick="retry()" style="flex:1;justify-content:center">🔄 다시 도전</button>
-    </div>
+  <div class="hdr"><h1>🎉 완료!</h1></div>
+  <div class="card" style="text-align:center">
+    <div style="font-size:48px;margin-bottom:10px" id="r-emoji"></div>
+    <div style="font-size:22px;font-weight:700;margin-bottom:6px" id="r-score"></div>
+    <div style="font-size:14px;color:var(--txm)" id="r-msg"></div>
   </div>
+  <div id="r-wrong" style="margin-bottom:12px"></div>
+  <button class="btn tl full" onclick="toHome()">홈으로</button>
 </div>
-</div>
+
 <div class="notif" id="notif"></div>
+</div>
 
 <script>
+// ══════════════════════════════════════════════════
+//  TTS ENGINE
+// ══════════════════════════════════════════════════
+const TTS = {
+  synth: window.speechSynthesis,
+  speaking: false,
+  queue: [],
+  currentBtn: null,
+  seqDots: null,
+  seqIdx: 0,
+
+  stop() {
+    this.synth.cancel();
+    this.speaking = false;
+    this.queue = [];
+    if (this.currentBtn) {
+      this.currentBtn.classList.remove('speaking');
+      this.currentBtn.textContent = '🔊';
+    }
+    this.currentBtn = null;
+    if (this.seqDots) {
+      this.seqDots.forEach(d => { d.classList.remove('active','done'); });
+    }
+  },
+
+  speak(texts, btn, dots) {
+    // texts: [{text, lang}]  순서대로 읽기
+    this.stop();
+    this.currentBtn = btn;
+    this.seqDots = dots;
+    this.seqIdx = 0;
+    this.queue = [...texts];
+    this.speaking = true;
+    if (btn) { btn.classList.add('speaking'); btn.textContent = '⏹'; }
+    this._next();
+  },
+
+  _next() {
+    if (!this.speaking || this.queue.length === 0) {
+      this.speaking = false;
+      if (this.currentBtn) {
+        this.currentBtn.classList.remove('speaking');
+        this.currentBtn.textContent = '🔊';
+      }
+      if (this.seqDots) {
+        this.seqDots.forEach(d => d.classList.add('done'));
+      }
+      return;
+    }
+    const item = this.queue.shift();
+    const utter = new SpeechSynthesisUtterance(item.text);
+    utter.lang = item.lang || 'en-US';
+    utter.rate = item.rate || 0.9;
+    utter.pitch = 1.0;
+
+    // dot 표시
+    if (this.seqDots && this.seqDots[this.seqIdx]) {
+      if (this.seqIdx > 0) this.seqDots[this.seqIdx-1].classList.replace('active','done');
+      this.seqDots[this.seqIdx].classList.add('active');
+    }
+    this.seqIdx++;
+
+    utter.onend = () => { setTimeout(() => this._next(), 300); };
+    utter.onerror = () => { this._next(); };
+    this.synth.speak(utter);
+  }
+};
+
+// 단어 카드에서 TTS 실행: 단어 → 예문 → 구문(phrase) 순
+// 단어 발음만 읽기 (테스트 화면용)
+function speakWordOnly(word) {
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(word);
+  utter.lang = 'en-US';
+  utter.rate = 0.85;
+  window.speechSynthesis.speak(utter);
+}
+
+function speakWord(w, btn, dotsEl) {
+  // 진행 중이면 중지
+  if (TTS.speaking) { TTS.stop(); return; }
+
+  const dots = dotsEl ? Array.from(dotsEl.querySelectorAll('.tts-dot')) : null;
+  const texts = [];
+
+  // 1. 단어 (영어, 느리게)
+  texts.push({ text: w.w, lang: 'en-US', rate: 0.85 });
+
+  // 2. 뜻 (한국어)
+  const cleanMean = w.m.replace(/[;:,]/g, ' ').trim();
+  texts.push({ text: cleanMean, lang: 'ko-KR', rate: 1.0 });
+
+  // 3. 예문 (영어, 볼드 제거)
+  if (w.ex) {
+    const cleanEx = w.ex.replace(/<[^>]+>/g, '');
+    texts.push({ text: cleanEx, lang: 'en-US', rate: 0.85 });
+  }
+
+  // 4. 첫 번째 구문 (영어 부분만)
+  if (w.phrases && w.phrases.length > 0) {
+    const ph = w.phrases[0];
+    const phEn = (typeof ph === 'string' ? ph.split('|')[0] : ph).trim();
+    texts.push({ text: phEn, lang: 'en-US', rate: 0.85 });
+  }
+
+  TTS.speak(texts, btn, dots);
+}
+
+// ══════════════════════════════════════════════════
+//  WORD DATABASE  (Day 1~6 완성 / Day 7~30 준비 중)
+// ══════════════════════════════════════════════════
 const DB={
 1:{theme:"Human Beings",theme_kr:"인간",words:[
 {w:"yearn",pos:"v",m:"갈망하다",phrases:["secretly yearn|몰래 갈망하다","yearn for freedom|자유를 갈망하다"],ex:"Becoming an actor was the one thing Stuart desired, the thing he <b>yearned</b> most to achieve.",ex_kr:"배우가 되는 것은 스튜어트가 소망했던 그것, 가장 성취하기를 바랐던 것이었다.",syn:"long 갈망하다"},
@@ -406,247 +535,369 @@ const DB={
 {w:"upset",pos:"a/v",m:"속상한, 기분이 상한; 속상하게 하다; 망치다",phrases:["feel upset by|~로 속이 상하다","have an upset stomach|배탈이 나다","upset a plan|계획을 망치다"],ex:"I guess John got pretty <b>upset</b> when Cook criticized his work.",ex_kr:"쿡이 존의 작업에 대해 비판해서 존이 무척 화가 난 것 같아요.",syn:"onset 시작 시초 / offset 벌충하다 상쇄하다"},
 {w:"vacillate",pos:"v",m:"머뭇거리다; 오락가락하다, 동요하다",phrases:["vacillate on this issue|이 문제에 대해 머뭇거리다","vacillate between hope and despair|희망과 절망 사이를 오락가락하다"],ex:"He's been <b>vacillating</b> between two options.",ex_kr:"그는 두 가지 선택 사이에서 망설이고 있다.",syn:"vaccinate 백신을 접종하다"},
 {w:"volatile",pos:"a",m:"변덕스러운; 휘발성의",phrases:["a volatile disposition|변덕스러운 성질","a volatile exchange rate|불안정한 환율"],ex:"Beethoven had a very <b>volatile</b> personality.",ex_kr:"베토벤은 매우 변덕스러운 성격이었다.",syn:"ductile 연성이 있는 유연한 / fertile 비옥한 풍부한 / futile 소용없는"}
+]},
+
+7:{theme:"Clothing & Shopping",theme_kr:"의류와 쇼핑",words:[
+  {w:"laundry",p:"/ˈlɔːndri/",m:"세탁물; 세탁",phrases:["do the laundry (세탁하다)","a pile of dirty laundry (더러운 빨래 더미)"],examples:[{en:"When you put in your dirty laundry, the washing machine will display how much detergent you need.",ko:"더러운 세탁물을 넣으면 옷을 빨기 위해 필요한 세제가 얼마나 필요한지 세탁기에 나타날 것이다."}],syn:["washing","clothes","linen"]},
+  {w:"garment",p:"/ˈɡɑːrmənt/",m:"옷",phrases:["outer garments (겉옷)","the garment industry (의류업)"],examples:[{en:"Before doing the laundry, I separate my garments into white and dark piles.",ko:"세탁하기 전에 나는 옷을 흰색과 짙은 색 더미로 분리한다."}],syn:["clothing","apparel","attire"]},
+  {w:"adore",p:"/əˈdɔːr/",m:"아주 좋아하다[사랑하다], 흠모하다",phrases:["adore baseball (야구를 아주 좋아하다)","the star's adoring fans (그 스타를 아주 좋아하는 팬들)"],examples:[{en:"The brooch was made for people who adore high-quality, handcrafted accessories at a reasonable price.",ko:"그 브로치는 적당한 가격의 고급 수제 액세서리를 애호하는 사람들을 위해 만들어졌습니다."}],syn:["love","worship","admire"]},
+  {w:"afford",p:"/əˈfɔːrd/",m:"(~할/살) 여유가 되다",phrases:["afford to travel abroad (해외여행 갈 여유가 되다)","can't afford a new car (새 차를 살 여유가 없다)"],examples:[{en:"How on earth could you afford that?",ko:"대체 돈이 어디서 났어?"}],syn:["manage","bear","sustain"]},
+  {w:"appreciation",p:"/əˌpriːʃiˈeɪʃən/",m:"감사; 감상",phrases:["token of appreciation (감사의 표시)","an appreciation of literature (문학에 대한 감상)"],examples:[{en:"In appreciation of our customers, we are bucking the current trend of shortening payment periods.",ko:"고객님 감사의 뜻으로, 저희는 지불 기한을 줄이는 요즘 추세에 역행하고 있습니다."}],syn:["gratitude","recognition","understanding"]},
+  {w:"voucher",p:"/ˈvaʊtʃər/",m:"상품 교환권, 쿠폰",phrases:["redeem a voucher (상품권을 물건으로 교환하다)","a luncheon voucher (점심 식권)"],examples:[{en:"Cash or vouchers are more effective against famine than food aid.",ko:"현금이나 상품권은 기근에 대비하여 식량 원조보다 더 효과적이다."}],syn:["coupon","token","ticket"]},
+  {w:"bargain",p:"/ˈbɑːrɡɪn/",m:"(정가보다) 싸게 파는 물건; 협상하다",phrases:["bargain hunters (싸고 질 좋은 물건을 찾아다니는 사람들)","strike a bargain (합의에 도달하다)"],examples:[{en:"Our special price is $40 cheaper than normal, so don't miss this great bargain.",ko:"정가보다 40달러 싼 특별가에 모십니다. 그러니 이번 대 바겐 세일을 놓치지 마세요."}],syn:["deal","steal","negotiate"]},
+  {w:"bid",p:"/bɪd/",m:"값을 부르다[제시하다], 입찰하다; 입찰 (가격)",phrases:["bid $20,000 for the painting (그 그림에 대해 2만 달러를 제시하다)","make a bid for (∼에 입찰하다)"],examples:[{en:"Do you really think someone will bid that high?",ko:"누군가가 정말 그렇게 높은 가격을 부를 거라고 생각하세요?"}],syn:["offer","tender","propose"]},
+  {w:"brochure",p:"/broʊˈʃʊər/",m:"안내 책자, 브로슈어",phrases:["hand out a travel brochure (여행안내 책자를 나누어 주다)"],examples:[{en:"I have a few brochures. What do you want to see most?",ko:"나한테 팸플릿 좀 있는데, 어디를 제일 보고 싶니?"}],syn:["pamphlet","leaflet","flier"]},
+  {w:"browse",p:"/braʊz/",m:"둘러보다, 훑어보다",phrases:["browse in the bookstore (서점에서 이것저것 둘러보다)","browse the Internet (인터넷을 검색하다)"],examples:[{en:"Keep browsing until you find a style of jacket that you like.",ko:"마음에 드는 스타일의 재킷을 찾을 때까지 둘러보세요."}],syn:["look around","scan","explore"]},
+  {w:"charge",p:"/tʃɑːrdʒ/",m:"요금; 혐의, 고발; (요금을) 청구하다",phrases:["free of charge (무료인)","be in charge of (∼을 책임지다[맡다])"],examples:[{en:"There's no extra charge for vegetarian meals on the flight.",ko:"기내에서 채식주의자용 식사에 대한 추가 비용은 없습니다."}],syn:["fee","cost","accuse"]},
+  {w:"clientele",p:"/ˌklaɪənˈtel/",m:"(어떤 기관·상점 등의) 모든 의뢰인[고객들]",phrases:["attract a young clientele (젊은 고객들을 끌어들이다)","a very high class clientele (최상류층 고객들)"],examples:[{en:"The design store is attempting to market to a wealthier clientele.",ko:"디자인 가게는 돈이 많은 고객들을 상대로 판매하려 하고 있다."}],syn:["customers","patrons","clients"]},
+  {w:"complimentary",p:"/ˌkɒmplɪˈmentəri/",m:"무료의",phrases:["complimentary tickets (무료 티켓, 초대권)","provide a complimentary bottle of wine (와인 한 병을 서비스로 제공하다)"],examples:[{en:"The bookstore gave away complimentary tote bags on its opening day.",ko:"그 서점은 개점일에 무료로 토트백을 나누어 주었다."}],syn:["free","gratis","courtesy"]},
+  {w:"credit",p:"/ˈkredɪt/",m:"신용; 외상, 신용 거래; 학점",phrases:["credit rating (신용 등급)","buy a product on credit (물건을 외상으로 사다)"],examples:[{en:"What are the last four digits of your credit card number?",ko:"신용 카드의 끝 번호 네 자리가 무엇입니까?"}],syn:["trust","loan","recognition"]},
+  {w:"custom-made",p:"/ˈkʌstəmˌmeɪd/",m:"맞춤의, 주문 제작의",phrases:["a custom-made suit (맞춤 정장)","custom-made furniture (주문 제작한 가구)"],examples:[{en:"The custom-made suit was one of the finest he had ever seen.",ko:"그 맞춤 정장은 그가 여태껏 본 정장 중에 가장 훌륭한 것이었다."}],syn:["tailor-made","bespoke","personalized"]},
+  {w:"defective",p:"/dɪˈfektɪv/",m:"결함이 있는, 하자 있는",phrases:["defective goods (불량품)","return a defective product (결함이 있는 제품을 반품하다)"],examples:[{en:"We will repair any sunglasses found to be defective during the warranty period.",ko:"보증 수리 기간 동안 하자가 있는 선글라스는 수리해 드립니다."}],syn:["faulty","flawed","broken"]},
+  {w:"discount",p:"/ˈdɪskaʊnt/",m:"할인",phrases:["get a discount (할인받다)","large discount store (대형 할인 매장)"],examples:[{en:"Discounts anywhere from 25% to 40% are not uncommon.",ko:"25~40퍼센트의 할인은 어디서나 흔하다."}],syn:["reduction","markdown","deduction"]},
+  {w:"exchange",p:"/ɪksˈtʃeɪndʒ/",m:"교환; 교환하다",phrases:["currency exchange (환율)","exchange phone numbers (전화번호를 주고받다)"],examples:[{en:"I'm an exchange student from Canada.",ko:"캐나다에서 교환 학생으로 왔어요."}],syn:["swap","trade","barter"]},
+  {w:"exorbitant",p:"/ɪɡˈzɔːrbɪtənt/",m:"과도한, 터무니없는",phrases:["an exorbitant charge (터무니없는 요금)","exorbitant housing prices (터무니없이 높은 집값)"],examples:[{en:"Farmers in developed nations often receive exorbitant subsidies that give them an unfair advantage.",ko:"선진국의 농민들은 종종 그들에게 불공평한 이득이 되는 과도한 보조금을 받는다."}],syn:["excessive","outrageous","unreasonable"]},
+  {w:"gorgeous",p:"/ˈɡɔːrdʒəs/",m:"눈부시게 아름다운, 매우 화려한",phrases:["a gorgeous dress (아주 멋있는 드레스)","You look gorgeous! (당신 아주 아름다워!)"],examples:[{en:"Machu Picchu is one of the most gorgeous and mysterious ancient locales in the world.",ko:"마추픽추는 세계에서 가장 멋있고 신비스러운 고대 유적지 중 하나이다."}],syn:["stunning","beautiful","magnificent"]},
+  {w:"guarantee",p:"/ˌɡærənˈtiː/",m:"보장[보증]하다; 보증(서)",phrases:["be guaranteed against defects (제품 결함에 대해 보증되다)","money-back guarantee (환불 보증)"],examples:[{en:"Protections ordinarily afforded by the rule of law are not guaranteed.",ko:"통상 법률이 제공하는 보호는 보장할 수 없습니다."}],syn:["assure","promise","warranty"]},
+  {w:"haggle",p:"/ˈhæɡəl/",m:"흥정하다",phrases:["haggle over the price (가격에 대해 흥정하다)","haggle with a salesman (세일즈맨과 흥정하다)"],examples:[{en:"At Cars4U, we've eliminated the negotiation and haggling process, so your shopping experience is pleasant and hassle-free.",ko:"카스포유에서는 협상과 흥정의 과정을 없앴기 때문에 고객님의 쇼핑이 즐겁고 번거롭지 않습니다."}],syn:["bargain","negotiate","barter"]},
+  {w:"inventory",p:"/ˈɪnvəntɔːri/",m:"재고품, 재고 목록",phrases:["dispose of the inventory (재고품을 처리하다)","inventory control (재고 관리)"],examples:[{en:"To make way for next year's new models, Deerbar is selling off its entire remaining inventory at wholesale prices!",ko:"내년도 신형 모델 입고를 위해 디어바에서는 남아 있는 전 재고 물량을 도매가에 처분하고 있습니다!"}],syn:["stock","supply","goods"]},
+  {w:"luxurious",p:"/lʌɡˈʒʊəriəs/",m:"호화로운, 고급의",phrases:["live in a luxurious house (호화로운 집에 살다)","enjoy a luxurious lifestyle (호화로운 삶을 누리다)"],examples:[{en:"Although we tend to think of castles as luxurious, they were strictly functional and had very few comforts.",ko:"우리는 성을 사치스럽다고 생각하는 경향이 있지만, 성은 철저히 기능적이었으며 아주 적은 편의 시설들만 갖추고 있었다."}],syn:["lavish","opulent","sumptuous"]},
+  {w:"ostentatious",p:"/ˌɒstənˈteɪʃəs/",m:"과시하는, 호화로운",phrases:["ostentatious jewelry (호화로운 보석)","an ostentatious display of wealth (부의 과시, 돈 자랑)"],examples:[{en:"Nonsensical ideas expressed with ostentatious verbiage — that's how one critic described postmodernist theories.",ko:"한 비판론자는 포스트모더니즘 이론을 과시적인 장황함과 현학성으로 표현된 터무니없는 개념이라고 설명했죠."}],syn:["showy","pretentious","flashy"]},
+  {w:"outgrow",p:"/ˌaʊtˈɡroʊ/",m:"~보다 더 커지다, 더 크게 자라다",phrases:["Kids outgrow their clothes. (아이들이 커서 옷이 안 맞는다.)","outgrow his older brother (동생이 형보다 더 커지다)"],examples:[{en:"The Smiths are moving into a larger house since they have outgrown their current one.",ko:"스미스 씨 가족은 지금 사는 집이 비좁아져서 더 큰 집으로 이사할 것이다."}],syn:["surpass","exceed","grow beyond"]},
+  {w:"priceless",p:"/ˈpraɪsləs/",m:"매우 귀중한",phrases:["a priceless collection of antiques (매우 귀중한 골동품 수집품)","priceless information (매우 귀중한 정보)"],examples:[{en:"The woman refused to sell the jewelry, as she considered it priceless.",ko:"그 여자는 그 보석을 매우 귀중하게 여겼기 때문에 팔려고 하지 않았다."}],syn:["invaluable","precious","inestimable"]},
+  {w:"purchase",p:"/ˈpɜːrtʃəs/",m:"구입[구매]하다; 구입, 구매",phrases:["purchase goods on credit (신용 카드로 제품을 구매하다)","make a purchase of (∼을 구매하다)"],examples:[{en:"Those of you who have not purchased the textbook may get it from the student union bookstore.",ko:"여러분 중 교과서를 구입하지 않은 사람은 학생 조합 서점에서 책을 구할 수 있습니다."}],syn:["buy","acquire","obtain"]},
+  {w:"wardrobe",p:"/ˈwɔːrdroʊb/",m:"옷장; (갖고 있는) 옷",phrases:["hang the jacket in the wardrobe (재킷을 옷장 안에 걸다)","have an extensive wardrobe (옷이 많다)"],examples:[{en:"This is the darkest tie I have in my wardrobe.",ko:"이게 제 옷장에서 가장 짙은 색 넥타이예요."}],syn:["closet","clothing","outfits"]},
+  {w:"reasonable",p:"/ˈriːzənəbl/",m:"합리적인, (가격이) 적정한",phrases:["a reasonable decision (합리적인 결정)","meals at a reasonable price (가격이 적당한 괜찮은 식당)"],examples:[{en:"Do you know any good restaurants downtown that offer meals at a reasonable price?",ko:"시내에 가격이 적당한 괜찮은 식당을 알고 있나요?"}],syn:["fair","sensible","affordable"]},
+  {w:"receipt",p:"/rɪˈsiːt/",m:"영수증; 받음, 수취",phrases:["make out a receipt (영수증을 쓰다)","keep one's receipt (영수증을 보관해 두다)"],examples:[{en:"If you have your receipts, your travel expenses can be reimbursed.",ko:"만약 영수증을 갖고 있으면 여행 경비를 환급받을 수 있어요."}],syn:["invoice","proof of purchase","voucher"]},
+  {w:"refund",p:"/ˈriːfʌnd/",m:"환불(금); 상환[환불]하다",phrases:["demand a refund (환불을 요구하다)","a tax refund (세금 환급금)"],examples:[{en:"He has not been given a refund for the returned product.",ko:"그는 반품한 제품에 대한 환불을 받지 못했다."}],syn:["reimbursement","repayment","rebate"]},
+  {w:"retail",p:"/ˈriːteɪl/",m:"소매",phrases:["a retail outlet (소매점)","retail price (소매가)"],examples:[{en:"Vitamins and supplements can be purchased over the Internet and in retail stores.",ko:"비타민과 영양 보충제는 인터넷과 소매점에서 구입할 수 있다."}],syn:["wholesale opposite","store","shop"]},
+  {w:"secondhand",p:"/ˌsekəndˈhænd/",m:"간접의; 중고의",phrases:["secondhand smoke (간접흡연)","buy the camera secondhand (카메라를 중고로 사다)"],examples:[{en:"Save money by visiting some local secondhand stores.",ko:"인근에 있는 중고 상점을 이용해서 돈을 절약하십시오."}],syn:["used","pre-owned","indirect"]},
+  {w:"select",p:"/sɪˈlekt/",m:"선택[선발]하다; 엄선된",phrases:["select one item from the list (목록에서 한 항목을 선택하다)","a few select employees (소수의 엄선된 직원들)"],examples:[{en:"He should select someone who he feels can handle it.",ko:"그는 그가 생각하기에 그 일을 처리할 수 있는 사람을 골라야겠지요."}],syn:["choose","pick","elect"]},
+  {w:"spree",p:"/spriː/",m:"흥청망청하기, 흥청거림",phrases:["go on a shopping spree (흥청망청 쇼핑하다)","spend money on a drinking spree (흥청거리며 술을 마시는 데 돈을 쓰다)"],examples:[{en:"Susie went on a shopping spree.",ko:"수지는 쇼핑에 푹 빠졌어."}],syn:["binge","splurge","fling"]},
+  {w:"spurious",p:"/ˈspjʊəriəs/",m:"거짓의, 겉만 그럴싸한",phrases:["spurious gem (가짜 보석)","be downright spurious (완전히 거짓이다)"],examples:[{en:"Advertisers should be held responsible for making spurious claims about their products.",ko:"광고주들은 자사의 상품에 대해 허위 주장을 한 책임을 져야 한다."}],syn:["fake","false","counterfeit"]},
+  {w:"suit",p:"/suːt/",m:"적합하다; ~에 어울리다; 정장; 소송",phrases:["wear a business suit (비즈니스 정장을 입다)","file a suit against (∼을 상대로 소송을 제기하다)"],examples:[{en:"Find out which charity has a mission and goals that best suit your priorities.",ko:"어떤 자선 단체가 당신이 가장 중요하게 생각하는 일에 가장 적합한 사명과 목적을 가지고 있는지 알아보십시오."}],syn:["match","fit","costume"]},
+  {w:"auction",p:"/ˈɔːkʃən/",m:"경매; 경매에서 팔다",phrases:["buy the picture at auction (그림을 경매에서 사다)","hold an auction (경매를 열다)"],examples:[{en:"Activities will include a silent auction, an arts and crafts show, a battle of the bands, dancing, and picnic games.",ko:"입찰식 경매와 미술 및 수공예품 전시, 음악 밴드 경연, 춤, 야외 게임의 활동이 진행될 예정입니다."}],syn:["sale","bidding","public sale"]},
+  {w:"range",p:"/reɪndʒ/",m:"범위, 다양성; (범위가) ~에서 ~까지 이르다",phrases:["a wide range of (범위가 대단히 다양한)","top of the range (최고 수준)"],examples:[{en:"What price range did you have in mind?",ko:"어느 정도의 가격대를 생각하셨습니까?"}],syn:["variety","scope","spectrum"]}
+]},
+
+8:{theme:"Food",theme_kr:"음식",words:[
+  {w:"protein",p:"/ˈproʊtiːn/",m:"단백질",phrases:["rich in protein (단백질이 풍부한)","a source of protein (단백질원)"],examples:[{en:"You need to consume enough protein to build muscles.",ko:"근육을 키우려면 단백질 섭취가 필요하다."}],syn:["nutrients","macronutrient"]},
+  {w:"serving",p:"/ˈsɜːrvɪŋ/",m:"1인분",phrases:["enough for four servings (4인분으로 충분한)"],examples:[{en:"Eating two to four servings of fish a week reduces the risk of strokes by 6%.",ko:"일주일에 생선을 두 번 내지 네 번 먹으면 뇌졸중 위험을 6%까지 줄여 준다."}],syn:["portion","helping","amount"]},
+  {w:"gourmet",p:"/ˈɡʊərmeɪ/",m:"미식가의; 미식가, 식도락가",phrases:["gourmet restaurant (고급 식당)","gourmet meal (고급 요리)"],examples:[{en:"Gourmet chefs put much thought into preparing dishes.",ko:"일류 요리사들은 요리를 준비하는 데 많은 생각을 쏟는다."}],syn:["connoisseur","epicure","foodie"]},
+  {w:"quench",p:"/kwentʃ/",m:"(갈증을) 해소하다",phrases:["quench one's thirst (목을 축이다)","quench a fire (불을 끄다)"],examples:[{en:"Cold green tea is great for quenching your thirst.",ko:"차가운 녹차는 갈증을 해소하는데 최고다."}],syn:["satisfy","slake","extinguish"]},
+  {w:"additive",p:"/ˈædətɪv/",m:"첨가물",phrases:["food additives (식품 첨가제)"],examples:[{en:"Our yogurt contains only organic ingredients, with no additives or preservatives.",ko:"우리 요거트는 첨가제나 방부제 없이 오직 유기농 재료만 쓰고 있습니다."}],syn:["preservative","supplement","ingredient"]},
+  {w:"gratuity",p:"/ɡrəˈtjuːɪti/",m:"팁, 사례금",phrases:["a 15 percent gratuity (15퍼센트 팁)","give a small gratuity (약간의 사례를 하다)"],examples:[{en:"This bill includes a gratuity.",ko:"이 계산서에는 팁이 포함되어 있다."}],syn:["tip","bonus","reward"]},
+  {w:"exceptional",p:"/ɪkˈsepʃənəl/",m:"특출한, 뛰어난; 극히 예외적인",phrases:["an exceptional student (뛰어난 학생)","an exceptional promotion (이례적인 승진)"],examples:[{en:"The article gave J&J Restaurant its highest accolade for exceptional food and service.",ko:"그 기사는 J&J 식당의 뛰어난 음식과 서비스에 대해 최고의 칭찬을 했다."}],syn:["outstanding","extraordinary","remarkable"]},
+  {w:"delicacy",p:"/ˈdelɪkəsi/",m:"진미, 별미",phrases:["local delicacies (지역의 별미들)"],examples:[{en:"When bananas first came to Korea, they were a prized delicacy.",ko:"바나나가 처음 한국에 들어왔을 때 그것은 귀중한 진미였다."}],syn:["treat","specialty","luxury food"]},
+  {w:"appetite",p:"/ˈæpɪtaɪt/",m:"식욕; 욕구",phrases:["have a good appetite (식욕이 왕성하다)","lose one's appetite (식욕을 잃다)"],examples:[{en:"In spite of her large appetite, Gloria manages to stay thin.",ko:"글로리아는 식욕이 왕성함에도, 날씬한 몸매를 간신히 유지하고 있다."}],syn:["hunger","craving","desire"]},
+  {w:"beverage",p:"/ˈbevərɪdʒ/",m:"음료",phrases:["alcoholic beverages (알코올음료)","cooling beverages (청량음료)"],examples:[{en:"All beverages at the music festival will be free.",ko:"음악 페스티벌의 모든 음료가 무료입니다."}],syn:["drink","liquid","refreshment"]},
+  {w:"bill",p:"/bɪl/",m:"계산[청구]서; 법안; 청구서를 발송하다",phrases:["pay the bill (계산하다, 돈을 지불하다)","utility bills (전기·수도 등의 공공요금)"],examples:[{en:"For questions regarding credit card usage or other billing matters, please call 237-8056.",ko:"신용 카드 사용이나 다른 청구서 발송 문제에 대한 문의는 237-8056으로 전화 주세요."}],syn:["check","invoice","account"]},
+  {w:"bland",p:"/blænd/",m:"맛없는, 밍밍한; 단조로운, 재미없는",phrases:["bland-tasting (특별한 맛이 안 나는)","a bland film (재미없는 영화)"],examples:[{en:"This soup doesn't have much taste; it really is quite bland.",ko:"이 수프는 별 맛이 없다. 꽤 싱거워."}],syn:["tasteless","flat","dull"]},
+  {w:"cater",p:"/ˈkeɪtər/",m:"(사업으로 행사에) 음식을 공급하다; (요구·필요에) 맞춰 주다",phrases:["cater the banquet (연회에 음식을 공급하다)","cater to foreign tourists (외국인 관광객들을 충족시키다)"],examples:[{en:"Specialty shops generally cater to a particular kind of customer by providing personalized service and unique merchandise.",ko:"전문점들은 일반적으로 개인 맞춤형 서비스와 독특한 상품을 제공함으로써 특정 고객의 요구를 만족시킨다."}],syn:["provide","serve","accommodate"]},
+  {w:"cutlery",p:"/ˈkʌtləri/",m:"(나이프·포크·스푼 등의) 식탁용 날붙이",phrases:["a stainless steel cutlery set (스테인리스 수저류 세트)"],examples:[{en:"You can't pass through airport security with cutlery in your bag.",ko:"가방에 날붙이를 넣고 공항 보안 검색대를 통과할 수 없습니다."}],syn:["silverware","utensils","flatware"]},
+  {w:"dairy",p:"/ˈdeɪri/",m:"유제품의, 낙농의",phrases:["dairy products (유제품들)","the dairy industry (낙농업)"],examples:[{en:"It's in aisle three, across from the dairy section.",ko:"3번 통로에 있어요. 유제품 코너 맞은편이에요."}],syn:["milk-based","lactose"]},
+  {w:"decay",p:"/dɪˈkeɪ/",m:"부패, 부식; 썩다, 부패하다",phrases:["the moral decay (도덕적 타락)","decaying food (썩어 가는 음식)"],examples:[{en:"Bacteria in the mouth that cause tooth decay also inhibit some throat infections and pneumonia.",ko:"충치의 원인이 되는 입안의 박테리아는 또한 인후 감염과 폐렴을 억제합니다."}],syn:["rot","decompose","deteriorate"]},
+  {w:"diet",p:"/ˈdaɪət/",m:"식사, 식습관; 규정식, 다이어트",phrases:["have a balanced diet (균형 잡힌 식사를 하다)","go on a diet (다이어트로 살을 빼다)"],examples:[{en:"You look slim. Have you been on a diet?",ko:"날씬해 보여요. 다이어트를 하나요?"}],syn:["eating habits","nutrition","regime"]},
+  {w:"spicy",p:"/ˈspaɪsi/",m:"매운, 매콤한; 흥미로운, 약간 충격적인",phrases:["a spicy tomato sauce (매콤한 토마토소스)","a spicy story (흥미로운 이야기)"],examples:[{en:"How about something spicy, like Mexican or Thai?",ko:"멕시코나 태국 음식 같이 매운 게 어때요?"}],syn:["hot","peppery","fiery"]},
+  {w:"digest",p:"/dɪˈdʒest/",m:"소화하다; (완전히) 이해하다; 요약",phrases:["digest meat (고기를 소화하다)","a compact digest of today's news (오늘 뉴스의 요약)"],examples:[{en:"A bulky diet promotes a laidback lifestyle, in which Gorillas spend plenty of time resting and digesting.",ko:"상당한 식사량으로 느긋한 생활을 하게 되는데, 고릴라는 쉬면서 소화시키는 데 많은 시간을 보낸다."}],syn:["process","absorb","assimilate"]},
+  {w:"edible",p:"/ˈedəbl/",m:"먹을 수 있는, 식용의",phrases:["edible snails (식용 달팽이들)","a plant with edible leaves (먹을 수 있는 잎을 가진 식물)"],examples:[{en:"Companies are now working to grow potatoes and other vegetables that contain edible vaccines.",ko:"기업들은 현재 식용 가능한 백신을 함유한 감자와 기타 채소들을 재배하려고 연구 중이다."}],syn:["safe to eat","consumable","non-toxic"]},
+  {w:"fermentation",p:"/ˌfɜːrmenˈteɪʃən/",m:"발효",phrases:["the process of fermentation (발효 과정)","fermented foods (발효 식품)"],examples:[{en:"Alcohol is a product of the fermentation of certain substances.",ko:"술은 특정한 물질이 발효된 상품이다."}],syn:["brewing","curing","pickling"]},
+  {w:"gluttonous",p:"/ˈɡlʌtənəs/",m:"폭식하는",phrases:["a gluttonous eater (대식가)","have gluttonous habits (폭식하는 습관이 있다)"],examples:[{en:"Mark embarrassed himself at dinner with this gluttonous behavior.",ko:"마크는 저녁 식사 중에 게걸스럽게 먹는 행동으로 자신을 부끄럽게 만들었다."}],syn:["voracious","greedy","ravenous"]},
+  {w:"hangover",p:"/ˈhæŋoʊvər/",m:"숙취; 유물",phrases:["wake up with a hangover (숙취로 잠에서 깨다)","a hangover from the past (과거의 유물)"],examples:[{en:"It is a myth that you can drink fine wine all night without getting very drunk or suffering a bad hangover.",ko:"좋은 와인은 밤새도록 마셔도 아주 많이 취하거나 심한 숙취로 고생하지 않는다는 것은 근거 없는 낭설이다."}],syn:["aftereffect","aftermath","remnant"]},
+  {w:"ingredient",p:"/ɪnˈɡriːdiənt/",m:"(음식의) 재료, 성분",phrases:["a basic ingredient for a curry (카레 요리의 기본 재료)","the essential ingredients for success (성공의 필수 요소)"],examples:[{en:"Fortunately, the medicinal ingredients of most plants used for medical purposes can be synthesized.",ko:"다행스럽게도 의학적 목적으로 사용되는 대다수 식물들의 약용 성분들은 합성이 가능하기 때문에 야생 식물에 대한 수요를 낮춰 준다."}],syn:["component","element","constituent"]},
+  {w:"treat",p:"/triːt/",m:"대접하다; 다루다; 치료하다; 대접, 접대",phrases:["treat you to lunch (점심 내가 살게)","treat the symptoms (증상들을 치료하다)"],examples:[{en:"Thanks for treating me to a great dinner.",ko:"멋진 저녁 대접해 줘서 고마워."}],syn:["entertain","handle","cure"]},
+  {w:"luscious",p:"/ˈlʌʃəs/",m:"감미로운, 달콤한; 관능적인",phrases:["a luscious wine (감미로운 와인)","a luscious actress (관능적인 여배우)"],examples:[{en:"Each diner was served a piece of an absolutely luscious chocolate cake.",ko:"식사하는 사람들에게 정말 달콤한 초콜릿 케이크가 한 조각씩 나왔다."}],syn:["delicious","sweet","sensuous"]},
+  {w:"mince",p:"/mɪns/",m:"(고기·야채를) 잘게 썰다, 다지다",phrases:["mince the onions (양파들을 잘게 썰다)","minced meat (다진 고기)"],examples:[{en:"Couldn't you pick up some minced garlic and rice?",ko:"다진 마늘과 쌀 좀 사다 줄 수 없어요?"}],syn:["chop","dice","grind"]},
+  {w:"nutrient",p:"/ˈnjuːtriənt/",m:"영양소, 영양분",phrases:["a lack of essential nutrients (필수 영양소의 결핍)","nutrient deficiency (영양실조)"],examples:[{en:"Not only do growing bodies need the nutrients, but eating a healthy breakfast is important for kids to reach their full potential.",ko:"성장기 아이들의 신체는 영양소를 필요로 할 뿐만 아니라 건강한 아침 식사를 하는 것은 아이들이 학교와 스포츠 활동에서 자신의 능력을 최고로 발휘하는 데 중요하다."}],syn:["nourishment","mineral","vitamin"]},
+  {w:"order",p:"/ˈɔːrdər/",m:"주문, 주문서[품]; 순서; 질서; 주문하다",phrases:["receive an order (주문을 받다)","out of order (고장이 난)"],examples:[{en:"Your order will be ready soon, sir.",ko:"주문하신 음식은 곧 준비될 것입니다."}],syn:["request","sequence","arrangement"]},
+  {w:"pasteurize",p:"/ˈpæstʃəraɪz/",m:"저온 살균하다",phrases:["pasteurized milk (저온 살균된 우유)"],examples:[{en:"Milk must be pasteurized before it is considered safe for consumption.",ko:"우유는 소비에 안전하다고 여겨지기 전에 살균되어야 한다."}],syn:["sterilize","sanitize","heat-treat"]},
+  {w:"provision",p:"/prəˈvɪʒən/",m:"제공, 공급; 대비; (-s) 식량, 양식",phrases:["housing provision (주택 공급)","make provision for (∼에 대비하다)"],examples:[{en:"I recently had knee surgery, so I'll need some special provisions on the flight.",ko:"저는 최근에 무릎 수술을 받았기 때문에 특별 기내식이 필요할 것 같니다."}],syn:["supply","arrangement","food"]},
+  {w:"recipe",p:"/ˈresɪpiː/",m:"조리[요리]법; 방안, 비결",phrases:["a recipe for chicken soup (닭고기 수프 조리법)","a recipe for success (성공의 비결)"],examples:[{en:"When his magical recipe for chocolate-dipped macadamia nuts created a sensation on his home island of Maui, he decided it was time.",ko:"초콜릿을 씌운 마카다미아 땅콩의 놀라운 제조법이 그의 고향인 마우이 섬에서 선풍을 일으키자, 그는 때가 되었다고 생각했다."}],syn:["formula","instructions","method"]},
+  {w:"refreshing",p:"/rɪˈfreʃɪŋ/",m:"신선한, 상쾌하게 하는; 기억을 새롭게 하는",phrases:["a refreshing drink (청량음료)","refreshing breeze (상쾌한 미풍)"],examples:[{en:"Let me begin today by refreshing your memory on human teeth development.",ko:"오늘은 인간의 치아 발달에 대한 기억을 되살리는 것으로 시작하겠습니다."}],syn:["invigorating","cooling","stimulating"]},
+  {w:"regimen",p:"/ˈredʒɪmən/",m:"식이 요법; 계획",phrases:["a strict regimen (엄격한 식이 요법)","plan your workout regimen (운동 계획을 세워라)"],examples:[{en:"His training regimen includes two hours in the pool every day.",ko:"그의 훈련 요법에는 매일 두 시간 동안 수영하기가 있다."}],syn:["diet","program","routine"]},
+  {w:"savor",p:"/ˈseɪvər/",m:"~의 맛[향]을 즐기다, 음미하다; (좋은) 맛, 향, 풍미",phrases:["savor the aroma (향을 즐기다)","the savor of victory (승리의 맛[기쁨])"],examples:[{en:"Despite their prosperity, people continue the tradition of eating insects and actually savor them as delicacies.",ko:"번영에도 불구하고 주민들은 곤충을 먹는 전통을 지속하고 있는데, 사실상 그들은 진미로 곤충을 즐기고 있다."}],syn:["relish","enjoy","appreciate"]},
+  {w:"slice",p:"/slaɪs/",m:"(얇게 썬) 조각, 슬라이스; 얇게 자르다",phrases:["a slice of bread (빵 한 조각)","a slice of life (인생의 한 단면)"],examples:[{en:"I made an apple pie. Would you like to try a slice?",ko:"사과 파이를 만들었어요. 한 조각 드실래요?"}],syn:["piece","portion","cut"]},
+  {w:"sufficient",p:"/səˈfɪʃənt/",m:"충분한",phrases:["be sufficient for five people (5명에게 충분하다)","self-sufficient (자급자족할 수 있는)"],examples:[{en:"Certain plant species have dense, fat, tough-skinned leaves that keep sufficient water in storage.",ko:"특정 식물종은 충분한 수분을 저장해 둘 수 있는 치밀하고 도톰하며 표피가 질긴 잎을 가지고 있다."}],syn:["enough","adequate","ample"]},
+  {w:"leftover",p:"/ˈleftˌoʊvər/",m:"남은 음식; (과거의) 잔재",phrases:["refrigerate any leftovers (남은 음식들을 냉장고에 넣다)","a leftover from earlier times (이전 시대의 유물)"],examples:[{en:"I'll wrap up the leftovers.",ko:"내가 남은 음식을 싸 둘게."}],syn:["remainder","surplus","remnant"]},
+  {w:"vegetarian",p:"/ˌvedʒɪˈteəriən/",m:"채식주의자",phrases:["a strict vegetarian diet (엄격한 채식주의자 식단)","a special menu for vegetarians (채식주의자들을 위한 특별 메뉴)"],examples:[{en:"The vegetarian meal I requested wasn't available.",ko:"제가 요청한 채식주의자용 식사는 제공되지 않았습니다."}],syn:["vegan","plant-based eater","herbivore"]},
+  {w:"voracious",p:"/vɔːˈreɪʃəs/",m:"식욕이 왕성한, 게걸스러운",phrases:["a voracious eater (식욕이 왕성한 사람)","a voracious appetite for knowledge (왕성한 지식욕)"],examples:[{en:"Our voracious appetite for seafood has brought many species to the brink of extinction.",ko:"해산물에 대한 인간의 왕성한 식욕으로 많은 종들이 멸종의 위기에 처하게 되었다."}],syn:["insatiable","gluttonous","ravenous"]}
 ]}
+
 };
+// ══════════════════════════════════════════════════
+//  APP STATE
+// ══════════════════════════════════════════════════
+let selDay=null, curStep='learn', curMode='mc';
+let learnIdx=0, learnWords=[];
+let testWords=[], testIdx=0, testOk=0, testNg=0, testHP=3;
+let wrongList=[];
+const AVAIL=Object.keys(DB).map(Number).sort((a,b)=>a-b);
 
-// ── 상태 ──
-const S={selDay:null,selStep:'learn',selMode:'mc',li:0,ld:null,td:null,tm:'mc',qs:[],qi:0,sc:0,ht:3,str:0,mstr:0,cor:0,miss:[]};
+// ══════════════════════════════════════════════════
+//  HOME
+// ══════════════════════════════════════════════════
+const TOPICS={1:"인간",2:"건강과 질병",3:"가족과 사회",4:"일상생활",5:"의사소통",6:"감정"};
 
-function init(){
+function buildDayGrid(){
   const g=document.getElementById('day-grid');
-  Object.keys(DB).forEach(d=>{
-    const day=DB[d],hasData=true;
+  g.innerHTML='';
+  for(let d=1;d<=30;d++){
     const b=document.createElement('button');
-    b.className='dbtn'+(d=='5'?' act':'');
-    b.dataset.day=d;
-    b.innerHTML=`<div class="dnum">Day ${d}</div><div class="dthm">${day.theme}<br>${day.theme_kr}</div><div class="dcnt">단어 ${day.words.length}개</div>`;
-    b.onclick=()=>selDay(d);
-    g.appendChild(b);
-  });
-  // 준비중 Day (7-30)
-  for(let d=7;d<=30;d++){
-    if(DB[d]) continue;
-    const b=document.createElement('button');
-    b.className='dbtn lk';
-    b.innerHTML=`<div class="dnum" style="color:var(--gyll)">Day ${d}</div><div class="dthm">준비중</div>`;
+    const avail=!!DB[d];
+    b.className='dbtn'+(d===selDay?' sel':'')+(avail?'':' lk');
+    b.innerHTML=`<div style="font-size:13px;font-weight:700">Day ${d}</div><div style="font-size:10px;color:${avail?'inherit':'var(--gyll)'};margin-top:2px">${avail?(TOPICS[d]||DB[d].theme_kr):'준비중'}</div>`;
+    if(avail) b.onclick=()=>selectDay(d);
     g.appendChild(b);
   }
-  selDay('5'); selStep('learn'); selMode('mc');
 }
 
-function selDay(d){
-  S.selDay=String(d);
-  document.querySelectorAll('.dbtn').forEach(b=>b.classList.toggle('act',b.dataset.day===String(d)));
-  updHint();
+function selectDay(d){
+  selDay=d;
+  document.querySelectorAll('.dbtn').forEach((b,i)=>b.classList.toggle('sel',i+1===d));
+  const cnt=DB[d]?DB[d].words.length:0;
+  document.getElementById('day-info').textContent=DB[d]?`Day ${d} · ${DB[d].theme_kr} · ${cnt}개 단어`:`Day ${d}: 준비 중`;
+  updateHint();
 }
+
 function selStep(s){
-  S.selStep=s;
+  curStep=s;
   document.getElementById('tab-learn').classList.toggle('act',s==='learn');
   document.getElementById('tab-test').classList.toggle('act',s==='test');
-  document.getElementById('mbts').style.opacity=s==='test'?'1':'0.4';
-  document.getElementById('mbts').style.pointerEvents=s==='test'?'auto':'none';
-  updHint();
+  document.getElementById('mode-area').style.display=s==='test'?'block':'none';
+  updateHint();
 }
+
 function selMode(m){
-  S.selMode=m;
-  ['mc','rev','sp','mix'].forEach(id=>{
-    const b=document.getElementById('m-'+id);
-    b.className='btn sm'+(id===m?' tl':'');
+  curMode=m;
+  ['mc','rev','sp','mix'].forEach(k=>{
+    document.getElementById(`m-${k}`).className='btn sm'+(k===m?' tl':'');
   });
 }
-function updHint(){
+
+function updateHint(){
   const h=document.getElementById('go-hint');
-  if(!S.selDay){h.textContent='Day를 선택하세요';return;}
-  const cnt=DB[S.selDay]?.words.length||0;
-  h.textContent=S.selStep==='learn'?`Day ${S.selDay} · ${cnt}개 단어 학습`:`Day ${S.selDay} · ${cnt}개 단어 테스트`;
+  if(!selDay){h.textContent='Day를 선택하세요';return;}
+  if(!DB[selDay]){h.textContent=`Day ${selDay}는 아직 준비 중이에요`;return;}
+  const cnt=DB[selDay].words.length;
+  h.textContent=`Day ${selDay} · ${curStep==='learn'?'학습':'테스트'} · ${cnt}개 단어`;
 }
+
 function go(){
-  if(!S.selDay){ntf('Day를 선택하세요');return;}
-  if(!DB[S.selDay]){ntf('아직 준비 중인 Day입니다');return;}
-  if(S.selStep==='learn') startLearn(S.selDay);
-  else startTest(S.selDay,S.selMode);
+  if(!selDay){showNotif('Day를 선택하세요');return;}
+  if(!DB[selDay]){showNotif('아직 준비 중인 Day입니다');return;}
+  if(curStep==='learn') startLearn();
+  else startTest();
 }
 
-// ── LEARN ──
-function startLearn(day){
-  S.ld=String(day); S.li=0;
-  document.getElementById('ltitle').textContent=`Day ${day} · ${DB[day].theme_kr}`;
-  show('learn'); renderL();
+// ══════════════════════════════════════════════════
+//  LEARN
+// ══════════════════════════════════════════════════
+function startLearn(){
+  TTS.stop();
+  learnWords=[...DB[selDay].words];
+  learnIdx=0;
+  document.getElementById('l-title').textContent=`Day ${selDay} · ${DB[selDay].theme_kr}`;
+  showScreen('s-learn');
+  renderLearn();
 }
-function renderL(){
-  const d=DB[S.ld],words=d.words,i=S.li,total=words.length,w=words[i];
-  document.getElementById('lidx').textContent=`${i+1}/${total}`;
-  document.getElementById('lprog').style.width=`${((i+1)/total)*100}%`;
-  document.getElementById('lprogt').textContent=`${i+1}/${total}`;
-  document.getElementById('pbtn').disabled=i===0;
-  document.getElementById('nbtn').textContent=i===total-1?'완료 ✓':'다음 →';
-  // dots
-  const dc=document.getElementById('ndots');dc.innerHTML='';
-  words.forEach((_,j)=>{
-    const dot=document.createElement('div');
-    dot.className='ndot'+(j<i?' seen':'')+(j===i?' cur':'');
-    dot.onclick=()=>{S.li=j;renderL();};
-    dc.appendChild(dot);
-  });
-  // phrases
-  let ph='';
-  if(w.phrases?.length){
-    ph=`<div style="font-size:11px;font-weight:600;color:var(--txm);text-transform:uppercase;letter-spacing:.6px;margin-top:14px;margin-bottom:6px">숙어 · 활용</div>`;
-    w.phrases.forEach(p=>{const[en,kr]=p.split('|');ph+=`<div class="phr"><span class="phen">${en}</span><span class="phkr"> — ${kr}</span></div>`;});
-  }
-  const exH=w.ex?`<div style="font-size:11px;font-weight:600;color:var(--txm);text-transform:uppercase;letter-spacing:.6px;margin-top:14px;margin-bottom:6px">기출 예문</div><div class="exbox"><div class="exen">${w.ex}</div><div class="exkr">${w.ex_kr}</div></div>`:'';
-  const synH=w.syn?`<div class="vbox" style="margin-top:12px"><div style="font-size:10px;font-weight:600;color:var(--gy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">VOCA+</div>${w.syn.split(' / ').map(s=>`<div class="vi">${s.replace(/^(\S+)/,'<span class="vw">$1</span>')}</div>`).join('')}</div>`:'';
-  document.getElementById('wcard').innerHTML=`
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px">
-      <div class="ww">${w.w}</div>
-      <span class="tag tg-gy">${w.pos}</span>
-    </div>
-    <div style="margin-bottom:12px"><span class="tag ${S.ld==='5'?'tg-bl':'tg-tl'}">Day ${S.ld}</span></div>
-    <div class="wm">${w.m}</div>
-    ${ph}${exH}${synH}`;
-}
-function lnav(dir){
-  const total=DB[S.ld].words.length,next=S.li+dir;
-  if(next<0) return;
-  if(next>=total){ntf('🎉 Day '+S.ld+' 학습 완료!');bkHome();return;}
-  S.li=next; renderL();
-}
-function goTst(){startTest(S.ld,S.selMode);}
 
-// ── TEST ──
-function startTest(day,mode){
-  S.td=String(day);S.tm=mode||S.selMode;
-  const pool=DB[day].words.map(w=>({...w,day:String(day)}));
-  S.qs=shuf(pool);S.qi=0;S.sc=0;S.ht=3;S.str=0;S.mstr=0;S.cor=0;S.miss=[];
-  document.getElementById('ttitle').textContent=`Day ${day} · 테스트`;
-  show('test'); renderQ();
+function renderLearn(){
+  const w=learnWords[learnIdx];
+  const total=learnWords.length;
+  document.getElementById('l-counter').textContent=`${learnIdx+1} / ${total}`;
+  document.getElementById('l-prog').style.width=`${((learnIdx+1)/total)*100}%`;
+  document.getElementById('prev-btn').disabled=learnIdx===0;
+  document.getElementById('next-btn').textContent=learnIdx===total-1?'완료 ✓':'다음 →';
+
+  // TTS 시퀀스 점: 단어 · 뜻 · 예문 · 구문
+  const seqLabels=['단어','뜻','예문','구문'];
+  const dotHtml=seqLabels.map((_,i)=>`<div class="tts-dot" id="tts-dot-${i}"></div>`).join('');
+
+  const phrasesHtml=(w.phrases||[]).map(ph=>{
+    const parts=typeof ph==='string'?ph.split('|'):[ph,''];
+    return `<div class="phrase"><strong>${parts[0]}</strong>${parts[1]?` <span style="color:var(--txm)">— ${parts[1]}</span>`:''}`;
+  }).join('');
+
+  const exHtml=w.ex?`
+    <div class="wdiv"></div>
+    <div class="wsec">기출 예문</div>
+    <div class="exbox">
+      <div class="exen">${w.ex}</div>
+      ${w.ex_kr?`<div class="exko">${w.ex_kr}</div>`:''}
+    </div>`:'';
+
+  const synHtml=w.syn?`
+    <div class="wdiv"></div>
+    <div class="wsec">VOCA+</div>
+    <div class="synbox">${w.syn}</div>`:'';
+
+  document.getElementById('l-word').innerHTML=`
+    <div class="wcard">
+      <div class="whead">
+        <div>
+          <div class="wtop">
+            <span class="wword">${w.w}</span>
+            <span class="wpos">${w.pos||''}</span>
+          </div>
+          ${w.p?`<div class="wpron">${w.p}</div>`:''}
+        </div>
+        <button class="tts-btn" id="tts-main-btn" onclick="speakWord(learnWords[learnIdx], this, document.getElementById('tts-seq-dots'))">🔊</button>
+      </div>
+
+      <div class="tts-seq" id="tts-seq-dots">
+        ${dotHtml}
+        <span id="tts-seq-label" style="margin-left:4px;font-size:11px;color:var(--txm)">클릭하여 듣기</span>
+      </div>
+
+      <div class="wmean">${w.m}</div>
+
+      ${phrasesHtml?`<div class="wdiv"></div><div class="wsec">구문</div><div class="phrases">${phrasesHtml}</div>`:''}
+      ${exHtml}
+      ${synHtml}
+    </div>`;
 }
+
+function prevW(){
+  TTS.stop();
+  if(learnIdx>0){learnIdx--;renderLearn();}
+}
+function nextW(){
+  TTS.stop();
+  if(learnIdx<learnWords.length-1){learnIdx++;renderLearn();}
+  else{toHome();}
+}
+
+// ══════════════════════════════════════════════════
+//  TEST
+// ══════════════════════════════════════════════════
+function startTest(){
+  TTS.stop();
+  testWords=shuffle([...DB[selDay].words]);
+  testIdx=0; testOk=0; testNg=0; testHP=3; wrongList=[];
+  document.getElementById('t-title').textContent=`Day ${selDay} · ${DB[selDay].theme_kr}`;
+  showScreen('s-test');
+  renderQ();
+}
+
 function renderQ(){
-  if(S.qi>=S.qs.length||S.ht<=0){showRes();return;}
-  const q=S.qs[S.qi],total=S.qs.length;
-  document.getElementById('qcnt').textContent=`${S.qi+1}/${total}`;
-  document.getElementById('qpg').style.width=`${((S.qi+1)/total)*100}%`;
-  document.getElementById('sc').textContent=`${S.sc}점`;
-  ['h1','h2','h3'].forEach((id,i)=>document.getElementById(id).classList.toggle('dead',i>=S.ht));
-  let am=S.tm;
-  if(S.tm==='mix') am=['mc','mc','rev','sp'][Math.floor(Math.random()*4)];
-  S.cm=am;
-  const ml={mc:'뜻 고르기',rev:'한→영',sp:'영단어 입력'};
-  const dc=q.day==='5'?'tg-bl':'tg-tl';
-  const sb=S.str>=2?`<span class="tag tg-am">🔥 ${S.str}연속</span>`:'';
-  document.getElementById('qtags').innerHTML=`<span class="tag ${dc}">Day ${q.day}</span><span class="tag tg-gy">${q.pos}</span><span class="tag tg-gy">${ml[am]}</span>${sb}`;
-  document.getElementById('fb').innerHTML='';
-  document.getElementById('nxt').style.display='none';
-  document.getElementById('area-mc').style.display='none';
-  document.getElementById('area-sp').style.display='none';
-  if(am==='mc'){
-    document.getElementById('area-mc').style.display='block';
-    document.getElementById('qword').textContent=q.w;
-    document.getElementById('qword').style.fontSize='';
-    document.getElementById('qsub').textContent=`(${q.pos})`;
-    const wrong=shuf(S.qs.filter(x=>x.w!==q.w)).slice(0,3).map(x=>x.m);
-    mkChoices(shuf([q.m,...wrong]),c=>{
-      S.qs.slice(0,1); // dummy
-      document.getElementById('mcwrap').querySelectorAll('.cho').forEach(b=>{
-        b.disabled=true;
-        if(b.textContent.slice(3)===q.m) b.classList.add('ok');
-      });
-      const isOk=c===q.m;
-      if(!isOk) event.target.classList.add('ng');
-      hndl(isOk,q);
-    });
-  } else if(am==='rev'){
-    document.getElementById('area-mc').style.display='block';
-    document.getElementById('qword').style.fontSize='17px';
-    document.getElementById('qword').textContent=q.m;
-    document.getElementById('qsub').textContent=`(${q.pos}) — 영단어를 고르세요`;
-    const wrong=shuf(S.qs.filter(x=>x.w!==q.w)).slice(0,3).map(x=>x.w);
-    mkChoices(shuf([q.w,...wrong]),c=>{
-      document.getElementById('mcwrap').querySelectorAll('.cho').forEach(b=>{
-        b.disabled=true;
-        if(b.textContent.slice(3)===q.w) b.classList.add('ok');
-      });
-      const isOk=c===q.w;
-      if(!isOk) event.target.classList.add('ng');
-      hndl(isOk,q);
-    });
+  const total=testWords.length;
+  document.getElementById('t-prog').textContent=`${testIdx+1}/${total}`;
+  document.getElementById('t-ok').textContent=testOk;
+  document.getElementById('t-ng').textContent=testNg;
+  document.getElementById('hearts').textContent='❤️'.repeat(testHP)+'🖤'.repeat(3-testHP);
+
+  const w=testWords[testIdx];
+  let mode=curMode;
+  if(mode==='mix'){const m=['mc','rev','sp'];mode=m[testIdx%3];}
+
+  let html='';
+  if(mode==='mc'){
+    const others=testWords.filter((_,i)=>i!==testIdx);
+    const wrongs=shuffle(others).slice(0,3);
+    const opts=shuffle([w,...wrongs]);
+    html=`<div class="qw sp-word" onclick="speakWordOnly('${w.w}')" title="클릭하여 발음 듣기">${w.w}<button class="tts-q-btn">🔊</button></div><div class="qs">${w.pos||''} · 클릭하면 발음을 들을 수 있어요</div>
+      <div class="mc-grid">${opts.map(o=>`<button class="mc-opt" onclick="checkMC(this,'${o.m}')">${o.m}</button>`).join('')}</div>`;
+  } else if(mode==='rev'){
+    const others=testWords.filter((_,i)=>i!==testIdx);
+    const wrongs=shuffle(others).slice(0,3);
+    const opts=shuffle([w,...wrongs]);
+    html=`<div class="qw">${w.m}</div><div class="qs">뜻에 맞는 영단어를 고르세요</div>
+      <div class="mc-grid">${opts.map(o=>`<button class="mc-opt" onclick="checkMC(this,'${o.w}')">${o.w}</button>`).join('')}</div>`;
   } else {
-    document.getElementById('area-sp').style.display='block';
-    document.getElementById('spmean').innerHTML=q.m;
-    document.getElementById('sphint').textContent=`(${q.pos})`;
-    const inp=document.getElementById('spinp');
-    inp.value='';inp.disabled=false;inp.className='sinp';
-    inp.onkeydown=e=>{if(e.key==='Enter')chkSp();};
-    setTimeout(()=>inp.focus(),80);
+    html=`<div class="qw">${w.m}</div><div class="qs">(${w.pos||'?'}) 영단어를 입력하세요</div>
+      <input class="sinp" id="sp-inp" placeholder="철자를 입력하세요" autocomplete="off" autocorrect="off" spellcheck="false">
+      <button class="btn tl full" onclick="checkSP()" style="margin-top:10px">확인</button>`;
   }
+  document.getElementById('qcard').innerHTML=html;
+  document.getElementById('t-fb').style.display='none';
+  document.getElementById('t-next').style.display='none';
+
+  // 스펠링 모드에서 엔터 입력
+  const inp=document.getElementById('sp-inp');
+  if(inp) inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkSP();});
 }
-function mkChoices(choices,handler){
-  const wrap=document.getElementById('mcwrap');wrap.innerHTML='';
-  choices.forEach((c,i)=>{
-    const b=document.createElement('button');b.className='cho';
-    b.textContent=`${String.fromCharCode(65+i)}. ${c}`;
-    b.onclick=function(e){
-      document.getElementById('mcwrap').querySelectorAll('.cho').forEach(x=>x.disabled=true);
-      handler(c);
-    };
-    wrap.appendChild(b);
+
+function checkMC(btn,ans){
+  const w=testWords[testIdx];
+  const correct=ans===w.m||ans===w.w;
+  document.querySelectorAll('.mc-opt').forEach(b=>{
+    b.disabled=true;
+    if(b===btn) b.classList.add(correct?'ok':'ng');
   });
+  showFB(correct,w);
 }
-function chkSp(){
-  const q=S.qs[S.qi],inp=document.getElementById('spinp');
-  const ans=inp.value.trim().toLowerCase();
-  inp.disabled=true;
-  const ok=ans===q.w.toLowerCase();
-  inp.classList.add(ok?'ok':'ng');
-  hndl(ok,q);
+
+function checkSP(){
+  const w=testWords[testIdx];
+  const inp=document.getElementById('sp-inp');
+  if(!inp)return;
+  const val=inp.value.trim().toLowerCase();
+  const correct=val===w.w.toLowerCase();
+  inp.style.borderColor=correct?'var(--tll)':'#f5c6c6';
+  showFB(correct,w);
 }
-function hndl(ok,q){
-  const fb=document.getElementById('fb');
-  if(ok){
-    S.str++;S.cor++;if(S.str>S.mstr)S.mstr=S.str;
-    const bon=S.str>=3?Math.min(S.str,5)*2:0;S.sc+=10+bon;
-    const bt=bon?` (+${bon}점 보너스 🔥)`:'';
-    fb.innerHTML=`<div class="fb ok">✅ 정답!${bt}<br><strong>${q.w}</strong> = ${q.m}<div class="fbex">📌 ${q.ex?q.ex.replace(/<\/?b>/g,''):''}</div></div>`;
-  } else {
-    S.str=0;S.ht--;S.miss.push(q.w);
-    ['h1','h2','h3'].forEach((id,i)=>document.getElementById(id).classList.toggle('dead',i>=S.ht));
-    fb.innerHTML=`<div class="fb ng">❌ 틀렸어요!<br>정답: <strong>${q.w}</strong> = ${q.m}<div class="fbex">📌 ${q.ex?q.ex.replace(/<\/?b>/g,''):''}</div></div>`;
+
+function showFB(correct,w){
+  if(correct) testOk++; else{testNg++;testHP--;wrongList.push(w);}
+  const fb=document.getElementById('t-fb');
+  fb.style.display='block';
+  fb.className=correct?'fb-ok':'fb-ng';
+  const wordSpan=`<span onclick="speakWordOnly('${w.w}')" style="cursor:pointer;border-radius:6px;padding:1px 4px;transition:background .15s" onmouseover="this.style.background='var(--tl)'" onmouseout="this.style.background=''" title="클릭하여 발음 듣기"><strong>${w.w}</strong> 🔊</span>`;
+  fb.innerHTML=correct
+    ?`✅ 정답! ${wordSpan} — ${w.m}`
+    :`❌ 오답. 정답: ${wordSpan} — ${w.m}<br><small style="opacity:.8">${w.ex?w.ex.replace(/<[^>]+>/g,''):''}</small>`;
+  document.getElementById('t-next').style.display='flex';
+
+  if(testHP<=0){
+    setTimeout(()=>showResult(),800);
   }
-  document.getElementById('sc').textContent=`${S.sc}점`;
-  if(S.ht<=0){setTimeout(showRes,1200);return;}
-  document.getElementById('nxt').style.display='block';
 }
+
 function nextQ(){
-  document.getElementById('spinp').className='sinp';
-  S.qi++;renderQ();
+  testIdx++;
+  if(testIdx>=testWords.length||testHP<=0) showResult();
+  else renderQ();
 }
 
-// ── RESULT ──
-function showRes(){
-  show('result');
-  const total=S.qs.length,rate=Math.round((S.cor/total)*100);
-  let e='😅',t='조금 더 연습해봐요!';
-  if(rate>=90){e='🏆';t='완벽해요!';}
-  else if(rate>=70){e='🎉';t='잘했어요!';}
-  else if(rate>=50){e='💪';t='좋아요, 계속 도전!';}
-  document.getElementById('remo').textContent=e;
-  document.getElementById('rtit').textContent=t;
-  document.getElementById('rsub').textContent=`Day ${S.td} · ${total}문제`;
-  document.getElementById('rsc').textContent=S.sc;
-  document.getElementById('rrt').textContent=rate+'%';
-  document.getElementById('rst').textContent=S.mstr+'🔥';
-  document.getElementById('rmiss').innerHTML=S.miss.length
-    ?`<div style="font-size:12px;font-weight:600;color:var(--txm);margin-bottom:6px">다시 볼 단어 (${S.miss.length}개)</div>`+S.miss.map(w=>`<span style="display:inline-block;background:var(--rdl);color:#A32D2D;border-radius:6px;padding:3px 10px;margin:3px;font-size:13px;font-weight:500">${w}</span>`).join(''):'';
+function showResult(){
+  TTS.stop();
+  const total=testWords.length;
+  const ok=testOk, pct=total>0?Math.round((ok/total)*100):100;
+  const emojis=pct===100?'🏆':pct>=80?'🎉':pct>=60?'👍':'💪';
+  const msgs=pct===100?'완벽해요!':pct>=80?'잘했어요!':pct>=60?'조금 더 연습해봐요':'더 연습이 필요해요, 화이팅!';
+  document.getElementById('r-emoji').textContent=emojis;
+  document.getElementById('r-score').textContent=`${ok} / ${total} (${pct}%)`;
+  document.getElementById('r-msg').textContent=msgs;
+  if(wrongList.length>0){
+    document.getElementById('r-wrong').innerHTML=`<div class="card"><div class="sec">틀린 단어</div>
+      ${wrongList.map(w=>`<div class="witem"><strong>${w.w}</strong> — ${w.m}</div>`).join('')}</div>`;
+  } else document.getElementById('r-wrong').innerHTML='';
+  showScreen('s-result');
 }
-function retry(){startTest(S.td,S.tm);}
 
-// ── UTILS ──
-function shuf(a){return[...a].sort(()=>Math.random()-.5);}
-function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('s-'+id).classList.add('active');window.scrollTo(0,0);}
-function bkHome(){show('home');}
-function ntf(msg){const e=document.getElementById('notif');e.textContent=msg;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2200);}
+// ══════════════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════════════
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function toHome(){TTS.stop();showScreen('s-home');}
+function showNotif(msg){
+  const n=document.getElementById('notif');
+  n.textContent=msg;n.classList.add('show');
+  setTimeout(()=>n.classList.remove('show'),2000);
+}
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
+  return arr;
+}
 
-init();
+// Init
+buildDayGrid();
+selStep('learn');
+selMode('mc');
 </script>
 </body>
 </html>
